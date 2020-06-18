@@ -1,4 +1,4 @@
-const db = require('../data/dbConfig.js');
+const db = require('../../data/dbConfig.js');
 
 const getUpvotesByStory = (storyId) => {
     return db('upvote').where('story_id', storyId)
