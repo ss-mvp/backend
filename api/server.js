@@ -5,9 +5,9 @@ const cors = require("cors");
 // const newUpload = multer();
 const bodyParser = require("body-parser");
 
-const emailRouter = require("../email/emailRouter.js");
-const storyRouter = require("../story/storyRouter.js");
-const upvoteRouter = require("../upvote/upvoteRouter.js");
+const emailRouter = require("../api/email/emailRouter.js");
+const storyRouter = require("../api/story/storyRouter.js");
+const upvoteRouter = require("../api/upvote/upvoteRouter.js");
 
 const restricted = require("./middleware/restricted");
 

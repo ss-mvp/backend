@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const upload = require("../services/file-upload.js");
 const story = require("./storyModel.js");
-const users = require("../email/emailModel.js");
+const users = require("../api/email/emailModel.js");
 const moment = require("moment");
 const restricted = require("../api/middleware/restricted.js");
 const { PythonShell } = require("python-shell");
