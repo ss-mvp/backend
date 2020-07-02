@@ -6,7 +6,19 @@ module.exports = {
   getDate,
   addImage,
   allPrompts,
-  allStories
+  allStories,
+  addToQueue,
+  addPrompt,
+  createQueue,
+  getPromptById
+}
+
+function createQueue(id) {
+  return db('prompt_queue').insert({ queue: [id] })
+}
+
+function getPromptById(id) {
+  return db('prompt').where({ id }).first();
 }
 
 function addReadability(link, readability) {
@@ -21,14 +33,42 @@ function getDate() {
   return db('prompt').select('date');
 }
 
-function getPrompt(date) {
-  return db('prompt').where({ date }).first();
+async function getPrompt() {
+  // return db('prompt').where({ date }).first();
+  const queue = await getQueue()[0];
+  if (queue.length === 0) {
+    return []
+  } else {
+    const queue_id = queue[queue.length - 1];
+    return getPromptById(queue_id);
+  }
 }
 
 function allPrompts() {
-  return db('prompt').select('prompts');
+  return db('prompt');
 }
 
 function allStories() {
   return db('submissions');
+}
+
+function getQueue() {
+  return db('prompt_queue').select('queue');
+}
+
+async function addToQueue(id) {
+  const queue = await getQueue()[0];
+  queue = queue.split(',');
+  if (queue.length === 7) {
+    queue.push(id);
+    queue = queue.splice(1, queue.length - 1).join();
+  } else if (queue.length < 7) {
+    queue.push(id)
+  }
+  
+  return db('prompt_queue').where('id', '=', '1').update(queue);
+}
+
+function addPrompt(prompt) {
+  return db('prompt').insert(prompt)
 }

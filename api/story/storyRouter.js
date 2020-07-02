@@ -57,34 +57,55 @@ router.post("/", restricted, async (req, res) => {
   });
 });
 
+// router.get("/prompt", restricted, async (req, res) => {
+//   const today = moment().toArray();
+//   let promptDate = "";
+//   // use queue for recent prompts
+//   await story
+//     .getDate()
+//     .then(async (response) => {
+//       response.map((e, i) => {
+//         if (i === 0 && today <= e.date) {
+//           promptDate = e.date;
+//         }
+//         if (today >= e.date) {
+//           try {
+//             if (today <= response[i + 1].date && i + 1 < response.length - 1) {
+//               promptDate = e.date;
+//             }
+//           } catch {
+//             promptDate = e.date;
+//           }
+//         }
+//       });
+//       story
+//         .getPrompt(promptDate)
+//         .then((resp) => {
+//           return res.status(200).json(resp);
+//         })
+//         .catch((err) => console.log(err));
+//     })
+//     .catch((err) => console.log(err));
+// });
+
 router.get("/prompt", restricted, async (req, res) => {
-  const today = moment().toArray();
-  let promptDate = "";
-  await story
-    .getDate()
-    .then(async (response) => {
-      response.map((e, i) => {
-        if (i === 0 && today <= e.date) {
-          promptDate = e.date;
-        }
-        if (today >= e.date) {
-          try {
-            if (today <= response[i + 1].date && i + 1 < response.length - 1) {
-              promptDate = e.date;
-            }
-          } catch {
-            promptDate = e.date;
-          }
-        }
-      });
-      story
-        .getPrompt(promptDate)
-        .then((resp) => {
-          return res.status(200).json(resp);
-        })
-        .catch((err) => console.log(err));
+  
+  const prompt_id = await story.getPrompt();
+  if (prompt_id.length === 0) {
+    // create queue
+    let ids = [];
+    const prompts = await story.allPrompts();
+    prompts.map(element => {
+      ids.push(element.id);
     })
-    .catch((err) => console.log(err));
+    random_prompt = ids[Math.floor(Math.random() * (ids.length - 1))];
+    await story.createQueue(random_prompt);
+    const new_prompt = story.getPrompt();
+    return res.status(200).json({ prompt: new_prompt });
+  } else {
+    // const prompt = await story.getPromptById(prompt_id);
+    return res.status(200).json({ prompt: prompt_id });
+  }
 });
 
 router.get("/", restricted, async (req, res) => {

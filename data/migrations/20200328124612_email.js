@@ -10,9 +10,10 @@ exports.up = function(knex) {
   })
   .createTable('prompt', table => {
     table.increments();
-    table.boolean('active').defaultTo(false);
-    table.string('prompts');
-    table.string('date');
+    table.string('prompt');
+  })
+  .createTable('prompt_queue', table => {
+    table.string('queue', 128);
   })
   .createTable('submissions', table => {
       table.increments();
@@ -25,6 +26,7 @@ exports.up = function(knex) {
       table.integer('userId').unsigned()
       .references('id').inTable('users')
       .onDelete('CASCADE');
+      table.string('date').defaultTo(moment().format('MMM DD h:mm A'))
   })
 };
 
@@ -32,5 +34,6 @@ exports.down = function(knex) {
   return knex.schema
     .dropTableIfExists('users')
     .dropTableIfExists('prompt')
+    .dropTableIfExists('prompt_queue')
     .dropTableIfExists('submissions')
 };
