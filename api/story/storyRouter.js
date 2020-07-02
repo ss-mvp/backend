@@ -91,6 +91,7 @@ router.post("/", restricted, async (req, res) => {
 router.get("/prompt", restricted, async (req, res) => {
   
   const prompt_id = await story.getPrompt();
+  console.log(prompt_id)
   if (prompt_id.length === 0) {
     // create queue
     let ids = [];
