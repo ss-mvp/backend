@@ -59,6 +59,7 @@ function getQueue() {
 
 async function addToQueue(id) {
   const queue = await getQueue()[0];
+  console.log('add', queue)
   queue = queue.split(',');
   if (queue.length === 7) {
     queue.push(id);
