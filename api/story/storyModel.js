@@ -14,6 +14,7 @@ module.exports = {
 }
 
 function createQueue(id) {
+  console.log(id)
   return db('prompt_queue').insert({ queue: [id] })
 }
 
