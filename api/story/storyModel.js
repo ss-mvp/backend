@@ -42,11 +42,12 @@ async function getPrompt() {
   // return db('prompt').where({ date }).first();
   const queue = await getQueue();
   console.log(queue)
-  if (queue.length === 0) {
+  if (queue.queue.length === 0) {
     return []
   } else {
-    const queue_id = queue.slice(-1)[0];
+    const queue_id = queue.queue.slice(-1)[0];
     console.log('queue', queue_id)
+    console.log('type', typeof queue_id)
     return getPromptById(queue_id);
   }
 }
