@@ -13,6 +13,7 @@ exports.up = function(knex) {
     table.string('prompt');
   })
   .createTable('prompt_queue', table => {
+    table.integer('id');
     table.string('queue', 128);
   })
   .createTable('submissions', table => {
