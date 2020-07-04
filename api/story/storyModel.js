@@ -18,7 +18,8 @@ function createQueue(id) {
   const add_array = [];
   add_array.push(id);
   console.log('add_array', add_array)
-  return db('prompt_queue').insert(add_array);
+  const save_string = add_array.join();
+  return db('prompt_queue').insert(save_string);
 }
 
 function getPromptById(id) {
@@ -65,10 +66,10 @@ async function addToQueue(id) {
   const queue = await getQueue()[0];
   console.log('add', queue)
   queue = queue.split(',');
-  if (queue.length === 7) {
+  if (queue.length === 30) {
     queue.push(id);
     queue = queue.splice(1, queue.length - 1).join();
-  } else if (queue.length < 7) {
+  } else if (queue.length < 30) {
     queue.push(id)
   }
   
