@@ -41,7 +41,7 @@ function getDate() {
 async function getPrompt() {
   // return db('prompt').where({ date }).first();
   const queue = await getQueue();
-  console.log(queue)
+  // console.log(queue)
   if (queue.queue.length === 0) {
     return []
   } else {
