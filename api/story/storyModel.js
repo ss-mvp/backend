@@ -41,7 +41,7 @@ async function getPrompt() {
     return []
   } else {
     const queue_id = queue[queue.length - 1];
-    console.log(Number(queue_id.queue[0]))
+    console.log(Number(queue_id.queue))
     return getPromptById(queue_id);
   }
 }
