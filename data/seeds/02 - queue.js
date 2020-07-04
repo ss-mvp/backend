@@ -1,10 +1,10 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('table_name').del()
+  return knex('prompt_queue').del()
     .then(function () {
       // Inserts seed entries
-      return knex('table_name').insert([
+      return knex('prompt_queue').insert([
         {id: 1, queue: ''}
       ]);
     });
