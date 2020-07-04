@@ -13,14 +13,14 @@ module.exports = {
   getPromptById
 }
 
-function createQueue(id) {
-  console.log(id)
-  const add_array = [];
-  add_array.push(id);
-  console.log('add_array', add_array)
-  const save_string = add_array.join();
-  return db('prompt_queue').insert(save_string);
-}
+// function createQueue(id) {
+//   console.log(id)
+//   const add_array = [];
+//   add_array.push(id);
+//   console.log('add_array', add_array)
+//   const save_string = add_array.join();
+//   return db('prompt_queue').insert(save_string);
+// }
 
 function getPromptById(id) {
   return db('prompt').where({ id }).first();
@@ -64,16 +64,17 @@ function getQueue() {
 
 async function addToQueue(id) {
   const queue = await getQueue()[0];
-  console.log('add', queue)
-  queue = queue.split(',');
-  if (queue.length === 30) {
-    queue.push(id);
-    queue = queue.splice(1, queue.length - 1).join();
-  } else if (queue.length < 30) {
-    queue.push(id)
-  }
+  console.log('added-queue', queue);
+//   console.log('add', queue)
+//   queue = queue.split(',');
+//   if (queue.length === 30) {
+//     queue.push(id);
+//     queue = queue.splice(1, queue.length - 1).join();
+//   } else if (queue.length < 30) {
+//     queue.push(id)
+//   }
   
-  return db('prompt_queue').where('id', '=', '1').update(queue);
+//   return db('prompt_queue').where('id', '=', '1').update(queue);
 }
 
 function addPrompt(prompt) {

@@ -90,9 +90,9 @@ router.post("/", restricted, async (req, res) => {
 
 router.get("/prompt", restricted, async (req, res) => {
   
-  const prompt_id = await story.getPrompt();
-  console.log(prompt_id)
-  if (prompt_id.length === 0) {
+  const prompt = await story.getPrompt();
+  console.log(prompt)
+  if (prompt.length === 0) {
     // create queue
     let ids = [];
     const prompts = await story.allPrompts();
@@ -100,12 +100,12 @@ router.get("/prompt", restricted, async (req, res) => {
       ids.push(element.id);
     })
     random_prompt = ids[Math.floor(Math.random() * (ids.length - 1))];
-    await story.createQueue(random_prompt);
+    await story.addToQueue(random_prompt);
     const new_prompt = story.getPrompt();
     return res.status(200).json({ prompt: new_prompt });
   } else {
-    // const prompt = await story.getPromptById(prompt_id);
-    return res.status(200).json({ prompt: prompt_id });
+    // const prompt = await story.getPromptById(prompt);
+    return res.status(200).json({ prompt: prompt });
   }
 });
 
