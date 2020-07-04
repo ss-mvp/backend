@@ -15,7 +15,8 @@ module.exports = {
 
 function createQueue(id) {
   console.log(id)
-  const add_array = new Array(id)
+  const add_array = [];
+  add_array.push(id);
   console.log('add_array', add_array)
   return db('prompt_queue').insert(add_array);
 }
