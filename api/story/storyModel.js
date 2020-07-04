@@ -60,7 +60,7 @@ function allStories() {
 }
 
 function getQueue() {
-  return db('prompt_queue').select('queue');
+  return db('prompt_queue').select('queue').first();
 }
 
 async function addToQueue(id) {
