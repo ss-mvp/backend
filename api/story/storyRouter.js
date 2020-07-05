@@ -101,7 +101,7 @@ router.get("/prompt", restricted, async (req, res) => {
     })
     random_prompt = ids[Math.floor(Math.random() * (ids.length - 1))];
     await story.addToQueue(random_prompt);
-    const new_prompt = story.getPrompt();
+    const new_prompt = await story.getPrompt();
     return res.status(200).json({ prompt: new_prompt });
   } else {
     // const prompt = await story.getPromptById(prompt);
