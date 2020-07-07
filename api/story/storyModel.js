@@ -65,18 +65,26 @@ function getQueue() {
 }
 
 async function addToQueue(id) {
-  const queue = await getQueue();
-  console.log('added-queue', queue);
-//   console.log('add', queue)
-//   queue = queue.split(',');
-//   if (queue.length === 30) {
-//     queue.push(id);
-//     queue = queue.splice(1, queue.length - 1).join();
-//   } else if (queue.length < 30) {
-//     queue.push(id)
-//   }
-  
-//   return db('prompt_queue').where('id', '=', '1').update(queue);
+  let queue = await getQueue();
+
+  if (queue.queue.length === 0) {
+    queue = [] // empty string
+    queue.push(id)
+    console.log('queue',queue)
+    write_queue = {
+      queue: queue.join()
+    }
+    return db('prompt_queue').where('id', '=', 1).update(write_queue);
+  } else {
+    queue = queue.queue.split(',');
+    if (queue.length === 30) {
+      queue.push(id);
+      queue = queue.splice(1, queue.length - 1).join();
+    } else if (queue.length < 30) {
+      queue.push(id)
+      return db('prompt_queue').where('id', '=', 1).update(queue.join());
+    }
+  }
 }
 
 function addPrompt(prompt) {
