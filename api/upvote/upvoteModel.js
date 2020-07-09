@@ -3,23 +3,27 @@ const db = require('../../data/dbConfig.js');
 
 async function getFinalScores(promptId){
 
-    const topThree = await db("topThree").where({ promptId }).select({ id })
+    //return 3 ids
+    const topThree = await db("topThree").where({ promptId })
     
     //O(3)
     let allRanks = topThree.map( el => {
-        let one = db("ranking").where("topThreeId", el ).count({ rank: 1 })
-        let two = db("ranking").where("topThreeId", el ).count({ rank: 2 })
-        let three = db("ranking").where("topThreeId", el ).count({ rank: 3 })
 
-        Promise.all([one, two, three])
+        let one = db("ranking").where("topThreeId", el.id ).count({ rank: 1 })
+        let two = db("ranking").where("topThreeId", el.id ).count({ rank: 2 })
+        let three = db("ranking").where("topThreeId", el.id ).count({ rank: 3 })
+        
+        const allNums = Promise.all([one, two, three])
+
+        let totalScore = ((allNums[0]*3) + (allNums[1]*2) + (allNums[2]))
+        return {
+            ...el,
+            score: totalScore
+        }
         
     })
 
-    let allRanksSolved = Promise.all(allRanks)
-
-
-    
-    return await db("topThree").where({ promptId })
+    return allRanks
 };
   
 function rankIt(topThreeId, rank){
