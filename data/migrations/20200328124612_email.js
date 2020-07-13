@@ -33,8 +33,9 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return knex.schema
-    .dropTableIfExists('users')
-    .dropTableIfExists('prompt')
-    .dropTableIfExists('prompt_queue')
-    .dropTableIfExists('submissions')
+  .dropTableIfExists('submissions')
+  .dropTableIfExists('prompt_queue')
+  .dropTableIfExists('prompt')
+  .dropTableIfExists('users')
+    
 };
