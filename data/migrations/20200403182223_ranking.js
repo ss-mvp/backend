@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 
 exports.up = function(knex) {
   return knex.schema
@@ -14,6 +16,8 @@ exports.up = function(knex) {
       .references('id').inTable('prompt')
       .onDelete('CASCADE');
       table.integer('score').defaultTo(0)
+      table.timestamp('date').defaultTo(moment().format("MMMM Do YYYY"))
+      
   })
 
   .createTable('ranking', table => {
@@ -22,6 +26,7 @@ exports.up = function(knex) {
       .references('id').inTable('topThree')
       .onDelete('CASCADE')
     table.integer('rank').notNullable()
+    table.timestamp('date').defaultTo(moment().format("MMMM Do YYYY"))
   })
 };
 
