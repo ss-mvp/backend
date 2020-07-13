@@ -11,6 +11,7 @@ exports.up = function(knex) {
   .createTable('prompt', table => {
     table.increments();
     table.string('prompt');
+    table.boolean('active').defaultTo(false);
   })
   .createTable('prompt_queue', table => {
     table.integer('id');

@@ -88,26 +88,40 @@ router.post("/", restricted, async (req, res) => {
 //     .catch((err) => console.log(err));
 // });
 
-router.get("/prompt", restricted, async (req, res) => {
+// router.get("/prompt", restricted, async (req, res) => {
   
-  const prompt = await story.getPrompt();
-  // console.log(prompt)
+//   const prompt = await story.getPrompt();
+//   // console.log(prompt)
+//   if (prompt.length === 0) {
+//     // create queue
+//     let ids = [];
+//     const prompts = await story.allPrompts();
+//     prompts.map(element => {
+//       ids.push(element.id);
+//     })
+//     random_prompt = ids[Math.floor(Math.random() * (ids.length - 1))];
+//     await story.addToQueue(random_prompt);
+//     const new_prompt = await story.getPrompt();
+//     return res.status(200).json({ prompt: new_prompt });
+//   } else {
+//     // const prompt = await story.getPromptById(prompt);
+//     return res.status(200).json({ prompt });
+//   }
+// });
+
+router.get("/prompt", restricted, async (req, res) => {
+  const prompt = story.getPrompt();
+
   if (prompt.length === 0) {
-    // create queue
-    let ids = [];
-    const prompts = await story.allPrompts();
-    prompts.map(element => {
-      ids.push(element.id);
-    })
-    random_prompt = ids[Math.floor(Math.random() * (ids.length - 1))];
-    await story.addToQueue(random_prompt);
-    const new_prompt = await story.getPrompt();
-    return res.status(200).json({ prompt: new_prompt });
+    return res.status(500).json({ error: 'Something went wrong.' })
   } else {
-    // const prompt = await story.getPromptById(prompt);
-    return res.status(200).json({ prompt: prompt });
+    if (prompt.active === true) {
+      return res.status(200).json({ prompt });
+    } else {
+      return res.status(500).json({ error: 'Prompt not active.' })
+    }
   }
-});
+})
 
 router.get("/", restricted, async (req, res) => {
   const prompts = await story.allPrompts();
