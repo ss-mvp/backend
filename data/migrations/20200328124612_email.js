@@ -12,6 +12,8 @@ exports.up = function(knex) {
     table.increments();
     table.string('prompt');
     table.boolean('active').defaultTo(false);
+    table.boolean('topThree').defaultTo(false);
+    table.boolean('voting').defaultTo(false);
   })
   .createTable('prompt_queue', table => {
     table.integer('id');
@@ -21,6 +23,7 @@ exports.up = function(knex) {
       table.increments();
       table.string('image').index();
       table.string('pages');
+      table.boolean('flagged').defaultTo(false);
       table.jsonb('readability');
       table.integer('prompt_id').unsigned()
       .references('id').inTable('prompt')
