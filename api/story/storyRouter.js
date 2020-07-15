@@ -136,6 +136,27 @@ router.get("/story", restricted, async (req, res) => {
   return res.json({ stories: allStory, userInfo });
 });
 
+router.post('/edit', restricted, async (req, res) => {
+  // there needs to be id and edits in req packet
+  if (req.id && req.edits) {
+    await story.editPrompt(req.id, req.edits).then(() => {
+      return res.status(200).json({ message: `Prompt ${req.id} was edited successfully.` })
+    }).catch(err => console.log(err));
+  } else {
+    return res.status(400).json({ error: "You need to supply the ID and text to edit writing prompt." })
+  }
+})
+
+router.post('/add', async (req, res) => {
+  if (req.prompt) {
+    await story.addPrompt(req.prompt).then(() => {
+      return res.status(200).json({ message: "Prompt added" })
+    }).catch(err => console.log(err));
+  } else {
+    return res.status(400).json({ error: "You must add writing prompt text to add a prompt." })
+  }
+})
+
 const runScript = (path, data, findResults) => {
   const newShell = new PythonShell(path, { stdio: "pipe" });
   return new Promise((resolve, reject) => {
