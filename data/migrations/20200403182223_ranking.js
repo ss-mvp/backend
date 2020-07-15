@@ -16,7 +16,6 @@ exports.up = function(knex) {
       .references('id').inTable('prompt')
       .onDelete('CASCADE');
       table.integer('score').defaultTo(0)
-      table.timestamp('date').defaultTo(moment().format("MMMM Do YYYY"))
       
   })
 
@@ -26,7 +25,6 @@ exports.up = function(knex) {
       .references('id').inTable('topThree')
       .onDelete('CASCADE')
     table.integer('rank').notNullable()
-    table.timestamp('date').defaultTo(moment().format("MMMM Do YYYY"))
   })
 };
 

@@ -10,6 +10,7 @@ module.exports = {
   addToQueue,
   addPrompt,
   // createQueue,
+  deletePrompt,
   getPromptById,
   editPrompt,
   wipeQueue
@@ -30,6 +31,10 @@ function wipeQueue() {
 
 function getPromptById(id) {
   return db('prompt').where({ id }).first();
+}
+
+function deletePrompt(id) {
+  return db('prompt').where({ id }).del();
 }
 
 function addReadability(link, readability) {

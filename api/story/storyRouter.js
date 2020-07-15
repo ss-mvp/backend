@@ -123,6 +123,27 @@ router.get("/prompt", restricted, async (req, res) => {
   }
 })
 
+router.get('/all_prompts', async (req, res) => {
+  const prompts = await story.allPrompts();
+  if (!prompts) {
+    return res.status(500).json({ error: "Something went wrong." })
+  } else {
+    return res.json(prompts)
+  }
+})
+
+router.delete('/prompts/:id', async (req, res) => {
+  const prompt = await story.getPromptById(req.params.id);
+  console.log(prompt)
+  if (prompt) {
+    await story.deletePrompt(req.params.id).then(response => {
+      return res.status(201).json({ message: `Prompt ID ${req.params.id} was removed.` })
+    }).catch(err => console.log(err));
+  } else {
+    return res.status(400).json({ error: "Prompt doesn't exist." })
+  }
+})
+
 router.get("/", restricted, async (req, res) => {
   const prompts = await story.allPrompts();
   return res.json({ prompts });
