@@ -12,7 +12,8 @@ router.get('/', adminRestricted, async (req, res) => {
 router.post('/login', (req, res) => {
     if (req.username === 'admin' && req.password === 'GraigAdminAccount2020') {
       const { username, password } = req.body;
-      const token = signToken({ username, password })
+      const user = {username, password}
+      const token = signToken(user)
       return res.status(201).json({ token });
     } else {
         return res.status(400).json({ error: 'Incorrect Username/Password' });
