@@ -31,6 +31,6 @@ function rankIt(topThreeId, rank){
 };
 
 module.exports = {
-    getUpvotesByStory,
+    getFinalScores,
     rankIt,
 };

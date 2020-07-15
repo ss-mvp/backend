@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const admin = require('./adminModel.js');
-// const adminRestricted = require();
+const adminRestricted = require('../middleware/adminRestricted');
 
 router.get('/', adminRestricted, async (req, res) => {
 
@@ -10,9 +10,9 @@ router.get('/', adminRestricted, async (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    if (req.username === 'admin' && req.password === 'GraigAdminAccount2020') {
-      const { username, password } = req.body;
-      const token = signToken({ username, password })
+    if (req.body.username === 'admin' && req.body.password === 'GraigAdminAccount2020') {
+      const { username } = req.body;
+      const token = signToken({ username, role: 'admin' })
       return res.status(201).json({ token });
     } else {
         return res.status(400).json({ error: 'Incorrect Username/Password' });
@@ -24,7 +24,7 @@ router.post('/login', (req, res) => {
 function signToken(user) {
     const payload = {
       username: user.username,
-      password: user.password
+      role: 'admin'
     }
   
     const options = {
