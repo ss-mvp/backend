@@ -41,5 +41,4 @@ exports.down = function(knex) {
   .dropTableIfExists('prompt_queue')
   .dropTableIfExists('prompt')
   .dropTableIfExists('users')
-    
 };

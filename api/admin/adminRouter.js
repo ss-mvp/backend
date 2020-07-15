@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 const admin = require('./adminModel.js');
-// const adminRestricted = require();
+const jwtSecret = process.env.JWT_SECRET || 'sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23';
+const adminRestricted = require('../middleware/adminRestricted');
 
 router.get('/', adminRestricted, async (req, res) => {
 
@@ -11,7 +12,7 @@ router.get('/', adminRestricted, async (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    if (req.username === 'admin' && req.password === 'GraigAdminAccount2020') {
+    if (req.body.username === 'admin' && req.body.password === 'GraigAdminAccount2020') {
       const { username, password } = req.body;
       const user = {username, password}
       const token = signToken(user)
@@ -26,7 +27,7 @@ router.post('/login', (req, res) => {
 function signToken(user) {
     const payload = {
       username: user.username,
-      password: user.password
+      role: 'admin'
     }
   
     const options = {

@@ -26,6 +26,6 @@ server.use(bodyParser.json({ limit: "50mb" }));
 server.use("/email", emailRouter);
 server.use("/upload", restricted, storyRouter);
 server.use("/upvote", restricted, upvoteRouter);
-server.use("/admin", restricted, adminRouter);
+server.use("/admin", adminRouter);
 
 module.exports = server;
