@@ -110,8 +110,9 @@ router.post("/", restricted, async (req, res) => {
 // });
 
 router.get("/prompt", restricted, async (req, res) => {
-  const prompt = story.getPrompt();
-
+  const prompt = await story.getPrompt();
+  console.log(prompt)
+  
   if (prompt.length === 0) {
     return res.status(500).json({ error: 'Something went wrong.' })
   } else {
@@ -120,6 +121,26 @@ router.get("/prompt", restricted, async (req, res) => {
     } else {
       return res.status(500).json({ error: 'Prompt not active.' })
     }
+  }
+})
+
+router.get('/all_prompts', async (req, res) => {
+  const prompts = await story.allPrompts();
+  if (!prompts) {
+    return res.status(500).json({ error: "Something went wrong." })
+  } else {
+    return res.json(prompts)
+  }
+})
+
+router.delete('/prompts/:id', async (req, res) => {
+  const prompt = await story.getPromptById(req.params.id);
+  if (prompt) {
+    story.deletePrompt(req.params.id).then(response => {
+      return res.status(201).json({ message: `Prompt ID ${req.params.id} was removed.` })
+    }).catch(err => console.log(err));
+  } else {
+    return res.status(400).json({ error: "Prompt doesn't exist." })
   }
 })
 
@@ -136,10 +157,11 @@ router.get("/story", restricted, async (req, res) => {
   return res.json({ stories: allStory, userInfo });
 });
 
-router.post('/edit', restricted, async (req, res) => {
+router.put('/edit/:id', restricted, (req, res) => {
   // there needs to be id and edits in req packet
-  if (req.id && req.edits) {
-    await story.editPrompt(req.id, req.edits).then(() => {
+  console.log(req.body)
+  if (req.params.id && req.body.prompt) {
+    story.editPrompt(req.body, req.params.id).then(() => {
       return res.status(200).json({ message: `Prompt ${req.id} was edited successfully.` })
     }).catch(err => console.log(err));
   } else {
@@ -147,9 +169,10 @@ router.post('/edit', restricted, async (req, res) => {
   }
 })
 
-router.post('/add', async (req, res) => {
-  if (req.prompt) {
-    await story.addPrompt(req.prompt).then(() => {
+router.post('/add', (req, res) => {
+  console.log(req.body)
+  if (req.body.prompt) {
+    story.addPrompt(req.body).then(() => {
       return res.status(200).json({ message: "Prompt added" })
     }).catch(err => console.log(err));
   } else {

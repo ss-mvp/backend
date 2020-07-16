@@ -6,7 +6,7 @@ const { getUpvotesByStory, addUpvote, removeUpvote } = require("./upvoteModel");
 
 router.get("/:storyId", async (req, res) => {
   try {
-    let upvotes = await getUpvotesByStory(storyId);
+    let upvotes = await getUpvotesByStory(req.params.storyId);
     let [userVote] = upvotes.filter((el) => el.user_id === req.userId);
     let userHasVoted;
     {
@@ -15,7 +15,7 @@ router.get("/:storyId", async (req, res) => {
     res
       .status(200)
       .json({
-        storyId: storyId,
+        storyId: req.params.storyId,
         votes: upvotes.length,
         userVoted: userHasVoted,
       });
@@ -28,7 +28,7 @@ router.get("/:storyId", async (req, res) => {
 
 router.post("/:storyId", async (req, res) => {
   try {
-    await addUpvote({ story_id: storyId, user_id: req.userId });
+    await addUpvote({ story_id: req.params.storyId, user_id: req.userId });
     res
       .status(201)
       .json({
@@ -43,11 +43,11 @@ router.post("/:storyId", async (req, res) => {
 
 router.delete("/:storyId", async (req, res) => {
   try {
-    await removeUpvote(storyId, req.userId);
+    await removeUpvote(req.params.storyId, req.userId);
     res
       .status(200)
       .json({
-        message: `User ID ${req.userId}'s story ID ${storyId}'s upvote has been removed`,
+        message: `User ID ${req.userId}'s story ID ${req.params.storyId}'s upvote has been removed`,
       });
   } catch (err) {
     res

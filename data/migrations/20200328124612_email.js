@@ -8,7 +8,7 @@ exports.up = function(knex) {
       table.string('validationUrl').notNullable();
       table.boolean('validated').defaultTo(false);
   })
-  .createTable('prompt', table => {
+  .createTable('prompts', table => {
     table.increments();
     table.string('prompt');
     table.boolean('active').defaultTo(false);
@@ -26,7 +26,7 @@ exports.up = function(knex) {
       table.boolean('flagged').defaultTo(false);
       table.jsonb('readability');
       table.integer('prompt_id').unsigned()
-      .references('id').inTable('prompt')
+      .references('id').inTable('prompts')
       .onDelete('CASCADE');
       table.integer('userId').unsigned()
       .references('id').inTable('users')
@@ -39,6 +39,6 @@ exports.down = function(knex) {
   return knex.schema
   .dropTableIfExists('submissions')
   .dropTableIfExists('prompt_queue')
-  .dropTableIfExists('prompt')
+  .dropTableIfExists('prompts')
   .dropTableIfExists('users')
 };

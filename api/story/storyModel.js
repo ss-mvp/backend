@@ -10,6 +10,7 @@ module.exports = {
   addToQueue,
   addPrompt,
   // createQueue,
+  deletePrompt,
   getPromptById,
   editPrompt,
   wipeQueue
@@ -29,7 +30,11 @@ function wipeQueue() {
 // }
 
 function getPromptById(id) {
-  return db('prompt').where({ id }).first();
+  return db('prompts').where({ id }).first();
+}
+
+function deletePrompt(id) {
+  return db('prompts').where({ id }).del();
 }
 
 function addReadability(link, readability) {
@@ -41,7 +46,7 @@ function addImage(image) {
 }
 
 function getDate() {
-  return db('prompt').select('date');
+  return db('prompts').select('date');
 }
 
 async function getPrompt() {
@@ -59,7 +64,7 @@ async function getPrompt() {
 }
 
 function allPrompts() {
-  return db('prompt');
+  return db('prompts');
 }
 
 function allStories() {
@@ -93,10 +98,10 @@ async function addToQueue(id) {
   }
 }
 
-function addPrompt(prompt) {
-  return db('prompt').insert(prompt)
+function addPrompt(newPrompt) {
+  return db('prompts').insert(newPrompt)
 }
 
 function editPrompt(edits, id) {
-  return db('prompt').where({ id }).update(edits);
+  return db('prompts').where({ id }).update(edits);
 }
