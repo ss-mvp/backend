@@ -1,5 +1,11 @@
 const moment = require('moment');
 
+function nextDay(day) {
+  day = day.add(16, 'hours');
+  day = day.add(30, 'minutes')
+  return day
+}
+
 exports.up = function(knex) {
   return knex.schema.createTable('users', table => {
       table.increments();
@@ -11,6 +17,9 @@ exports.up = function(knex) {
   .createTable('prompts', table => {
     table.increments();
     table.string('prompt');
+    table.string('time').defaultTo(moment().format());
+    table.string('end').defaultTo(nextDay(moment()));
+    table.string('newGame').defaultTo(moment().add(1, 'days').format());
     table.boolean('active').defaultTo(false);
     table.boolean('topThree').defaultTo(false);
     table.boolean('voting').defaultTo(false);

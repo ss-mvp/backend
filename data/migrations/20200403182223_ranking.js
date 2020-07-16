@@ -7,7 +7,7 @@ exports.up = function(knex) {
   .createTable('votersIP', table => {
     table.increments().notNullable()
     table.string('ip')
-    table.timestamp('date_voted').defaultTo(moment(new Date(), MMM-DD-YYYY))
+    // table.timestamp('date_voted').defaultTo(moment(new Date(), 'MMM-DD-YYYY'))
   })
 
   .createTable('topThree', table => {

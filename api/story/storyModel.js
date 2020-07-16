@@ -13,7 +13,8 @@ module.exports = {
   deletePrompt,
   getPromptById,
   editPrompt,
-  wipeQueue
+  wipeQueue,
+  getTime
 }
 
 function wipeQueue() {
@@ -104,4 +105,11 @@ function addPrompt(newPrompt) {
 
 function editPrompt(edits, id) {
   return db('prompts').where({ id }).update(edits);
+}
+
+async function getTime(id) {
+  const start = await db('prompts').where({ id }).select('time');
+  const end = await db('prompts').where({ id }).select('end');
+  const newGame = await db('prompts').where({ id }).select('newGame');
+  return {start, end, newGame}
 }

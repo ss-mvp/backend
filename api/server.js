@@ -4,6 +4,10 @@ const cors = require("cors");
 // const multer = require('multer');
 // const newUpload = multer();
 const bodyParser = require("body-parser");
+const startGame = require('../scripts/startGame.js');
+const startVoting = require('../scripts/startVoting.js');
+const endSubmission = require('../scripts/endSubmission.js');
+const endVoting = require('../scripts/endVoting.js');
 
 const emailRouter = require("../api/email/emailRouter.js");
 const storyRouter = require("../api/story/storyRouter.js");
@@ -22,6 +26,10 @@ server.use(cors(corsOptions));
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
+startGame();
+startVoting();
+endSubmission();
+endVoting();
 
 server.use("/email", emailRouter);
 server.use("/upload", restricted, storyRouter);

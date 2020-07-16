@@ -1,5 +1,5 @@
 const CronJob = require('cron').CronJob;
-const story = require("./storyModel.js");
+const story = require("../api/story/storyModel.js");
 
 const job = new CronJob('00 00 15 * * *', async function() {
     const prompt = await story.getPrompt();
