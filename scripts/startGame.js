@@ -2,7 +2,7 @@ const CronJob = require('cron').CronJob;
 const story = require("../api/story/storyModel.js");
 
 // const job = new CronJob('00 30 22 * * *', async function() {
-const job = new CronJob('00 56 16 * * *', async function() {
+const job = new CronJob('00 40 17 * * *', async function() {
     // Start daily game
     const prompt = await story.getPrompt();
 

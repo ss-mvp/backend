@@ -12,3 +12,5 @@ const job = new CronJob('00 30 15 * * *', async function() {
 })
 
 job.start();
+
+module.exports = job;
