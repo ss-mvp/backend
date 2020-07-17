@@ -42,6 +42,6 @@
     "python-shell": "^1.0.8"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.4"
   }
 }
