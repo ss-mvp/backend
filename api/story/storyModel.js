@@ -14,7 +14,8 @@ module.exports = {
   getPromptById,
   editPrompt,
   wipeQueue,
-  getTime
+  getTime,
+  getQueue
 }
 
 function wipeQueue() {
@@ -80,11 +81,11 @@ async function addToQueue(id) {
   let queue = await getQueue();
 
   if (queue.queue.length === 0) {
-    queue = [] // empty string
-    queue.push(id)
-    console.log('queue',queue)
+    newQueue = [] // empty string
+    newQueue.push(id)
+    console.log('queue',newQueue)
     write_queue = {
-      queue: queue.join()
+      queue: newQueue.join()
     }
     return db('prompt_queue').where('id', '=', 1).update(write_queue);
   } else {
@@ -94,7 +95,7 @@ async function addToQueue(id) {
       queue = queue.splice(1, queue.length - 1).join();
     } else if (queue.length < 30) {
       queue.push(id)
-      return db('prompt_queue').where('id', '=', 1).update(queue.join());
+      return db('prompt_queue').where('id', '=', 1).update({ queue: queue.join() });
     }
   }
 }
@@ -103,7 +104,7 @@ function addPrompt(newPrompt) {
   return db('prompts').insert(newPrompt)
 }
 
-function editPrompt(edits, id) {
+function editPrompt(id, edits) {
   return db('prompts').where({ id }).update(edits);
 }
 
