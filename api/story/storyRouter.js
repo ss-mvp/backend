@@ -57,62 +57,24 @@ router.post("/", restricted, async (req, res) => {
   });
 });
 
-// router.get("/prompt", restricted, async (req, res) => {
-//   const today = moment().toArray();
-//   let promptDate = "";
-//   // use queue for recent prompts
-//   await story
-//     .getDate()
-//     .then(async (response) => {
-//       response.map((e, i) => {
-//         if (i === 0 && today <= e.date) {
-//           promptDate = e.date;
-//         }
-//         if (today >= e.date) {
-//           try {
-//             if (today <= response[i + 1].date && i + 1 < response.length - 1) {
-//               promptDate = e.date;
-//             }
-//           } catch {
-//             promptDate = e.date;
-//           }
-//         }
-//       });
-//       story
-//         .getPrompt(promptDate)
-//         .then((resp) => {
-//           return res.status(200).json(resp);
-//         })
-//         .catch((err) => console.log(err));
-//     })
-//     .catch((err) => console.log(err));
-// });
-
-// router.get("/prompt", restricted, async (req, res) => {
-  
-//   const prompt = await story.getPrompt();
-//   // console.log(prompt)
-//   if (prompt.length === 0) {
-//     // create queue
-//     let ids = [];
-//     const prompts = await story.allPrompts();
-//     prompts.map(element => {
-//       ids.push(element.id);
-//     })
-//     random_prompt = ids[Math.floor(Math.random() * (ids.length - 1))];
-//     await story.addToQueue(random_prompt);
-//     const new_prompt = await story.getPrompt();
-//     return res.status(200).json({ prompt: new_prompt });
-//   } else {
-//     // const prompt = await story.getPromptById(prompt);
-//     return res.status(200).json({ prompt });
-//   }
-// });
+router.get('/time', restricted, async (req, res) => {
+  const prompt = await story.getPrompt();
+  console.log(prompt.id)
+  if (prompt) {
+    const time = await story.getTime(prompt.id);
+    if (time) {
+      return res.status(200).json({ time });
+    } else {
+      return res.status(400).json({ error: "Something went wrong." })
+    }
+  } else {
+    return res.status(400).json({ error: "No active prompt." })
+  }
+})
 
 router.get("/prompt", restricted, async (req, res) => {
   const prompt = await story.getPrompt();
-  console.log(prompt)
-  
+  // console.log(prompt)
   if (prompt.length === 0) {
     return res.status(500).json({ error: 'Something went wrong.' })
   } else {
