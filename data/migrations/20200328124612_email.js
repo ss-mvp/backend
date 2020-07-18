@@ -1,9 +1,16 @@
-const moment = require('moment');
+// const moment = require('moment');
 
-function nextDay(day) {
-  day = day.add(16, 'hours');
-  day = day.add(30, 'minutes')
-  return day
+function nextDay(day, hours) {
+  // day = day.add(16, 'hours');
+  // day = day.add(30, 'minutes')
+  // return day
+  Date.prototype.addHours = function(h) {
+    this.setTime(this.getTime() + (h*60*60*1000));
+    return this.getTime();
+  }
+
+  return day.addHours(hours)
+
 }
 
 exports.up = function(knex) {
@@ -25,9 +32,9 @@ exports.up = function(knex) {
     table.increments();
     table.integer('prompt_id').unsigned().notNullable()
     .references('id').inTable('prompts')
-    table.string('time').defaultTo(moment().format());
-    table.string('end').defaultTo(nextDay(moment()));
-    table.string('newGame').defaultTo(moment().add(1, 'days').format());
+    table.string('time').defaultTo(new Date().getTime());
+    table.string('end').defaultTo(nextDay(new Date(), 16.5));
+    table.string('newGame').defaultTo(nextDay(new Date(), 24));
   })
   .createTable('prompt_queue', table => {
     table.integer('id');
@@ -45,7 +52,8 @@ exports.up = function(knex) {
       table.integer('userId').unsigned()
       .references('id').inTable('users')
       .onDelete('CASCADE');
-      table.string('date').defaultTo(moment().format('MMM DD h:mm A'))
+      // table.string('date').defaultTo(moment().format('MMM DD h:mm A'))
+      table.string('date').defaultTo(Date.now())
   })
 };
 
