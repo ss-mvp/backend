@@ -21,11 +21,10 @@ exports.up = function(knex) {
       table.integer('prompt_id').unsigned()
       .references('id').inTable('prompts')
       .onDelete('CASCADE');
-      table.integer('prompt_time').unsigned()
-      .references('time').inTable('prompt_time')
+      table.integer('prompt_time_id').unsigned()
+      .references('id').inTable('prompt_time')
       .onDelete('CASCADE');
       // table.integer('score').defaultTo(0)
-      
   })
 
   .createTable('ranking', table => {

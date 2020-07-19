@@ -16,6 +16,7 @@ function nextDay(day, hours) {
 exports.up = function(knex) {
   return knex.schema.createTable('users', table => {
       table.increments();
+      table.string('username', 128).unique().notNullable().index()
       table.string('email', 128).unique().notNullable().index();
       table.string('password').notNullable();
       table.string('validationUrl').notNullable();

@@ -5,6 +5,12 @@ module.exports = {
   removeWinner,
   flagContent,
   getSubmissions,
+  getUsers
+}
+
+// This is going to have to be changed to username when we implement it.
+function getUsers() {
+  return db('users').select('email', 'id');
 }
 
 function getSubmissions() {

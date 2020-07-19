@@ -9,28 +9,23 @@ module.exports = {
   allStories,
   addToQueue,
   addPrompt,
-  // createQueue,
   deletePrompt,
   getPromptById,
   editPrompt,
   wipeQueue,
   getTime,
   getQueue,
-  setTime
+  setTime,
+  getAllTimes
+}
+
+function getAllTimes(id) {
+  return db('prompt_time').where('id', '=', 'prompt_id');
 }
 
 function wipeQueue() {
   return db('prompt_queue').where({ id: 1 }).update({ queue: '' });
 }
-
-// function createQueue(id) {
-//   console.log(id)
-//   const add_array = [];
-//   add_array.push(id);
-//   console.log('add_array', add_array)
-//   const save_string = add_array.join();
-//   return db('prompt_queue').insert(save_string);
-// }
 
 function getPromptById(id) {
   return db('prompts').where({ id }).first();

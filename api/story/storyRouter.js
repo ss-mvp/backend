@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const upload = require("../../services/file-upload.js");
 const story = require("./storyModel.js");
-const ranking = require("../");
 const users = require("../email/emailModel.js");
 const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
@@ -20,6 +19,15 @@ const attemptJSONParse = (data) => {
 const onlyTranscription = (data) => {
   data["images"] && data["metadata"];
 };
+
+// router.get('/user/:id', restricted, async (req, res) => {
+//   const user = await auth.findEmail(req.params.id);
+//   if (user) {
+//       return res.status(200).json({ user });
+//   } else {
+//       return res.status(400).json({ error: "No user found with that ID." });
+//   }
+// })
 
 router.post("/", restricted, async (req, res) => {
   const singleUpload = upload.single("image");
