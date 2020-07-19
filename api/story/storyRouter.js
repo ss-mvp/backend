@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const upload = require("../../services/file-upload.js");
 const story = require("./storyModel.js");
+const ranking = require("../");
 const users = require("../email/emailModel.js");
 const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
@@ -43,7 +44,8 @@ router.post("/", restricted, async (req, res) => {
       prompt_id: req.body.promptId,
       userId: req.userId,
       flaggedWord: transcribed.flagged.flag,
-      flagged: transcribed.flagged.isFlagged
+      flagged: transcribed.flagged.isFlagged,
+      score: readability.ranking_score
     };
 
     await story

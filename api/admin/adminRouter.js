@@ -22,7 +22,15 @@ router.post('/login', (req, res) => {
     }
 })
 
-// router.post()
+router.post('/setwinner/:prompt_id/:user_id/:story_id', adminRestricted, async (req, res) => {
+  const { prompt_id, user_id, story_id } = req.params;
+  const winner = await admin.setWinner(story_id, user_id, prompt_id);
+  if (winner) {
+    return res.status(200).json({ message: `Story with ID ${story_id} and prompt ${prompt_id} from User ID ${user_id} was set as a winner.` })
+  } else {
+    return res.status(500).json({ error: "Something went wrong." })
+  }
+})
 
 function signToken(user) {
     const payload = {

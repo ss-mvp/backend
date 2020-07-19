@@ -47,6 +47,7 @@ exports.up = function(knex) {
       table.boolean('flagged').defaultTo(false);
       table.string('flaggedWord').defaultTo('None')
       table.jsonb('readability');
+      table.float('score')
       table.integer('prompt_id').unsigned()
       .references('id').inTable('prompts')
       .onDelete('CASCADE');
