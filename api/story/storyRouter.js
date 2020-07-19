@@ -20,9 +20,6 @@ const onlyTranscription = (data) => {
   data["images"] && data["metadata"];
 };
 
-// This is a working route to upload a file to AWS
-// using the file-upload.js helper function.
-
 router.post("/", restricted, async (req, res) => {
   const singleUpload = upload.single("image");
   singleUpload(req, res, async function (e) {
@@ -32,19 +29,22 @@ router.post("/", restricted, async (req, res) => {
     let transcribed = await transcribe({ images });
     transcribed = JSON.parse(transcribed);
     console.log(transcribed);
+
     let readability = await readable({ story: transcribed.images[0] });
     readability = JSON.parse(readability);
-    console.log(readability);
+    // console.log(readability);
 
-    if (e) return res.status(400).json({ error: e.message });
+    // if (e) return res.status(400).json({ error: e.message });
 
     const sendPackage = {
       image: req.file.location,
       pages: transcribed,
       readability,
       prompt_id: req.body.promptId,
-      userId: req.userId,
+      userId: req.userId
     };
+
+    // console.log(sendPackage);
 
     await story
       .addImage(sendPackage)

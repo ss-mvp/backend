@@ -31,7 +31,7 @@ async function getRandom() {
 }
 
 // const job = new CronJob('00 30 22 * * *', async function() {
-const startGame = new CronJob('00 18 20 * * *', async function() {
+const startGame = new CronJob('00 01 20 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();

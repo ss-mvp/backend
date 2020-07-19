@@ -6,10 +6,10 @@ function nextDay(day, hours) {
   // return day
   Date.prototype.addHours = function(h) {
     this.setTime(this.getTime() + (h*60*60*1000));
-    return this.getTime();
+    return Date.parse(this);
   }
 
-  return day.addHours(hours)
+  return Date.parse(Date(day.addHours(hours)))
 
 }
 
@@ -32,7 +32,7 @@ exports.up = function(knex) {
     table.increments();
     table.integer('prompt_id').unsigned().notNullable()
     .references('id').inTable('prompts')
-    table.string('time').defaultTo(new Date().getTime());
+    table.string('time').defaultTo(Date.parse(new Date()));
     table.string('end').defaultTo(nextDay(new Date(), 16.5));
     table.string('newGame').defaultTo(nextDay(new Date(), 24));
   })

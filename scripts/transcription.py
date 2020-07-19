@@ -57,12 +57,28 @@ def process_images(uris):
     metadata = map(nothing, transcripts)
     return {'images': list(transcripts), 'metadata': list(metadata)}
 
+def check_singles(text):
+    singles = {}
+    flagged = False
+    with open('scripts/bad_single.csv', 'r') as bs:
+        for word in bs:
+            if word not in singles:
+                singles[word] = True
+
+    for words in text:
+        if word in singles:
+            flagged = True
+
+    return flagged
+
 
 # Input: JSON String in the transcribable data structure
 # Output: JSON String of the data being processed into transcripts and metadata
 def main(transcribable):
     json = loads(transcribable)
     transcriptions = process_images(json['images'])
+    flagged = check_singles(transcriptions['images'][0])
+    transcriptions['flagged'] = flagged
     return dumps(transcriptions)
 
 

@@ -2,7 +2,6 @@ from sys import stdin, stdout
 from json import loads, dumps
 from decouple import config
 import textstat
-
 import urllib.request
 
 def get_stats(text):
