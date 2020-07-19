@@ -28,11 +28,11 @@ router.post("/", restricted, async (req, res) => {
 
     let transcribed = await transcribe({ images });
     transcribed = JSON.parse(transcribed);
-    console.log(transcribed);
+    // console.log(transcribed);
 
     let readability = await readable({ story: transcribed.images[0] });
     readability = JSON.parse(readability);
-    // console.log(readability);
+    console.log(readability)
 
     // if (e) return res.status(400).json({ error: e.message });
 
@@ -41,10 +41,10 @@ router.post("/", restricted, async (req, res) => {
       pages: transcribed,
       readability,
       prompt_id: req.body.promptId,
-      userId: req.userId
+      userId: req.userId,
+      flaggedWord: transcribed.flagged.flag,
+      flagged: transcribed.flagged.isFlagged
     };
-
-    // console.log(sendPackage);
 
     await story
       .addImage(sendPackage)
@@ -59,7 +59,6 @@ router.post("/", restricted, async (req, res) => {
 
 router.get('/time', restricted, async (req, res) => {
   const prompt = await story.getPrompt();
-  // console.log(prompt.id)
   if (prompt) {
     const time = await story.getTime(prompt.id);
     console.log(time)
@@ -75,7 +74,6 @@ router.get('/time', restricted, async (req, res) => {
 
 router.get("/prompt", restricted, async (req, res) => {
   const prompt = await story.getPrompt();
-  // console.log(prompt)
   if (prompt.length === 0) {
     return res.status(500).json({ error: 'Something went wrong.' })
   } else {

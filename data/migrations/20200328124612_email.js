@@ -43,8 +43,9 @@ exports.up = function(knex) {
   .createTable('submissions', table => {
       table.increments();
       table.string('image').index();
-      table.string('pages');
+      table.string('pages', 2000000);
       table.boolean('flagged').defaultTo(false);
+      table.string('flaggedWord').defaultTo('None')
       table.jsonb('readability');
       table.integer('prompt_id').unsigned()
       .references('id').inTable('prompts')

@@ -57,28 +57,80 @@ def process_images(uris):
     metadata = map(nothing, transcripts)
     return {'images': list(transcripts), 'metadata': list(metadata)}
 
+# def check_singles(text):
+#     singles = {}
+#     the_word = ''
+#     flagged = False
+#     with open('scripts/bad_single.csv', 'r') as bs:
+#         for word in bs:
+#             word = word.strip(',')
+#             # if word not in singles:
+#             singles[word] = True
+
+#     text = text[0].split(' ')
+#     result = []
+#     for words in text:
+#         # result.append(type(words.lower().replace(',', '')))
+#         words = words.lower().replace(',', '')
+#         if words in singles:
+#             the_word = words
+#             flagged = True
+#         else:
+#             continue
+
+#     return [flagged, the_word]
+
 def check_singles(text):
     singles = {}
+    the_word = ''
     flagged = False
     with open('scripts/bad_single.csv', 'r') as bs:
         for word in bs:
-            if word not in singles:
-                singles[word] = True
+            word = word.replace(',', '').replace('\n', '')
+            # if word not in singles:
+            singles[word] = True
 
+    text = text[0].split(' ')
+    result = []
     for words in text:
-        if word in singles:
+        # result.append(type(words.lower().replace(',', '')))
+        words = words.lower().replace(',', '')
+        if words in singles:
+            the_word = words
             flagged = True
+            break
+        else:
+            continue
 
-    return flagged
+    return {"isFlagged": flagged, "flag": the_word}
 
+def check_phrases(text):
+    phrases = {}
+    phrase = ''
+    flagged = False
+    with open('scripts/bad_phrases.csv', 'r') as bp:
+        for words in bp:
+            words = words.replace(',', '').replace('\n', '')
+            if words in text[0]:
+                flagged = True
+                phrase = words
+                break
+    
+    return {"isFlagged": flagged, "flag": phrase}
 
 # Input: JSON String in the transcribable data structure
 # Output: JSON String of the data being processed into transcripts and metadata
 def main(transcribable):
     json = loads(transcribable)
     transcriptions = process_images(json['images'])
-    flagged = check_singles(transcriptions['images'][0])
-    transcriptions['flagged'] = flagged
+    # Check the single word CSV for bad words
+    singles_flagged = check_singles(transcriptions['images'])
+    if singles_flagged['isFlagged']:
+        transcriptions['flagged'] = singles_flagged
+    else:
+        # Check the bad phrase CSV for matches
+        phrase_flagged = check_phrases(transcriptions['images'])
+        transcriptions['flagged'] = phrase_flagged
     return dumps(transcriptions)
 
 
