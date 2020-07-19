@@ -2,7 +2,6 @@ from sys import stdin, stdout
 from json import loads, dumps
 from decouple import config
 import textstat
-
 import urllib.request
 
 def get_stats(text):
@@ -41,8 +40,13 @@ def get_stats(text):
 # Input: JSON String in the transcribable data structure
 # Output: JSON String of the data being processed to retrieve readability scores
 def main(text):
+    ranking_score = 0
     json = loads(text)
     scores = get_stats(json['story']) # Assuming the web side calls the text "story"
+    for k, v in scores.items():
+        if k != "consolidated_score" and k != "doc_length" and k != "quote_count":
+            ranking_score += v
+    scores['ranking_score'] = ranking_score
     return dumps(scores)
 
 

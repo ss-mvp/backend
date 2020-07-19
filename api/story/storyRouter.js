@@ -20,8 +20,14 @@ const onlyTranscription = (data) => {
   data["images"] && data["metadata"];
 };
 
-// This is a working route to upload a file to AWS
-// using the file-upload.js helper function.
+// router.get('/user/:id', restricted, async (req, res) => {
+//   const user = await auth.findEmail(req.params.id);
+//   if (user) {
+//       return res.status(200).json({ user });
+//   } else {
+//       return res.status(400).json({ error: "No user found with that ID." });
+//   }
+// })
 
 router.post("/", restricted, async (req, res) => {
   const singleUpload = upload.single("image");
@@ -31,12 +37,13 @@ router.post("/", restricted, async (req, res) => {
 
     let transcribed = await transcribe({ images });
     transcribed = JSON.parse(transcribed);
-    console.log(transcribed);
+    // console.log(transcribed);
+
     let readability = await readable({ story: transcribed.images[0] });
     readability = JSON.parse(readability);
-    console.log(readability);
+    console.log(readability)
 
-    if (e) return res.status(400).json({ error: e.message });
+    // if (e) return res.status(400).json({ error: e.message });
 
     const sendPackage = {
       image: req.file.location,
@@ -44,6 +51,9 @@ router.post("/", restricted, async (req, res) => {
       readability,
       prompt_id: req.body.promptId,
       userId: req.userId,
+      flaggedWord: transcribed.flagged.flag,
+      flagged: transcribed.flagged.isFlagged,
+      score: readability.ranking_score
     };
 
     await story
@@ -59,9 +69,9 @@ router.post("/", restricted, async (req, res) => {
 
 router.get('/time', restricted, async (req, res) => {
   const prompt = await story.getPrompt();
-  console.log(prompt.id)
   if (prompt) {
     const time = await story.getTime(prompt.id);
+    console.log(time)
     if (time) {
       return res.status(200).json({ time });
     } else {
@@ -74,7 +84,6 @@ router.get('/time', restricted, async (req, res) => {
 
 router.get("/prompt", restricted, async (req, res) => {
   const prompt = await story.getPrompt();
-  // console.log(prompt)
   if (prompt.length === 0) {
     return res.status(500).json({ error: 'Something went wrong.' })
   } else {

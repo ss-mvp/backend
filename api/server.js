@@ -4,10 +4,6 @@ const cors = require("cors");
 // const multer = require('multer');
 // const newUpload = multer();
 const bodyParser = require("body-parser");
-// const startGame = require('../scripts/startGame.js').job;
-// const startVoting = require('../scripts/startVoting.js').job;
-// const endSubmission = require('../scripts/endSubmission.js').job;
-// const endVoting = require('../scripts/endVoting.js').job;
 
 const emailRouter = require("../api/email/emailRouter.js");
 const storyRouter = require("../api/story/storyRouter.js");
@@ -31,7 +27,7 @@ async function getRandom() {
 }
 
 // const job = new CronJob('00 30 22 * * *', async function() {
-const startGame = new CronJob('00 08 18 * * *', async function() {
+const startGame = new CronJob('00 58 18 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();
@@ -122,10 +118,6 @@ server.use(cors(corsOptions));
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
-// startGame;
-// startVoting;
-// endSubmission;
-// endVoting;
 
 server.use("/email", emailRouter);
 server.use("/upload", restricted, storyRouter);
