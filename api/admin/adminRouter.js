@@ -21,17 +21,38 @@ router.get('/users', adminRestricted, async (req, res) => {
     }
 })
 
+router.get('/flag/:id', adminRestricted, async (req, res) => {
+  const flag = await admin.getFlag(req.params.id);
+  // return res.status(200).json({ flag })
+  if (flag.length > 0) {
+    return res.status(200).json({ flag })
+  } else {
+    return res.status(500).json({ error: "Something went wrong." })
+  }
+})
+
 router.post('/flag/:id', adminRestricted, async (req, res) => {
-    if (req.query.flagged && req.query.flagged === true) {
-      await admin.unFlagContent(req.params.id);
-      return res.status(200).json('Content Unflagged')
-    }
+    // if (req.query.flagged && req.query.flagged === true) {
+    //   await admin.unFlagContent(req.params.id);
+    //   console.log('unflagged!')
+    //   return res.status(200).json('Content Unflagged')
+    // } 
+    
     const flagged = await admin.flagContent(req.params.id);
-    if (flagged) {
-      return res.status(200).json({ message: "Content flagged." })
+    console.log(flagged)
+    if (flagged.flagged) {
+      console.log(flagged)
+      return res.status(200).json({ message: "Content flagged.", flag: 1 })
     } else {
-      return res.status(500).json({ error: "Something went wrong." })
+      return res.status(200).json({ message: "Content unflagged.", flag: 0 })
     }
+    
+})
+
+router.get('/winners', adminRestricted, async (req, res) => {
+    const subs = await admin.getSubmissionsPerTime();
+    console.log(subs)
+    return res.json({ subs });
 })
 
 router.post('/login', (req, res) => {

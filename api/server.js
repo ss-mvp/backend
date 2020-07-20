@@ -27,7 +27,7 @@ async function getRandom() {
 }
 
 // const job = new CronJob('00 30 22 * * *', async function() {
-const startGame = new CronJob('00 014 20 * * *', async function() {
+const startGame = new CronJob('00 02 14 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();
@@ -75,6 +75,8 @@ const endSubmission = new CronJob('00 23 19 * * *', async function() {
       console.log('No prompt');
   } else {
      await story.editPrompt(prompt.id, { active: false, topThree: true });
+     const promptId = prompt.id;
+    //  const times = await story.getTime(promptId);
   }
 })
 

@@ -1,17 +1,17 @@
 // const moment = require('moment');
 
-function nextDay(day, hours) {
-  // day = day.add(16, 'hours');
-  // day = day.add(30, 'minutes')
-  // return day
-  Date.prototype.addHours = function(h) {
-    this.setTime(this.getTime() + (h*60*60*1000));
-    return Date.parse(this);
-  }
+// function nextDay(day, hours) {
+//   // day = day.add(16, 'hours');
+//   // day = day.add(30, 'minutes')
+//   // return day
+//   Date.prototype.addHours = function(h) {
+//     this.setTime(this.getTime() + (h*60*60*1000));
+//     return Date.parse(this);
+//   }
 
-  return Date.parse(Date(day.addHours(hours)))
+//   return Date.parse(Date(day.addHours(hours)))
 
-}
+// }
 
 exports.up = function(knex) {
   return knex.schema.createTable('users', table => {
@@ -34,8 +34,8 @@ exports.up = function(knex) {
     table.integer('prompt_id').unsigned().notNullable()
     .references('id').inTable('prompts')
     table.string('time').defaultTo(Date.parse(new Date()));
-    table.string('end').defaultTo(nextDay(new Date(), 16.5));
-    table.string('newGame').defaultTo(nextDay(new Date(), 24));
+    table.string('end').defaultTo(Date.parse(new Date()) + (59400000 - 1));
+    table.string('newGame').defaultTo(Date.parse(new Date()) + (86400000 - 1));
   })
   .createTable('prompt_queue', table => {
     table.integer('id');
@@ -55,8 +55,7 @@ exports.up = function(knex) {
       table.integer('userId').unsigned()
       .references('id').inTable('users')
       .onDelete('CASCADE');
-      // table.string('date').defaultTo(moment().format('MMM DD h:mm A'))
-      table.string('date').defaultTo(Date.now())
+      table.string('date').defaultTo(Date.parse(new Date()))
   })
 };
 
