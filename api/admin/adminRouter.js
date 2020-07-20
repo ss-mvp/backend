@@ -21,6 +21,19 @@ router.get('/users', adminRestricted, async (req, res) => {
     }
 })
 
+router.post('/flag/:id', adminRestricted, async (req, res) => {
+    if (req.query.flagged && req.query.flagged === true) {
+      await admin.unFlagContent(req.params.id);
+      return res.status(200).json('Content Unflagged')
+    }
+    const flagged = await admin.flagContent(req.params.id);
+    if (flagged) {
+      return res.status(200).json({ message: "Content flagged." })
+    } else {
+      return res.status(500).json({ error: "Something went wrong." })
+    }
+})
+
 router.post('/login', (req, res) => {
     if (req.body.username === 'admin' && req.body.password === 'GraigAdminAccount2020') {
       const { username, password } = req.body;

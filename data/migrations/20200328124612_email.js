@@ -46,7 +46,7 @@ exports.up = function(knex) {
       table.string('image').index();
       table.string('pages', 2000000);
       table.boolean('flagged').defaultTo(false);
-      table.string('flaggedWord').defaultTo('None')
+      table.string('flag').defaultTo('None')
       table.jsonb('readability');
       table.float('score')
       table.integer('prompt_id').unsigned()
