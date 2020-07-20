@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { getTopThree, rankIt, getFinalScores, addIP } = require("./rankingModel");
+const { getWinner, getTopThree, rankIt, getFinalScores, addIP } = require("./rankingModel");
 
 // hello heroku
 
@@ -31,15 +31,24 @@ router.post("/rankthree", checkIP, async(req, res) => {
 router.get("/winner", async(req, res) => {
   try {
     let allThree = await getFinalScores()
-    let winner;
+    let first, second, third;
     let maxScore = 0;
+    let secondScore = 0;
     allThree.forEach(el => {
       if (el.score > maxScore){
         maxScore = el.score
-        winner = el.topThreeId
+        first = el.topThreeId
+      } else if (el.score >= secondScore){
+        secondScore = el.score
+        second = el.topThreeId
+      } else {
+        third = el.topThreeId
       }
     })
-    
+    let winner = await getWinner(first)
+    let runnerUp = await getWinner(second)
+    let lastPlace = await getWinner(third)
+    res.status(200).json([winner, runnerUp, lastPlace])
   }
   catch(err){
     res.status(500).json({ message: `${error}` })

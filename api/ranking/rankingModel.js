@@ -51,4 +51,5 @@ async function getWinner(winnerId){
     return await db("topThree")
     .where({ topThreeId: winnderId })
     .join("users", "topThree.topThreeId", "=", "users.id")
+    .first()
 }
