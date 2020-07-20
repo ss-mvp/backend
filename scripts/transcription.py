@@ -46,39 +46,10 @@ def transcribe(uri):
 def nothing(transcript):
     return {"nada": "nothing"}
 
-
-# Input list of URIs
 def process_images(uris):
-    # Map functions are used to take iterable data structures like list, maps, etc. and make a map
-    # that consist of the data of the original data structure after being run through a function.
-    # Outputs a map (list like data structure) of all the uris after being transcribed
     transcripts = map(transcribe, uris)
-    # Outputs a map (list like data structure) of all the transcriptions after having the meta data parsed
     metadata = map(nothing, transcripts)
     return {'images': list(transcripts), 'metadata': list(metadata)}
-
-# def check_singles(text):
-#     singles = {}
-#     the_word = ''
-#     flagged = False
-#     with open('scripts/bad_single.csv', 'r') as bs:
-#         for word in bs:
-#             word = word.strip(',')
-#             # if word not in singles:
-#             singles[word] = True
-
-#     text = text[0].split(' ')
-#     result = []
-#     for words in text:
-#         # result.append(type(words.lower().replace(',', '')))
-#         words = words.lower().replace(',', '')
-#         if words in singles:
-#             the_word = words
-#             flagged = True
-#         else:
-#             continue
-
-#     return [flagged, the_word]
 
 def check_singles(text):
     singles = {}
@@ -87,13 +58,10 @@ def check_singles(text):
     with open('scripts/bad_single.csv', 'r') as bs:
         for word in bs:
             word = word.replace(',', '').replace('\n', '')
-            # if word not in singles:
             singles[word] = True
 
     text = text[0].split(' ')
-    result = []
     for words in text:
-        # result.append(type(words.lower().replace(',', '')))
         words = words.lower().replace(',', '')
         if words in singles:
             the_word = words

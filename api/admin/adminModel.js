@@ -5,12 +5,13 @@ module.exports = {
   removeWinner,
   flagContent,
   getSubmissions,
-  getUsers
+  getUsers,
+  unFlagContent
 }
 
 // This is going to have to be changed to username when we implement it.
 function getUsers() {
-  return db('users').select('email', 'id');
+  return db('users').select('username', 'id');
 }
 
 function getSubmissions() {
@@ -19,6 +20,10 @@ function getSubmissions() {
 
 function flagContent(id) {
   return db('submissions').where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" })
+}
+
+function unFlagContent(id) {
+  return db('submissions').where({ id }).update({ flagged: false, flag: "" })
 }
 
 async function setWinner(details) {

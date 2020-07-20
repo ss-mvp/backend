@@ -51,7 +51,7 @@ router.post("/", restricted, async (req, res) => {
       readability,
       prompt_id: req.body.promptId,
       userId: req.userId,
-      flaggedWord: transcribed.flagged.flag,
+      flag: transcribed.flagged.flag,
       flagged: transcribed.flagged.isFlagged,
       score: readability.ranking_score
     };
