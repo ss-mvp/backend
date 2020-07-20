@@ -9,25 +9,23 @@ module.exports = {
   allStories,
   addToQueue,
   addPrompt,
-  // createQueue,
   deletePrompt,
   getPromptById,
   editPrompt,
-  wipeQueue
+  wipeQueue,
+  getTime,
+  getQueue,
+  setTime,
+  getAllTimes
+}
+
+function getAllTimes(id) {
+  return db('prompt_time').where('id', '=', 'prompt_id');
 }
 
 function wipeQueue() {
   return db('prompt_queue').where({ id: 1 }).update({ queue: '' });
 }
-
-// function createQueue(id) {
-//   console.log(id)
-//   const add_array = [];
-//   add_array.push(id);
-//   console.log('add_array', add_array)
-//   const save_string = add_array.join();
-//   return db('prompt_queue').insert(save_string);
-// }
 
 function getPromptById(id) {
   return db('prompts').where({ id }).first();
@@ -79,11 +77,11 @@ async function addToQueue(id) {
   let queue = await getQueue();
 
   if (queue.queue.length === 0) {
-    queue = [] // empty string
-    queue.push(id)
-    console.log('queue',queue)
+    newQueue = [] // empty string
+    newQueue.push(id)
+    console.log('queue',newQueue)
     write_queue = {
-      queue: queue.join()
+      queue: newQueue.join()
     }
     return db('prompt_queue').where('id', '=', 1).update(write_queue);
   } else {
@@ -93,7 +91,7 @@ async function addToQueue(id) {
       queue = queue.splice(1, queue.length - 1).join();
     } else if (queue.length < 30) {
       queue.push(id)
-      return db('prompt_queue').where('id', '=', 1).update(queue.join());
+      return db('prompt_queue').where('id', '=', 1).update({ queue: queue.join() });
     }
   }
 }
@@ -102,6 +100,18 @@ function addPrompt(newPrompt) {
   return db('prompts').insert(newPrompt)
 }
 
-function editPrompt(edits, id) {
+function editPrompt(id, edits) {
   return db('prompts').where({ id }).update(edits);
+}
+
+async function getTime(prompt_id) {
+  const start = await db('prompt_time').where({ prompt_id }).select('time').first();
+  const end = await db('prompt_time').where({ prompt_id }).select('end').first();
+  const newGame = await db('prompt_time').where({ prompt_id }).select('newGame').first();
+  console.log(start, end, newGame);
+  return {start, end, newGame}
+}
+
+function setTime(id) {
+  return db('prompt_time').where({ id }).insert({ prompt_id: id });
 }
