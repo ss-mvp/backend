@@ -18,6 +18,83 @@ exports.seed = function(knex) {
                 password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
                 validationUrl: '$3b$09$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
                 validated: true
+            },
+            {
+                username: 'BigMama',
+                email: 'bigmama@mama.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$93$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'JoeExotic',
+                email: 'joeexotic@gw.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$14$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'TimGif',
+                email: 'TimGif@tg.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$95$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'fakeTim',
+                email: 'fakeTim@faketime.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$71$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'ButterNutSquash',
+                email: 'squash@butternut.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$56$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'mcLovin',
+                email: 'mcLovin@mclovin.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$32$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'AustinP',
+                email: 'Austin@power.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$12$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'DarthVader',
+                email: 'darthvader@thefather.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$78$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'Obiwan',
+                email: 'Obiwan@onlyhope.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$cd$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'CarlsJr',
+                email: 'jr@Carls.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3b$09$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
+            },
+            {
+                username: 'ComTruise',
+                email: 'com@truise.com',
+                password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
+                validationUrl: '$3bab9$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
+                validated: true
             }
         ]);
       });
