@@ -8,6 +8,7 @@ exports.seed = function(knex) {
             {
                 username: 'ElongatedMuskrat',
                 email: 'zimashima@gmail.com',
+                // 12345678
                 password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
                 validationUrl: '$2b$10$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
                 validated: true
@@ -15,6 +16,7 @@ exports.seed = function(knex) {
             {
                 username: 'CaroleBaskin',
                 email: 'CaroleBaskin@bigcat.com',
+                // 12345678
                 password: '$2b$10$ECMudLuZE7Y.du6tUqACh.n5U9Tizykr5LUYlM0IAoFbpb3Amj31a',
                 validationUrl: '$3b$09$sigYcfShRF1aoyig12ErC.ByyqJmYOYRDkYUIBh1DycMrSV6K7x4S',
                 validated: true

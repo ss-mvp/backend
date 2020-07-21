@@ -21,10 +21,12 @@ router.get('/users', adminRestricted, async (req, res) => {
     }
 })
 
+
+
 router.get('/flag/:id', adminRestricted, async (req, res) => {
   const flag = await admin.getFlag(req.params.id);
   // return res.status(200).json({ flag })
-  if (flag.length > 0) {
+  if (flag) {
     return res.status(200).json({ flag })
   } else {
     return res.status(500).json({ error: "Something went wrong." })
@@ -40,7 +42,7 @@ router.post('/flag/:id', adminRestricted, async (req, res) => {
     
     const flagged = await admin.flagContent(req.params.id);
     console.log(flagged)
-    if (flagged.flagged) {
+    if (flagged) {
       console.log(flagged)
       return res.status(200).json({ message: "Content flagged.", flag: 1 })
     } else {
@@ -52,6 +54,7 @@ router.post('/flag/:id', adminRestricted, async (req, res) => {
 router.get('/winners', adminRestricted, async (req, res) => {
     const subs = await admin.getSubmissionsPerTime();
     console.log(subs)
+    // console.log(subs)
     return res.json({ subs });
 })
 

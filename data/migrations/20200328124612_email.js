@@ -55,6 +55,7 @@ exports.up = function(knex) {
       table.integer('userId').unsigned()
       .references('id').inTable('users')
       .onDelete('CASCADE');
+      table.boolean('vote').defaultTo(false);
       table.string('date').defaultTo(Date.parse(new Date()))
   })
 };
