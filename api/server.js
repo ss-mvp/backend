@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 
 const emailRouter = require("../api/email/emailRouter.js");
 const storyRouter = require("../api/story/storyRouter.js");
-const upvoteRouter = require("./ranking/rankingRouter.js");
+const rankingRouter = require("./ranking/rankingRouter.js");
 const adminRouter = require("../api/admin/adminRouter.js");
 const restricted = require("./middleware/restricted");
 
@@ -123,7 +123,6 @@ server.use(bodyParser.json({ limit: "50mb" }));
 
 server.use("/email", emailRouter);
 server.use("/upload", restricted, storyRouter);
-server.use("/upvote", restricted, upvoteRouter);
 server.use("/admin", adminRouter);
-
+server.use("/ranking", rankingRouter)
 module.exports = server;

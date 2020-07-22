@@ -20,7 +20,7 @@ module.exports = {
 }
 
 function getAllTimes(id) {
-  return db('prompt_time').where('id', '=', 'prompt_id');
+  return db('prompt_time').join("prompts", "prompts.id", "prompt_time.prompt_id").where({ prompt_id: id });
 }
 
 function wipeQueue() {

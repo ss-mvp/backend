@@ -15,7 +15,7 @@
 
 exports.up = function(knex) {
   return knex.schema.createTable('users', table => {
-      table.increments();
+      table.increments().notNullable()
       table.string('username', 128).unique().notNullable().index()
       table.string('email', 128).unique().notNullable().index();
       table.string('password').notNullable();
@@ -23,14 +23,14 @@ exports.up = function(knex) {
       table.boolean('validated').defaultTo(false);
   })
   .createTable('prompts', table => {
-    table.increments();
+    table.increments().notNullable()
     table.string('prompt');
     table.boolean('active').defaultTo(false);
     table.boolean('topThree').defaultTo(false);
     table.boolean('voting').defaultTo(false);
   })
   .createTable('prompt_time', table => {
-    table.increments();
+    table.increments().notNullable()
     table.integer('prompt_id').unsigned().notNullable()
     .references('id').inTable('prompts')
     table.string('time').defaultTo(Date.parse(new Date()));
@@ -38,11 +38,11 @@ exports.up = function(knex) {
     table.string('newGame').defaultTo(Date.parse(new Date()) + (86400000 - 1));
   })
   .createTable('prompt_queue', table => {
-    table.integer('id');
+    table.integer('id').notNullable()
     table.string('queue', 128);
   })
   .createTable('submissions', table => {
-      table.increments();
+      table.increments().notNullable()
       table.string('image').index();
       table.string('pages', 2000000);
       table.boolean('flagged').defaultTo(false);

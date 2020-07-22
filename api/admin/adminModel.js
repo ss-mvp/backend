@@ -9,6 +9,7 @@ module.exports = {
   unFlagContent,
   getSubmissionsPerTime,
   getFlag,
+  updateTopThree
   // getAllVotes
 }
 
@@ -62,7 +63,11 @@ async function unFlagContent(id) {
 }
 
 async function setWinner(details) {
-  return db('topThree').insert(details);
+  return await db('topThree').insert(details);
+}
+
+async function updateTopThree(story_id){
+  return await db('submissions').where({ id: story_id }).update({ vote: true, topThree: true })
 }
 
 function removeWinner(story_id, user_id, prompt_id) {

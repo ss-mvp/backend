@@ -5,13 +5,13 @@ exports.up = function(knex) {
   return knex.schema
   
   .createTable('votersIP', table => {
-    table.increments()
+    table.increments().notNullable()
     table.string('ip')
     // table.timestamp('date_voted').defaultTo(moment(new Date(), 'MMM-DD-YYYY'))
   })
 
   .createTable('topThree', table => {
-    table.increments()
+    table.increments().notNullable()
     table.integer('story_id').unsigned()
       .references('id').inTable('submissions')
       .onDelete('CASCADE');
@@ -30,7 +30,7 @@ exports.up = function(knex) {
   })
 
   .createTable('ranking', table => {
-    table.increments()
+    table.increments().notNullable()
     table.integer('topthree_id').unsigned()
       .references('id').inTable('topThree')
       .onDelete('CASCADE')

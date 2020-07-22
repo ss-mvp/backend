@@ -6,7 +6,7 @@ module.exports = {
     getFinalScores,
     rankIt,
     addIP,
-    getWinner
+    getWinner,
 };
 
 
@@ -50,6 +50,6 @@ async function addIP(newIP){
 async function getWinner(winnerId){
     return await db("topThree")
     .where({ topThreeId: winnderId })
-    .join("users", "topThree.topThreeId", "=", "users.id")
+    .join("users", "topThree.user_id", "users.id")
     .first()
 }

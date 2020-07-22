@@ -71,7 +71,6 @@ router.get('/time', restricted, async (req, res) => {
   const prompt = await story.getPrompt();
   if (prompt) {
     const time = await story.getTime(prompt.id);
-    console.log(time)
     if (time) {
       return res.status(200).json({ time });
     } else {
