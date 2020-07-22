@@ -7,6 +7,7 @@ const { getWinner, getTopThree, rankIt, getFinalScores, addIP } = require("./ran
 router.get("/topthree", async (req, res) => {
   try {
     const topThree = await getTopThree()
+    console.log(topThree)
     res.status(200).json(topThree)
   }
   catch(err){

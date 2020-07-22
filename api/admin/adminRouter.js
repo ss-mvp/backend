@@ -77,7 +77,6 @@ router.post('/flag/:id', adminRestricted, async (req, res) => {
 
 router.get('/winners', adminRestricted, async (req, res) => {
     const subs = await admin.getSubmissionsPerTime();
-    console.log(subs)
     return res.json({ subs });
 })
 
@@ -107,8 +106,8 @@ router.post('/setwinners/:prompt_id', adminRestricted, async (req, res) => {
     }
     try {
       req.body.forEach(async (el) => {
-        await admin.updateTopThree({ id: el.story_id })
-      });
+        await admin.updateTopThree(parseInt(el.story_id))
+      })
     } catch(err){
       return status(500).json({ message: `cannot update due to ${err}` })
     }

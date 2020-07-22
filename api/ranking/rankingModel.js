@@ -11,8 +11,10 @@ module.exports = {
 
 
 async function getTopThree(){
-    const today = moment(new Date(), MMM-DD-YYYY)
-    return await db("topThree").where({ date_competed: today})
+    return await db("topThree")
+    .rightJoin('users', 'topThree.user_id', 'users.id')
+    .rightJoin('submissions', 'submissions.id', 'topThree.story_id')
+    .orderBy('id', 'desc').limit(3)
 }
 async function getFinalScores(){
     //return 3 ids
