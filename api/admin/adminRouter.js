@@ -72,6 +72,7 @@ router.post('/flag/:id', adminRestricted, async (req, res) => {
 
 router.get('/winners', adminRestricted, async (req, res) => {
     const subs = await admin.getSubmissionsPerTime();
+    console.log(subs)
     return res.json({ subs });
 })
 
