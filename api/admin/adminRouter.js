@@ -8,7 +8,7 @@ const adminRestricted = require('../middleware/adminRestricted');
 router.get('/', adminRestricted, async (req, res) => {
 
     const submissions = await admin.getSubmissions();
-
+    // console.log(submissions)
     return res.json({ submissions });
 })
 
@@ -77,6 +77,7 @@ router.post('/flag/:id', adminRestricted, async (req, res) => {
 
 router.get('/winners', adminRestricted, async (req, res) => {
     const subs = await admin.getSubmissionsPerTime();
+    console.log(subs)
     return res.json({ subs });
 })
 

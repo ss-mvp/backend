@@ -16,7 +16,8 @@ module.exports = {
   getTime,
   getQueue,
   setTime,
-  getAllTimes
+  getAllTimes,
+  getSubmission
 }
 
 function getAllTimes(id) {
@@ -39,8 +40,13 @@ function addReadability(link, readability) {
     return db('submissions').where('image', '=', link).update({ readability })
 }
 
-function addImage(image) {
-  return db('submissions').insert(image);
+function getSubmission(id) {
+  return db('submissions').where({ id });
+}
+
+async function addImage(image) {
+  const { id } = await db('submissions').insert(image);
+  return getSubmission(id);
 }
 
 function getDate() {

@@ -51,11 +51,12 @@ function addVideo(videoAndTime) {
 async function getSubmissionsPerTime() {
   const subs = await db('submissions')
   .join('prompt_time', 'prompt_time.prompt_id', 'submissions.prompt_id')
-  .join('prompts', 'prompts.id', 'submissions.prompt_id')
+  .join('prompts', 'submissions.prompt_id', 'prompts.id')
   // .where('prompt_time.prompt_id', '=', 'prompt_id')
   .whereNot("submissions.flagged", true)
   .where('prompt_time.time', '<', 'submissions.date')
   .andWhere('prompt_time.newGame', '>', Date.parse(new Date()))
+  .select('submissions.id as id', )
   // console.log('time', prompt_time.newGame)
   return subs
 }

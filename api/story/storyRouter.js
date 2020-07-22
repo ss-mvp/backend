@@ -55,11 +55,12 @@ router.post("/", restricted, async (req, res) => {
       flagged: transcribed.flagged.isFlagged,
       score: readability.ranking_score
     };
+    console.log('send', sendPackage)
 
     await story
       .addImage(sendPackage)
       .then((response) => {
-        console.log("It wrote");
+        console.log(response);
       })
       .catch((err) => console.log(err));
 
