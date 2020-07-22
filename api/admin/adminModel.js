@@ -10,8 +10,8 @@ module.exports = {
   getSubmissionsPerTime,
   getFlag,
   addVideo,
-  getVideo,
-  getVideoById,
+  // getVideo,
+  // getVideoById,
   updateTopThree,
   // getCurrentPromptTime,
   // getAllVotes
@@ -25,24 +25,6 @@ module.exports = {
 //   .join('topThree', 'topThree.story_id', 'submissions.id')
 //   .select('topThree.score', )
 // }
-
-function getVideoById(id) {
-  return db('admin').where({ id }).select('video_id').first();
-}
-
-async function getVideo() {
-  const videos = await db('admin');
-  const id = 0;
-  const largest = 0;
-  videos.map(element => {
-    if (parseInt(element.video_time > largest)) {
-      largest = element.video_time
-      id = element.id
-    }
-  })
-  const return_video = await getVideoById(id);
-  return return_video
-}
 
 function addVideo(videoAndTime) {
   return db('admin').insert(videoAndTime);

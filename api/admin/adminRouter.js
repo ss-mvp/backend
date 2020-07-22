@@ -21,11 +21,6 @@ router.get('/users', adminRestricted, async (req, res) => {
     }
 })
 
-router.get('/video', async (req, res) => {
-  const video_id = await admin.getVideo();
-  return res.json({ video_id });
-})
-
 router.post('/video', adminRestricted, async (req, res) => {
 
   function youtube_parser(url){
