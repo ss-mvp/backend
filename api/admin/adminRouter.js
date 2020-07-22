@@ -21,11 +21,40 @@ router.get('/users', adminRestricted, async (req, res) => {
     }
 })
 
+router.get('/video', async (req, res) => {
+  const video_id = await admin.getVideo();
+  return res.json({ video_id });
+})
 
+router.post('/video', adminRestricted, async (req, res) => {
+
+  function youtube_parser(url){
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+  } 
+
+  if (req.body.link) {
+    const video_time = Date.parse(new Date());
+    const sendPackage = {
+      video_link: req.body.link,
+      video_time: video_time,
+      video_id: youtube_parser(req.body.link)
+    }
+    console.log(sendPackage)
+    const addVideo = await admin.addVideo(sendPackage);
+    if (addVideo) {
+      return res.status(200).json({ message: "Video added." });
+    } else {
+      return res.status(400).json({ error: "Something went wrong adding video." })
+    }
+  } else {
+    return res.status(400).json({ error: "This request must include a valid YouTube link." })
+  }
+})
 
 router.get('/flag/:id', adminRestricted, async (req, res) => {
   const flag = await admin.getFlag(req.params.id);
-  // return res.status(200).json({ flag })
   if (flag) {
     return res.status(200).json({ flag })
   } else {
@@ -34,14 +63,9 @@ router.get('/flag/:id', adminRestricted, async (req, res) => {
 })
 
 router.post('/flag/:id', adminRestricted, async (req, res) => {
-    // if (req.query.flagged && req.query.flagged === true) {
-    //   await admin.unFlagContent(req.params.id);
-    //   console.log('unflagged!')
-    //   return res.status(200).json('Content Unflagged')
-    // } 
     
     const flagged = await admin.flagContent(req.params.id);
-    console.log(flagged)
+    console.log('flagged', flagged)
     if (flagged) {
       console.log(flagged)
       return res.status(200).json({ message: "Content flagged.", flag: 1 })
@@ -53,8 +77,6 @@ router.post('/flag/:id', adminRestricted, async (req, res) => {
 
 router.get('/winners', adminRestricted, async (req, res) => {
     const subs = await admin.getSubmissionsPerTime();
-    console.log(subs)
-    // console.log(subs)
     return res.json({ subs });
 })
 
