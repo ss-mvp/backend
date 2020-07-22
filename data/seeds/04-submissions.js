@@ -5,7 +5,7 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('submissions').insert([{
-        "id": 1,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -34,7 +34,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 2,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -63,7 +63,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 3,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -92,7 +92,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 4,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -121,7 +121,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 5,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -150,7 +150,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 6,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -179,7 +179,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 7,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -208,7 +208,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 8,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -237,7 +237,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 9,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -266,7 +266,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 10,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -295,8 +295,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 11,
-        "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
+ "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
         "flag": "",
@@ -324,7 +323,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 12,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
@@ -353,7 +352,7 @@ exports.seed = function(knex) {
         "voting": false
     },
     {
-      "id": 13,
+
         "image": "https://ss-submissions.s3.amazonaws.com/1595350818077",
         "pages": {"images":["no image "],"metadata":[],"flagged":{"isFlagged":false,"flag":""}},
         "flagged": false,
