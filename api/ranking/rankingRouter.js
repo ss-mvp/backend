@@ -7,11 +7,11 @@ const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP } = require("
 router.get("/topthree", async (req, res) => {
   try {
     const topThree = await getTopThree()
-    console.log(await get())
+    console.log(topThree)
     res.status(200).json(topThree)
   }
   catch(err){
-    res.status(500).json({ message: 'Cannot get Top Three' })
+    res.status(500).json({ message: 'Cannot get Top Three', error: err })
   }
 });
 

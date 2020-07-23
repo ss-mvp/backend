@@ -13,14 +13,15 @@ module.exports = {
 
 async function getTopThree(){
     return await db("topThree")
-    .rightJoin('users', 'topThree.user_id', 'users.id')
-    .rightJoin('submissions', 'submissions.id', 'topThree.story_id')
-    .orderBy('id', 'desc').limit(3)
+    .join('users', 'topThree.user_id', 'users.id')
+    .join('submissions', 'submissions.id', 'topThree.story_id')
+    .orderBy('topThree.id', 'desc').limit(3)
 }
 
 async function get(){
     return await db("topThree")
 }
+
 async function getFinalScores(){
     //return 3 ids
     const today = moment(new Date(), MMM-DD-YYYY)
