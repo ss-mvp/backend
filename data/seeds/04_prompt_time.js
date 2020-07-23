@@ -8,7 +8,7 @@ exports.seed = function(knex) {
                 "prompt_id": 1,
                 "time": 1595350739000,
                 "end": 1595410138999,
-                "newGame": 1595464981000.
+                "newGame": 1595532599000.
             }
         );
       });

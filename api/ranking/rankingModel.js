@@ -1,4 +1,3 @@
-const moment = require('moment')
 const db = require('../../data/dbConfig.js');
 
 module.exports = {
@@ -11,20 +10,28 @@ module.exports = {
 };
 
 
+
 async function getTopThree(){
     return await db("topThree")
-    .rightJoin('users', 'topThree.user_id', 'users.id')
-    .rightJoin('submissions', 'submissions.id', 'topThree.story_id')
-    .orderBy('id', 'desc').limit(3)
+    .join('users', 'topThree.user_id', 'users.id')
+    .join('submissions', 'submissions.id', 'topThree.story_id')
+    .orderBy('topThree.id', 'desc').limit(3)
+    .select(
+        'topThree.id as id',
+        'submissions.userId',
+        'users.username',
+        'submissions.image',
+        'submissions.pages',
+    )
 }
 
 async function get(){
-    return await db("topThree")
+    return await db("topThree").orderBy('id', 'desc').limit(3)
 }
 async function getFinalScores(){
     //return 3 ids
-    const today = moment(new Date(), MMM-DD-YYYY)
-    const topThree = await db("topThree").where({ date_competed: today })
+
+    const topThree = await db("topThree")
     //O(3)
     let allRanks = topThree.map( el => {
 
@@ -50,7 +57,7 @@ async function rankIt(topThreeId, rank){
 };
 
 async function addIP(newIP){
-    const today = moment(new Date(), MMM-DD-YYYY)
+    const today = moment().format("MMM Do YY");
     return await db("votersIP").insert({ ip: newIP, date_voted: today })
 }
 
