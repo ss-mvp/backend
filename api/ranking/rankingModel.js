@@ -31,25 +31,31 @@ async function get(){
 async function getFinalScores(){
     //return 3 ids
 
-    const topThree = await db("topThree")
+    const topThree = await db("topThree").orderBy('id', 'desc').limit(3)
     //O(3)
-    let allRanks = topThree.map( el => {
+    let allRanks = topThree.map( async (el) => {
 
-        let one = db("ranking").where("topThreeId", el.id ).count({ rank: 1 })
-        let two = db("ranking").where("topThreeId", el.id ).count({ rank: 2 })
-        let three = db("ranking").where("topThreeId", el.id ).count({ rank: 3 })
+        let one = db("ranking").where({ topthree_id: el.id, rank: 1 })
+        let two = db("ranking").where({ topthree_id: el.id, rank: 2 })
+        let three = db("ranking").where({ topthree_id: el.id, rank: 3 })
         
-        const allNums = Promise.all([one, two, three])
+        const allNums = await Promise.all([one, two, three])
+        let totalScore = 0
+        totalScore = ((allNums[0].length *3) + (allNums[1].length*2) + allNums[2].length)
 
-        let totalScore = ((allNums[0]*3) + (allNums[1]*2) + (allNums[2]))
-        return {
-            ...el,
-            score: totalScore
-        }
-        
+        return await db("topThree").where({ id: el.id }).update({ score: totalScore })
     })
 
-    return allRanks
+    await Promise.all(allRanks)
+
+    return await db("topThree")
+        .join("users", '"topThree".user_id', "user's.id")
+        .join("submissions", '"topThree".story_id', "submissions.id")
+        .groupBy('"topThree".prompt_time_id')
+        .orderBy('"topThree".score')
+        .select("users.username", "submissions.image", '"topThree".id')
+        .limit(3)
+
 };
 
 async function rankIt(topThreeId, rank){
@@ -63,7 +69,9 @@ async function addIP(newIP){
 
 async function getWinner(winnerId){
     return await db("topThree")
-    .where({ topThreeId: winnderId })
+    .where({ id: winnerId })
     .join("users", "topThree.user_id", "users.id")
+    .join("submissions", "topThree.story_id", "submissions.id")
+    .select("users.username", "topThree.id", "submissions.images")
     .first()
 }
