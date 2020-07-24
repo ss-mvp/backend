@@ -111,10 +111,10 @@ startGame.start();
 
 const server = express();
 const corsOptions = {
-    origin: '*',
+    origin: ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app'],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
   }
-
+  
 server.use(helmet());
 server.use(cors(corsOptions));
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
