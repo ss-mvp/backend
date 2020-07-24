@@ -112,6 +112,7 @@ startGame.start();
 const server = express();
   
 server.use(helmet());
+server.use(cors());
 // server.use(function(req, res, next) {
 //   const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
 //   const origin = req.headers.origin
@@ -130,9 +131,9 @@ server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
 
-server.use("/email", cors(), emailRouter);
-server.use("/upload", cors(), storyRouter);
-server.use("/admin", cors(), adminRouter);
-server.use("/ranking", cors(), rankingRouter)
+server.use("/email", emailRouter);
+server.use("/upload", storyRouter);
+server.use("/admin", adminRouter);
+server.use("/ranking", rankingRouter)
 
 module.exports = server;
