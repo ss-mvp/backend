@@ -118,10 +118,19 @@ const corsOptions = {
   
 server.use(helmet());
 server.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
+  const origin = req.headers.origin
+
+  if (origins.indexOf(origin) > -1) {
+    res.setHeader("Access-Control-Allow-Origin", origin)
+  }
+  // res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
+
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
