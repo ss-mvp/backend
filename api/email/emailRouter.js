@@ -77,8 +77,8 @@ router.get('/activate', async (req, res) => {
         if (req.query.token === token.validationUrl) {
             // const activation = await auth.activateEmail(req.query.email, { validated: true });
             await auth.activateEmail(req.query.email, { validated: true });
-            // res.redirect('https://story-master.netlify.com/Login');
-            res.redirect('http://localhost:3000/signin');
+            res.redirect('https://goofy-shirley-2a2ca3.netlify.app/signin');
+            // res.redirect('http://localhost:3000/signin');
             // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
         }
     } else {
