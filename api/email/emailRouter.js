@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const hbs = require('nodemailer-express-handlebars');
 const dotenv = require('dotenv');
 dotenv.config();
+const restricted = require('../middleware/restricted.js');
 const jwtSecret = process.env.JWT_SECRET
 const ses = require('nodemailer-ses-transport');
 
@@ -15,11 +16,11 @@ router.get('/activation/:email', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     
-    if (!req.body.email || !req.body.password) {
+    if (!req.body.email || !req.body.password || !req.body.username) {
         return res.status(400).json({ error: 'Username and Password are required.' });
     } 
     
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
     const existingUser = await auth.getUserId(email);
     if (existingUser) {
@@ -31,6 +32,7 @@ router.post('/register', async (req, res) => {
 
     const newUser = {
         email,
+        username,
         password: bc.hashSync(password, 10),       
         validationUrl: validationHash
     }
@@ -75,7 +77,8 @@ router.get('/activate', async (req, res) => {
         if (req.query.token === token.validationUrl) {
             // const activation = await auth.activateEmail(req.query.email, { validated: true });
             await auth.activateEmail(req.query.email, { validated: true });
-            res.redirect('https://story-master.netlify.com/Login');
+            // res.redirect('https://story-master.netlify.com/Login');
+            res.redirect('http://localhost:3000/signin');
             // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
         }
     } else {

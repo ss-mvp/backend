@@ -7,7 +7,7 @@ exports.up = function(knex) {
   .createTable('votersIP', table => {
     table.increments().notNullable()
     table.string('ip')
-    // table.timestamp('date_voted').defaultTo(moment(new Date(), 'MMM-DD-YYYY'))
+    table.string('date_voted').defaultTo(moment().format("MMM Do YY"))
   })
 
   .createTable('topThree', table => {
@@ -22,7 +22,11 @@ exports.up = function(knex) {
       .references('id').inTable('prompts')
       .onDelete('CASCADE');
       table.integer('score').defaultTo(0)
-      
+      // table.timestamp('date_competed').defaultTo(moment(new Date(), MMM-DD-YYYY))
+      table.integer('prompt_time_id').unsigned()
+      .references('id').inTable('prompt_time')
+      .onDelete('CASCADE');
+      // table.integer('score').defaultTo(0)
   })
 
   .createTable('ranking', table => {
