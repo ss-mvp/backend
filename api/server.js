@@ -116,7 +116,7 @@ const corsOptions = {
   }
 
 server.use(helmet());
-server.use(cors({ origin: '*' }));
+server.use(cors());
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
