@@ -16,11 +16,14 @@ module.exports = {
   getTime,
   getQueue,
   setTime,
-  getAllTimes
+  getAllTimes,
+  getSubmission,
+  getVideo,
+  getVideoById
 }
 
 function getAllTimes(id) {
-  return db('prompt_time').where('id', '=', 'prompt_id');
+  return db('prompt_time').join("prompts", "prompts.id", "prompt_time.prompt_id").where({ prompt_id: id });
 }
 
 function wipeQueue() {
@@ -39,8 +42,13 @@ function addReadability(link, readability) {
     return db('submissions').where('image', '=', link).update({ readability })
 }
 
-function addImage(image) {
-  return db('submissions').insert(image);
+function getSubmission(id) {
+  return db('submissions').where({ id });
+}
+
+async function addImage(image) {
+  const { id } = await db('submissions').insert(image);
+  return getSubmission(id);
 }
 
 function getDate() {
@@ -59,6 +67,24 @@ async function getPrompt() {
     // console.log('type', typeof queue_id)
     return getPromptById(queue_id);
   }
+}
+
+function getVideoById(id) {
+  return db('admin').where({ id }).first();
+}
+
+async function getVideo() {
+  const videos = await db('admin');
+  let id = 0;
+  let largest = 0;
+  videos.map(element => {
+    if (parseInt(element.video_time) > largest) {
+      largest = element.video_time
+      id = element.id
+    }
+  })
+  const return_video = await getVideoById(id);
+  return return_video
 }
 
 function allPrompts() {

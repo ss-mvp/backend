@@ -1,16 +1,17 @@
 const router = require("express").Router();
 
-const { getWinner, getTopThree, rankIt, getFinalScores, addIP } = require("./rankingModel");
+const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP } = require("./rankingModel");
 
 // hello heroku
 
 router.get("/topthree", async (req, res) => {
   try {
     const topThree = await getTopThree()
+    console.log(topThree)
     res.status(200).json(topThree)
   }
   catch(err){
-    res.status(500).json({ message: 'Cannot get Top Three' })
+    res.status(500).json({ message: 'Cannot get Top Three', error: err })
   }
 });
 

@@ -14,8 +14,6 @@ router.get('/activation/:email', async (req, res) => {
     return res.json(await auth.checkActivation(req.params.email));
 })
 
-
-
 router.post('/register', async (req, res) => {
     
     if (!req.body.email || !req.body.password || !req.body.username) {

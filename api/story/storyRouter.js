@@ -2,6 +2,7 @@ const router = require("express").Router();
 const upload = require("../../services/file-upload.js");
 const story = require("./storyModel.js");
 const users = require("../email/emailModel.js");
+const admin = require("../admin/adminModel.js")
 const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
 const { PythonShell } = require("python-shell");
@@ -55,11 +56,12 @@ router.post("/", restricted, async (req, res) => {
       flagged: transcribed.flagged.isFlagged,
       score: readability.ranking_score
     };
+    console.log('send', sendPackage)
 
     await story
       .addImage(sendPackage)
       .then((response) => {
-        console.log("It wrote");
+        console.log(response);
       })
       .catch((err) => console.log(err));
 
@@ -67,11 +69,20 @@ router.post("/", restricted, async (req, res) => {
   });
 });
 
+router.get('/video', async (req, res) => {
+  const video = await story.getVideo();
+  const returnPackage = {
+    video_id: video.video_id,
+    video_link: video.video_link
+  }
+  // console.log(video)
+  return res.json({ returnPackage });
+})
+
 router.get('/time', restricted, async (req, res) => {
   const prompt = await story.getPrompt();
   if (prompt) {
     const time = await story.getTime(prompt.id);
-    console.log(time)
     if (time) {
       return res.status(200).json({ time });
     } else {

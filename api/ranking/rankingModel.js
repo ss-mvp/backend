@@ -6,14 +6,22 @@ module.exports = {
     getFinalScores,
     rankIt,
     addIP,
-    getWinner
+    getWinner,
+    get,
 };
 
 
 async function getTopThree(){
-    const today = moment(new Date(), MMM-DD-YYYY)
-    return await db("topThree").where({ date_competed: today})
+    return await db("topThree")
+    .join('users', 'topThree.user_id', 'users.id')
+    .join('submissions', 'submissions.id', 'topThree.story_id')
+    .orderBy('topThree.id', 'desc').limit(3)
 }
+
+async function get(){
+    return await db("topThree")
+}
+
 async function getFinalScores(){
     //return 3 ids
     const today = moment(new Date(), MMM-DD-YYYY)
@@ -50,6 +58,6 @@ async function addIP(newIP){
 async function getWinner(winnerId){
     return await db("topThree")
     .where({ topThreeId: winnderId })
-    .join("users", "topThree.topThreeId", "=", "users.id")
+    .join("users", "topThree.user_id", "users.id")
     .first()
 }
