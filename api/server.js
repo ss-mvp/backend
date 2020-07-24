@@ -116,14 +116,14 @@ const corsOptions = {
   }
 
 server.use(helmet());
-server.use(cors());
+server.use(cors(corsOptions));
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
 
-server.use("/email", emailRouter);
-server.use("/upload", restricted, storyRouter);
-server.use("/admin", adminRouter);
-server.use("/ranking", rankingRouter)
+server.use("/email", cors(corsOptions), emailRouter);
+server.use("/upload", cors(corsOptions), restricted, storyRouter);
+server.use("/admin", cors(corsOptions), adminRouter);
+server.use("/ranking", cors(corsOptions), rankingRouter)
 
 module.exports = server;
