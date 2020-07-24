@@ -118,7 +118,7 @@ const corsOptions = {
   
 server.use(helmet());
 server.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
