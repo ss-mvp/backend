@@ -7,6 +7,7 @@ const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
 const { PythonShell } = require("python-shell");
 const dotenv = require("dotenv");
+const adminRestricted = require("../middleware/adminRestricted.js");
 dotenv.config();
 
 const attemptJSONParse = (data) => {
@@ -69,7 +70,7 @@ router.post("/", restricted, async (req, res) => {
   });
 });
 
-router.get('/video', async (req, res) => {
+router.get('/video', restricted, async (req, res) => {
   const video = await story.getVideo();
   const returnPackage = {
     video_id: video.video_id,
@@ -106,7 +107,7 @@ router.get("/prompt", restricted, async (req, res) => {
   }
 })
 
-router.get('/all_prompts', async (req, res) => {
+router.get('/all_prompts', adminRestricted, async (req, res) => {
   const prompts = await story.allPrompts();
   if (!prompts) {
     return res.status(500).json({ error: "Something went wrong." })
@@ -115,7 +116,7 @@ router.get('/all_prompts', async (req, res) => {
   }
 })
 
-router.delete('/prompts/:id', async (req, res) => {
+router.delete('/prompts/:id', adminRestricted, async (req, res) => {
   const prompt = await story.getPromptById(req.params.id);
   if (prompt) {
     story.deletePrompt(req.params.id).then(response => {
@@ -151,7 +152,7 @@ router.put('/edit/:id', restricted, (req, res) => {
   }
 })
 
-router.post('/add', (req, res) => {
+router.post('/add', adminRestricted, (req, res) => {
   console.log(req.body)
   if (req.body.prompt) {
     story.addPrompt(req.body).then(() => {

@@ -122,7 +122,7 @@ server.use(bodyParser.json({ limit: "50mb" }));
 // server.use(newUpload.array());
 
 server.use("/email", cors(corsOptions), emailRouter);
-server.use("/upload", cors(corsOptions), restricted, storyRouter);
+server.use("/upload", cors(corsOptions), storyRouter);
 server.use("/admin", cors(corsOptions), adminRouter);
 server.use("/ranking", cors(corsOptions), rankingRouter)
 
