@@ -33,9 +33,9 @@ exports.up = function(knex) {
     table.increments().notNullable()
     table.integer('prompt_id').unsigned().notNullable()
     .references('id').inTable('prompts')
-    table.string('time').defaultTo(Date.parse(new Date()));
-    table.string('end').defaultTo(Date.parse(new Date()) + (59400000 - 1));
-    table.string('newGame').defaultTo(Date.parse(new Date()) + (86400000 - 1));
+    table.biginteger('time').defaultTo(Date.parse(new Date()));
+    table.biginteger('end').defaultTo(Date.parse(new Date()) + (59400000 - 1));
+    table.biginteger('newGame').defaultTo(Date.parse(new Date()) + (86400000 - 1));
   })
   .createTable('prompt_queue', table => {
     table.integer('id').notNullable()

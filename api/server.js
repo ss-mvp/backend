@@ -27,7 +27,7 @@ async function getRandom() {
 }
 
 // const job = new CronJob('00 30 22 * * *', async function() {
-const startGame = new CronJob('00 46 09 * * *', async function() {
+const startGame = new CronJob('00 30 08 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();
@@ -68,7 +68,7 @@ const startGame = new CronJob('00 46 09 * * *', async function() {
 })
 
 // const endSubmission = new CronJob('00 00 15 * * *', async function() {
-const endSubmission = new CronJob('00 23 19 * * *', async function() {
+const endSubmission = new CronJob('00 00 15 * * *', async function() {
   const prompt = await story.getPrompt();
   console.log('end submission')
   if (prompt.length === 0) {
@@ -81,7 +81,7 @@ const endSubmission = new CronJob('00 23 19 * * *', async function() {
 })
 
 // const startVoting = new CronJob('00 30 15 * * *', async function() {
-  const startVoting = new CronJob('00 24 19 * * *', async function() {
+  const startVoting = new CronJob('00 30 15 * * *', async function() {
     const prompt = await story.getPrompt();
     console.log('start vote')
     if (prompt.length === 0) {
@@ -92,7 +92,7 @@ const endSubmission = new CronJob('00 23 19 * * *', async function() {
   })
 
 // const endVoting = new CronJob('00 00 18 * * *', async function() {
-  const endVoting = new CronJob('00 25 19 * * *', async function() {
+  const endVoting = new CronJob('00 00 18 * * *', async function() {
     const prompt = await story.getPrompt();
     console.log('end vote')
     if (prompt.length === 0) {

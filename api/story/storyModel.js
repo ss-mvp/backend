@@ -17,7 +17,9 @@ module.exports = {
   getQueue,
   setTime,
   getAllTimes,
-  getSubmission
+  getSubmission,
+  getVideo,
+  getVideoById
 }
 
 function getAllTimes(id) {
@@ -65,6 +67,24 @@ async function getPrompt() {
     // console.log('type', typeof queue_id)
     return getPromptById(queue_id);
   }
+}
+
+function getVideoById(id) {
+  return db('admin').where({ id }).first();
+}
+
+async function getVideo() {
+  const videos = await db('admin');
+  let id = 0;
+  let largest = 0;
+  videos.map(element => {
+    if (parseInt(element.video_time) > largest) {
+      largest = element.video_time
+      id = element.id
+    }
+  })
+  const return_video = await getVideoById(id);
+  return return_video
 }
 
 function allPrompts() {
