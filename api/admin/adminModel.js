@@ -10,6 +10,7 @@ module.exports = {
   getSubmissionsPerTime,
   getFlag,
   addVideo,
+  removeSubmissionsByEmail,
   // getVideo,
   // getVideoById,
   updateTopThree,
@@ -25,6 +26,11 @@ module.exports = {
 //   .join('topThree', 'topThree.story_id', 'submissions.id')
 //   .select('topThree.score', )
 // }
+
+async function removeSubmissionsByEmail(email) {
+  const { id } = await db('users').where({ email })
+  return db('submissions').where(id, userId).del()
+}
 
 function addVideo(videoAndTime) {
   return db('admin').insert(videoAndTime);
