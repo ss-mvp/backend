@@ -15,7 +15,6 @@ router.get('/activation/:email', async (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
-    
     if (!req.body.email || !req.body.password || !req.body.username) {
         return res.status(400).json({ error: 'Username and Password are required.' });
     } 
@@ -38,7 +37,8 @@ router.post('/register', async (req, res) => {
     }
     await auth.addUser(newUser);
     
-    const sendUrl = '';
+    let sendUrl = '';
+    
 
     if(process.env.BE_ENV==="development"){
         sendUrl = `http://localhost:5000/email/activate/?token=${validationHash}&email=${email}`;
@@ -55,7 +55,6 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
-
     if (req.body.email && req.body.password) {
         const { validated } = await auth.checkActivation(req.body.email);
         console.log(validated)
