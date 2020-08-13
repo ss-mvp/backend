@@ -78,7 +78,7 @@ router.get('/winners', adminRestricted, async (req, res) => {
 router.post('/remove_user_data/:email', adminRestricted, async (req, res) => {
   const { email } = req.params;
   const removal = await admin.removeSubmissionsByEmail(email);
-  if (removal) {
+  if (removal > 0) {
     return res.status(200).json({ message: "Submissions removed" });
   } else {
     return res.status(200).json({ message: "There were no submissions" })
