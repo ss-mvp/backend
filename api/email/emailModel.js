@@ -43,7 +43,6 @@ function getToken(email) {
 };
 
 function issueActivatedToken(validationUrl) {
-    console.log('validated', validationUrl)
     return db('users').where({validationUrl}).first()
 }
 
