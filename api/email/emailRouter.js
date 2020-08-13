@@ -43,8 +43,7 @@ router.post('/register', async (req, res) => {
     if(process.env.BE_ENV==="development"){
         sendUrl = `http://localhost:5000/email/activate/?token=${validationHash}&email=${email}`;
 
-    }
-    if(process.env.BE_ENV==="production"){
+    }else {
         sendUrl = `https://ss-mvp.herokuapp.com/email/activate/?token=${validationHash}&email=${email}`;
 
     }
