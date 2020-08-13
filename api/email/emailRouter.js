@@ -49,7 +49,8 @@ router.post('/register', async (req, res) => {
         sendUrl = `https://ss-mvp.herokuapp.com/email/activate/?token=${validationHash}&email=${email}`;
     }
 
-
+    // send email to parent instead of user, if given.
+    // ToDo: change this to a separate ToS/PP confirmation email
     sendEmail(parentEmail || email, sendUrl);
 
     return res.status(200).json({ message: 'User created, waiting for validation.' })    
