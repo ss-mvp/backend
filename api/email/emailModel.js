@@ -11,6 +11,7 @@ module.exports = {
     toggleFirstLogin,
     getToken,
     removeUser,
+    issueActivatedToken
 }
 
 function getAllUsers() {
@@ -40,6 +41,10 @@ function checkActivation(email) {
 function getToken(email) {
     return db('users').where({ email }).select('validationUrl').first();
 };
+
+function issueActivatedToken(validationUrl) {
+    return db('users').where({validationUrl}).first()
+}
 
 function removeUser(id) {
     return db('users').where({ id }).del();
