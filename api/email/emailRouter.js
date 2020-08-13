@@ -37,8 +37,18 @@ router.post('/register', async (req, res) => {
         validationUrl: validationHash
     }
     await auth.addUser(newUser);
+    
+    const sendUrl = '';
 
-    const sendUrl = `https://ss-mvp.herokuapp.com/email/activate/?token=${validationHash}&email=${email}`;
+    if(process.env.BE_ENV==="development"){
+        sendUrl = `http://localhost:5000/email/activate/?token=${validationHash}&email=${email}`;
+
+    }
+    if(process.env.BE_ENV==="production"){
+        sendUrl = `https://ss-mvp.herokuapp.com/email/activate/?token=${validationHash}&email=${email}`;
+
+    }
+
 
     sendEmail(email, sendUrl);
 
@@ -77,8 +87,14 @@ router.get('/activate', async (req, res) => {
         if (req.query.token === token.validationUrl) {
             // const activation = await auth.activateEmail(req.query.email, { validated: true });
             await auth.activateEmail(req.query.email, { validated: true });
-            res.redirect('https://goofy-shirley-2a2ca3.netlify.app/signin');
-            // res.redirect('http://localhost:3000/signin');
+
+
+            if(process.env.BE_ENV==="development"){
+                res.redirect('http://localhost:3000/signin');
+            }else {
+                res.redirect('https://goofy-shirley-2a2ca3.netlify.app/signin');
+                
+            }
             // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
         }
     } else {
