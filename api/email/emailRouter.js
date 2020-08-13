@@ -77,13 +77,29 @@ router.get('/activate', async (req, res) => {
         if (req.query.token === token.validationUrl) {
             // const activation = await auth.activateEmail(req.query.email, { validated: true });
             await auth.activateEmail(req.query.email, { validated: true });
-            res.redirect('https://goofy-shirley-2a2ca3.netlify.app/signin');
+            // res.redirect('https://goofy-shirley-2a2ca3.netlify.app/signin');
+            res.redirect(`https://goofy-shirley-2a2ca3.netlify.app/activated/${req.query.token}`);
             // res.redirect('http://localhost:3000/signin');
+            // res.redirect(`http://localhost:3000/activated/${req.query.token}`);
             // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
         }
     } else {
         return res.status(400).json({ error: 'This token is invalid for activation.' })
     }
+})
+
+//this route is called when user activates email to issue a token so they can be automatically logged in
+router.post('/activatedLogin', async (req, res)=>{
+    const activatedUser = await auth.issueActivatedToken(req.body.token);
+    console.log('body', req.body.token)
+    console.log('activatedUser', activatedUser)
+    if(activatedUser){
+        let token = signToken(activatedUser)
+        res.status(200).json({token: token})
+    } else {
+        res.status(400).json({message:'invalid token'})
+    }
+
 })
 
 router.delete('/:email', (req, res) => {
