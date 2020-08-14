@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ error: 'Username and Password are required.' });
     } 
     
-    const { email, password, username } = req.body;
+    const { email, password, username, age, parentEmail } = req.body;
 
     const existingUser = await auth.getUserId(email);
     if (existingUser) {
@@ -32,8 +32,10 @@ router.post('/register', async (req, res) => {
     const newUser = {
         email,
         username,
-        password: bc.hashSync(password, 10),       
-        validationUrl: validationHash
+        password: bc.hashSync(password, 10),
+        age,
+        parentEmail,
+        validationUrl: validationHash,
     }
     await auth.addUser(newUser);
     
@@ -45,11 +47,11 @@ router.post('/register', async (req, res) => {
 
     }else {
         sendUrl = `https://ss-mvp.herokuapp.com/email/activate/?token=${validationHash}&email=${email}`;
-
     }
 
-
-    sendEmail(email, sendUrl);
+    // send email to parent instead of user, if given.
+    // ToDo: change this to a separate ToS/PP confirmation email
+    sendEmail(parentEmail || email, sendUrl);
 
     return res.status(200).json({ message: 'User created, waiting for validation.' })    
 })
