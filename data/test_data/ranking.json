@@ -1,0 +1,23 @@
+[
+    { "topthree_id": 1, "rank" : 1 },
+    { "topthree_id": 2, "rank" : 2 },
+    { "topthree_id": 3, "rank" : 3 },
+    { "topthree_id": 2, "rank" : 1 },
+    { "topthree_id": 1, "rank" : 2 },
+    { "topthree_id": 3, "rank" : 3 },
+    { "topthree_id": 3, "rank" : 1 },
+    { "topthree_id": 2, "rank" : 2 },
+    { "topthree_id": 1, "rank" : 3 },
+    { "topthree_id": 1, "rank" : 1 },
+    { "topthree_id": 3, "rank" : 2 },
+    { "topthree_id": 2, "rank" : 3 },
+    { "topthree_id": 1, "rank" : 1 },
+    { "topthree_id": 2, "rank" : 2 },
+    { "topthree_id": 3, "rank" : 3 },
+    { "topthree_id": 3, "rank" : 1 },
+    { "topthree_id": 2, "rank" : 2 },
+    { "topthree_id": 1, "rank" : 3 },
+    { "topthree_id": 3, "rank" : 1 },
+    { "topthree_id": 1, "rank" : 2 },
+    { "topthree_id": 2, "rank" : 3 }
+]
