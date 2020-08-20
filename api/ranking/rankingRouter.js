@@ -62,15 +62,17 @@ router.get("/winner", async(req, res) => {
 
 //helper function to checkIP
 async function checkIP(req, res, next){
-  const ipToCheck = "ermaderp"
+  const ipToCheck = "127.0.0.5"
   // const ipToCheck = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   const today = moment().format("MMM Do YY");
   const alreadyVoted = await db("votersIP").where({ ip: ipToCheck, date_voted: today }).first()
   if (alreadyVoted){
-    res.staus(400).json({ message: 'Cannot vote again today' })
+    console.log("Don't even try, cheater")
+    console.log("see? you did voted -->", alreadyVoted)
+    res.status(400).json({ message: 'Cannot vote again today' })
   } else {
     req.userIP = ipToCheck
-    console.log(req.userIP)
+    console.log("req.userIP", req.userIP)
     next()
   }
 }
