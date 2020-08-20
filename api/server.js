@@ -27,7 +27,7 @@ async function getRandom() {
 }
 
 // const job = new CronJob('00 30 22 * * *', async function() {
-const startGame = new CronJob('00 40 10 * * *', async function() {
+const startGame = new CronJob('00 20 16 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();
@@ -68,7 +68,7 @@ const startGame = new CronJob('00 40 10 * * *', async function() {
 })
 
 // const endSubmission = new CronJob('00 00 15 * * *', async function() {
-const endSubmission = new CronJob('00 00 15 * * *', async function() {
+const endSubmission = new CronJob('00 00 17 * * *', async function() {
   const prompt = await story.getPrompt();
   console.log('end submission')
   if (prompt.length === 0) {
@@ -81,7 +81,7 @@ const endSubmission = new CronJob('00 00 15 * * *', async function() {
 })
 
 // const startVoting = new CronJob('00 30 15 * * *', async function() {
-  const startVoting = new CronJob('00 30 15 * * *', async function() {
+  const startVoting = new CronJob('00 30 17 * * *', async function() {
     const prompt = await story.getPrompt();
     console.log('start vote')
     if (prompt.length === 0) {
@@ -112,20 +112,25 @@ startGame.start();
 const server = express();
   
 server.use(helmet());
-server.use(cors());
-// server.use(function(req, res, next) {
-//   const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
-//   const origin = req.headers.origin
+if(process.env.BE_ENV === 'development'){
+  server.use(cors());
+}else {
 
-//   // if (origins.indexOf(origin) > -1) {
-//   //   res.setHeader("Access-Control-Allow-Origin", origin)
-//   // }
-//   res.header("Access-Control-Allow-Origin", "https://goofy-shirley-2a2ca3.netlify.app"); // update to match the domain you will make the request from
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//   res.header('Access-Control-Allow-Credentials', true);
-//   next();
-// });
+  server.use(function(req, res, next) {
+    // const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
+    // const origin = req.headers.origin
+  
+    // if (origins.indexOf(origin) > -1) {
+    //   res.setHeader("Access-Control-Allow-Origin", origin)
+    // }
+    res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Origin", "https://goofy-shirley-2a2ca3.netlify.app"); // update to match the domain you will make the request from
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+  });
+}
 
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 server.use(bodyParser.json({ limit: "50mb" }));
