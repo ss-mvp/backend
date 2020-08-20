@@ -26,15 +26,15 @@ async function getRandom() {
   return random_prompt
 }
 
-// const job = new CronJob('00 30 22 * * *', async function() {
-const startGame = new CronJob('00 25 23 * * *', async function() {
+// const job = new CronJob('00 30 02 * * *', async function() {
+const startGame = new CronJob('00 45 23 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();
     let ht = {}
     let rand = await getRandom();
 
-    if (prompt.length === 0 || prompt.length === 30) {
+    if (!prompt || prompt.length === 0 || prompt.length === 30) {
         await story.wipeQueue();
         // Choose new prompt
         // const rando = await getRandom();
@@ -67,11 +67,11 @@ const startGame = new CronJob('00 25 23 * * *', async function() {
     await story.setTime(rand);
 })
 
-// const endSubmission = new CronJob('00 00 15 * * *', async function() {
-const endSubmission = new CronJob('00 30 23 * * *', async function() {
+// const endSubmission = new CronJob('00 00 19 * * *', async function() {
+const endSubmission = new CronJob('00 47 23 * * *', async function() {
   const prompt = await story.getPrompt();
   console.log('end submission')
-  if (prompt.length === 0) {
+  if (!prompt || prompt.length === 0) {
       console.log('No prompt');
   } else {
      await story.editPrompt(prompt.id, { active: false, topThree: true });
@@ -80,22 +80,22 @@ const endSubmission = new CronJob('00 30 23 * * *', async function() {
   }
 })
 
-// const startVoting = new CronJob('00 30 15 * * *', async function() {
-  const startVoting = new CronJob('00 35 23 * * *', async function() {
+// const startVoting = new CronJob('00 30 19 * * *', async function() {
+  const startVoting = new CronJob('00 49 23 * * *', async function() {
     const prompt = await story.getPrompt();
     console.log('start vote')
-    if (prompt.length === 0) {
+    if (!prompt || prompt.length === 0) {
         console.log('No prompt');
     } else {
        await story.editPrompt(prompt.id, { topThree: false, voting: true });
     }
   })
 
-// const endVoting = new CronJob('00 00 18 * * *', async function() {
-  const endVoting = new CronJob('00 40 23 * * *', async function() {
+// const endVoting = new CronJob('00 00 22 * * *', async function() {
+  const endVoting = new CronJob('00 51 23 * * *', async function() {
     const prompt = await story.getPrompt();
     console.log('end vote')
-    if (prompt.length === 0) {
+    if (!prompt || prompt.length === 0) {
         console.log('No prompt');
     } else {
        await story.editPrompt(prompt.id, { voting: false })
