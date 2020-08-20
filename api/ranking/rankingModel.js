@@ -22,7 +22,7 @@ async function getTopThree(){
         'submissions.userId',
         'users.username',
         'submissions.image',
-        'submissions.pages',
+        'submissions.pages'
     )
 }
 
@@ -66,6 +66,7 @@ async function rankIt(topThreeId, rank){
 
 async function addIP(newIP){
     const today = moment().format("MMM Do YY");
+    console.log(await db("votersIP"))
     return await db("votersIP").insert({ ip: newIP, date_voted: today })
 }
 

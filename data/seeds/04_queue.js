@@ -2,9 +2,9 @@ const queue = require("../seed_data/queue.json")
 
 exports.seed = function(knex) {
     // Deletes ALL existing entries
-    return knex('queue').del()
+    return knex('prompt_queue').del()
       .then(function () {
         // Inserts seed entries
-        return knex('queue').insert(queue)
+        return knex('prompt_queue').insert(queue)
         })
 }

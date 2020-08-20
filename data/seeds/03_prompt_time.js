@@ -1,10 +1,10 @@
-const prompts = require("../seed_data/prompts.json")
-
 exports.seed = function(knex) {
     // Deletes ALL existing entries
-    return knex('prompts').del()
+    return knex('prompt_time').del()
       .then(function () {
         // Inserts seed entries
-        return knex('prompts').insert(prompts)
+        return knex('prompt_time').insert({
+            "prompt_id": 1
+          })
         })
 }
