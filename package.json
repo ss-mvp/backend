@@ -6,7 +6,12 @@
   "scripts": {
     "server": "nodemon index.js",
     "start": "node index.js",
-    "test": "cross-env NODE_ENV=testing jest --watch"
+    "test": "cross-env NODE_ENV=testing jest --watch",
+    "rollback": "knex migrate:rollback",
+    "latest": "knex migrate:latest",
+    "seed": "knex seed:run",
+    "go": "pipenv run npm run server",
+    "dev": "npm run rollback && npm run latest && npm run seed && npm run go"
   },
   "repository": {
     "type": "git",
