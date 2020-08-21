@@ -65,7 +65,10 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 
 | Method | Endpoint          | Access Control | Description                       |
 | ------ | ----------------- | -------------- | --------------------------------- |
-| GET    | `/ranking/`       | all users      | todo. |
+| GET    | `/ranking/`       | anyone         | Get the 3 winner submissions. |
+| POST   | `/ranking/`       | anyone         | Submit my ranking of the 3 submissions. |
+| GET    | `/ranking/votes`  | anyone         | Get current vote counts. |
+| GET    | `/ranking/winner` | anyone         | Get the 3 winner submissions final ranking. |
 
 ## Known issues at the end of Labs24 6/24/20
 
