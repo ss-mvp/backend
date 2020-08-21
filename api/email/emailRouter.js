@@ -127,6 +127,8 @@ router.post('/activatedLogin', async (req, res) => {
   }
 });
 
+// This needs self user or admin user verification
+// This also needs to delete all user submissions
 router.delete('/:email', (req, res) => {
   auth
     .getUserId(req.params.email)

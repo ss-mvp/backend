@@ -22,29 +22,35 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 
 #### Email Routes
 
-| Method | Endpoint         | Access Control | Description                                 |
-| ------ | ---------------- | -------------- | ------------------------------------------- |
-| GET    | `/email/`        | all users      | todo. |
+| Method | Endpoint                   | Access Control | Description                                 |
+| ------ | -------------------------- | -------------- | ------------------------------------------- |
+| GET    | `/email/activation/:email` | anyone         | Returns user if email was validated. |
+| POST   | `email/register`           | anyone         | Creates new user and sends validation email. |
+| POST   | `email/login`              | anyone         | Returns authorization if user exists and email validated. |
+| POST   | `email/activate`           | anyone         | Validates email for a new user if given a valid query string. |
+| POST   | `email/activatedLogin`     | anyone         | Returns aothorization if user email validated. |
+| DELETE | `email/:email`             | anyone         | Delete user account. |
+| GET    | `email/video`              | anyone         | Returns link for winners announcement YouTube video stream. |
 
 #### Story Routes
 
 | Method | Endpoint          | Access Control | Description                       |
 | ------ | ----------------- | -------------- | --------------------------------- |
-| GET    | `/upload/`        | all users    | todo. |
+| GET    | `/upload/`        | users          | todo. |
 
 #### Admin Routes
 
 | Method | Endpoint                         | Access Control | Description               |
 | ------ | -------------------------------- | -------------- | ------------------------- |
-| GET    | `/admin/`                        | admin users    | Returns all unflagged user submissions. |
-| GET    | `/admin/users`                   | admin users    | Returns all usernames. |
-| POST   | `/admin/video`                   | admin users    | Set YouTube video stream url. |
-| GET    | `/admin/flag/:id`                | admin users    | Returns a specific flagged submission. |
-| POST   | `/admin/flag/:id`                | admin users    | Toggles flagged status on a submission. |
-| GET    | `/admin/winners`                 | admin users    | Returns top 10 submissions for today's prompt. |
-| POST   | `/admin/remove_user_data/:email` | admin users    | Delete all submissions from a user. |
-| POST   | `/admin/login`                   | admin users    | Verify admin user login. |
-| POST   | `/admin/setwinners/:prompt_id`   | admin users    | Set winners for today's prompt. |
+| GET    | `/admin/`                        | admin          | Returns all unflagged user submissions. |
+| GET    | `/admin/users`                   | admin          | Returns all usernames. |
+| POST   | `/admin/video`                   | admin          | Set YouTube video stream url. |
+| GET    | `/admin/flag/:id`                | admin          | Returns a specific flagged submission. |
+| POST   | `/admin/flag/:id`                | admin          | Toggles flagged status on a submission. |
+| GET    | `/admin/winners`                 | admin          | Returns top 10 submissions for today's prompt. |
+| POST   | `/admin/remove_user_data/:email` | admin          | Delete all submissions from a user. |
+| POST   | `/admin/login`                   | admin          | Verify admin user login. |
+| POST   | `/admin/setwinners/:prompt_id`   | admin          | Set winners for today's prompt. |
 
 #### Ranking Routes
 
