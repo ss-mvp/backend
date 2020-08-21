@@ -11,7 +11,8 @@ module.exports = {
     toggleFirstLogin,
     getToken,
     removeUser,
-    issueActivatedToken
+    issueActivatedToken,
+    getVideo
 }
 
 function getAllUsers() {
@@ -60,3 +61,7 @@ async function toggleFirstLogin(email) {
     await db('users').where({ email }).update({ firstLogin: false });
     return db('users').where({ email }).select('firstLogin').first();
 };
+
+function getVideo(){
+    return db('admin').select('video_link')
+}
