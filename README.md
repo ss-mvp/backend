@@ -34,9 +34,18 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 
 #### Story Routes
 
-| Method | Endpoint          | Access Control | Description                       |
-| ------ | ----------------- | -------------- | --------------------------------- |
-| GET    | `/upload/`        | users          | todo. |
+| Method | Endpoint             | Access Control | Description                       |
+| ------ | -------------------- | -------------- | --------------------------------- |
+| GET    | `/upload/`           | user           | Get all prevuous prompt data. |
+| POST   | `/upload/`           | user           | Save new submission. |
+| GET    | `/upload/video`      | user           | Returns link for winners announcement YouTube video stream. |
+| GET    | `/upload/time`       | user           | Get prompt start, end, and next game times. |
+| GET    | `/upload/prompt`     | user           | Get prompt data. |
+| GET    | `/upload/story`      | user           | Get all past submissions and all user data :triangular_flag_on_post:. |
+| PUT    | `/upload/edit/:id`   | user           | Edit the daily prompt. |
+| GET    | `/upload/all_prompt` | admin          | Get all previous prompt data. |
+| DELETE | `/upload/prompt/:id` | admin          | Delete a previous prompt. |
+| POST   | `/upload/add`        | admin          | Add a new daily prompt. |
 
 #### Admin Routes
 
