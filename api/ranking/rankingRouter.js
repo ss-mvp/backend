@@ -2,7 +2,7 @@ const moment = require('moment')
 const router = require("express").Router();
 const db = require("../../data/dbConfig")
 
-const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP } = require("./rankingModel");
+const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP, getVotes } = require("./rankingModel");
 
 // hello heroku
 
@@ -17,12 +17,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/votes", async (req, res) => {
+  try {
+    const top = await getVotes()
+    console.log(top)
+    res.status(200).json(top)
+  }
+  catch(err){
+    res.status(500).json({ message: 'Cannot get Votes', error: err })
+  }
+});
+
 router.post("/", checkIP, async(req, res) => {
+// router.post("/", async(req, res) => {
   try {
     try{
       console.log('tryin to save ranks')
       let ranks = req.body.map(el => {
-        rankIt(el.topThreeId, el.rank)
+        rankIt(el.topthree_id, el.rank)
       })
       await Promise.all(ranks)
     } catch(error){
@@ -50,8 +62,8 @@ router.get("/winner", async(req, res) => {
       allThree = await getFinalScores()
       console.log(allThree)
       return res.status(200).json(allThree)
-    } catch {
-      return res.status(500).json({ message: `Cannot get 3 winners` })
+    } catch (err){
+      return res.status(500).json({ message: `Cannot get 3 winners because ${err}` })
     }
     
   }

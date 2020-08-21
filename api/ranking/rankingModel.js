@@ -7,7 +7,8 @@ module.exports = {
     rankIt,
     addIP,
     getWinner,
-    get
+    get,
+    getVotes
 };
 
 
@@ -28,6 +29,10 @@ async function getTopThree(){
 
 async function get(){
     return await db("topThree").orderBy('id', 'desc').limit(3)
+}
+
+async function getVotes(){
+    return await db("ranking")
 }
 
 
