@@ -70,7 +70,12 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | GET    | `/ranking/votes`  | anyone         | Get current vote counts. |
 | GET    | `/ranking/winner` | anyone         | Get the 3 winner submissions final ranking. |
 
-## Known issues at the end of Labs24 6/24/20
+## Documentation
+
+For information on database entities and environment variables, see the [backend wiki](https://github.com/ss-mvp/backend/wiki).
+
+See [Frontend Documentation](https://github.com/ss-mvp/story-master-fe/blob/master/README.md) for details on the frontend of our project.
+
 
 ## Contributing
 
@@ -80,9 +85,3 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 ### Attribution
 
 These contribution guidelines have been adapted from [this good-Contributing.md-template](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
-
-## Documentation
-
-See [Frontend Documentation](https://github.com/ss-mvp/story-master-fe/blob/master/README.md) for details on the frontend of our project.
-
-For information on database entities and environment variables, see the [backend documentation](https://github.com/ss-mvp/backend/wiki).
