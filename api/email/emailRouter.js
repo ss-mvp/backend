@@ -143,6 +143,27 @@ router.delete('/:email', (req, res) => {
     });
 });
 
+
+
+router.get('/video', (req, res)=>{
+  auth.getVideo()
+    .then(video=>res.status(200).json(video))
+    .catch(err=>{
+      console.log(err)
+      res.status(500).json({messsage: err})
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
 function sendEmail(email, url) {
   const transporter = nm.createTransport(
     ses({
