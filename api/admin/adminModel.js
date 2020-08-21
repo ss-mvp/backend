@@ -43,25 +43,25 @@ async function getSubmissionsPerTime() {
     .join('users', 'users.id', 'submissions.userId')
     // .where('prompt_time.prompt_id', '=', 'prompt_id')
     .whereNot("submissions.flagged", true)
-    .where('prompt_time.time', '<', 'submissions.date')
-    .andWhere('prompt_time.newGame', '>', Date.parse(new Date()))
-    .select(
-      'submissions.id as id',
-      'submissions.userId',
-      'users.username',
-      'submissions.prompt_id',
-      'submissions.active',
-      'submissions.topThree',
-      'submissions.image',
-      'submissions.pages',
-      'submissions.flagged',
-      'submissions.flag',
-      'submissions.vote',
-      'submissions.voting',
-      'submissions.readability',
-      'submissions.score'
-    )
-    .orderBy('score', 'desc')
+    // .where('prompt_time.time', '<', 'submissions.date')
+    // .andWhere('prompt_time.newGame', '>', Date.parse(new Date()))
+    // .select(
+    //   'submissions.id as id',
+    //   'submissions.userId',
+    //   'users.username',
+    //   'submissions.prompt_id',
+    //   'submissions.active',
+    //   'submissions.topThree',
+    //   'submissions.image',
+    //   'submissions.pages',
+    //   'submissions.flagged',
+    //   'submissions.flag',
+    //   'submissions.vote',
+    //   'submissions.voting',
+    //   'submissions.readability',
+    //   'submissions.score'
+    // )
+    // .orderBy('score', 'desc')
     .limit(10)
   return subs
 }

@@ -7,7 +7,7 @@ module.exports = {
     rankIt,
     addIP,
     getWinner,
-    get,
+    get
 };
 
 
@@ -29,6 +29,7 @@ async function getTopThree(){
 async function get(){
     return await db("topThree").orderBy('id', 'desc').limit(3)
 }
+
 
 async function getFinalScores(){
     //return 3 ids
