@@ -61,7 +61,8 @@ async function getFinalScores(){
 };
 
 async function rankIt(topThreeId, rank){
-    return await db("ranking").insert({ rank }).where({ topThreeId });
+    const newRanking = {topthree_id: topThreeId, rank}
+    return await db("ranking").insert(newRanking)
 };
 
 async function addIP(newIP){
