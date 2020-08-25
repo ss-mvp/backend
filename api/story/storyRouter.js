@@ -132,6 +132,7 @@ router.get("/", restricted, async (req, res) => {
   return res.json({ prompts });
 });
 
+// This needs to be deleted/changed before release
 router.get("/story", restricted, async (req, res) => {
   const userInfo = await users.getAllUsers();
 
