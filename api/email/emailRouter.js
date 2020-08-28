@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
         if (validated === true) {
           if (bc.compareSync(req.body.password, response.password)) {
             const token = signToken(response);
-            return res.status(201).json({ token });
+            return res.status(201).json({ username: response.username, token });
           } else {
             return res
               .status(400)
@@ -121,7 +121,7 @@ router.post('/activatedLogin', async (req, res) => {
   console.log('activatedUser', activatedUser);
   if (activatedUser) {
     let token = signToken(activatedUser);
-    res.status(200).json({ token: token });
+    res.status(200).json({ username: activatedUser.username, token: token });
   } else {
     res.status(400).json({ message: 'invalid token' });
   }
