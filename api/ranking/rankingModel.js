@@ -57,8 +57,8 @@ async function getFinalScores(){
     await Promise.all(allRanks)
 
     return await db("topThree")
-        // .join("users", 'topThree.user_id', "user.id")
-        // .join("submissions", 'topThree.story_id', "submissions.id")
+        .join("users", 'topThree.user_id', "users.id")
+        .join("submissions", 'topThree.story_id', "submissions.id")
         // .groupBy('topThree.prompt_time_id')
         .orderBy('topThree.score', 'desc')
         // .select("users.username", "submissions.image", 'topThree.id')

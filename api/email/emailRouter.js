@@ -189,7 +189,7 @@ function sendEmail(email, url) {
 
   transporter.sendMail(
     {
-      from: 'noreply@whatamido.in',
+      from: 'support@storysquad.app',
       to: email,
       subject: 'Activate your Story Squad account',
       context: {
