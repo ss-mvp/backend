@@ -73,10 +73,21 @@ router.get("/winner", async(req, res) => {
 })
 
 //helper function to checkIP
-async function checkIP(req, res, next){
-  const ipToCheck = "127.0.0.5"
-  // const ipToCheck = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+async function checkIP(req, res, next) {
+  //I'm not sure if X-Forwarded-For can be trailed through AWS.....
+  //Potential disaster here. Watch closely.
+  const ipToCheck = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
+
+  //If localhost reset to 127 localhost
+  if (req.connection.remoteAddress == "::1")
+    ipToCheck = "127.0.0.1";
+
+  //If using default remoteaddr, the IP should lead with ::, so let's remove it
+  if (ipToCheck == req.connection.remoteAddress)
+    ipToCheck = req.connection.remoteAddress.replace(/^.*:/, '');
+
   const today = moment().format("MMM Do YY");
+  
   const alreadyVoted = await db("votersIP").where({ ip: ipToCheck, date_voted: today }).first()
   if (alreadyVoted){
     console.log("Don't even try, cheater")

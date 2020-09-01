@@ -6,7 +6,7 @@ exports.up = function(knex) {
   
   .createTable('votersIP', table => {
     table.increments().notNullable()
-    table.string('ip')
+    table.specificType('ip', 'inet')
     table.string('date_voted').defaultTo(moment().format("MMM Do YY"))
   })
 
