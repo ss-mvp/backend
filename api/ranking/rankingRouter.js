@@ -79,11 +79,11 @@ async function checkIP(req, res, next) {
   const ipToCheck = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
 
   //If localhost reset to 127 localhost
-  if (req.connection.remoteAddress == "::1")
+  if (req.connection.remoteAddress === "::1")
     ipToCheck = "127.0.0.1";
 
   //If using default remoteaddr, the IP should lead with ::, so let's remove it
-  if (ipToCheck == req.connection.remoteAddress)
+  if (ipToCheck === req.connection.remoteAddress)
     ipToCheck = req.connection.remoteAddress.replace(/^.*:/, '');
 
   const today = moment().format("MMM Do YY");
