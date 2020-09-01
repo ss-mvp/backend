@@ -116,15 +116,8 @@ startGame.start();
 
 
 const server = express();
-// server.use(forceHttps());
 
-server.use((req, res, next) => {
-  if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-      res.redirect('https://' + req.get('Host') + req.url);
-  }
-  else
-      next();
-})
+
 
 
 
