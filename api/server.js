@@ -3,6 +3,9 @@ const helmet = require("helmet");
 const cors = require("cors");
 // const multer = require('multer');
 // const newUpload = multer();
+
+const forceHttps = require('@crystallize/elasticloadbalancer-express-force-https');
+
 const bodyParser = require("body-parser");
 
 const emailRouter = require("../api/email/emailRouter.js");
@@ -10,6 +13,7 @@ const storyRouter = require("../api/story/storyRouter.js");
 const rankingRouter = require("./ranking/rankingRouter.js");
 const adminRouter = require("../api/admin/adminRouter.js");
 const restricted = require("./middleware/restricted");
+
 
 // cron code start
 
@@ -27,7 +31,7 @@ async function getRandom() {
 }
 
 // const job = new CronJob('00 30 02 * * *', async function() {
-const startGame = new CronJob('00 30 02 * * *', async function() {
+const startGame = new CronJob('00 11 14 * * *', async function() {
     // Start daily game
     console.log('start game')
     const prompt = await story.getPrompt();
@@ -110,6 +114,7 @@ startGame.start();
 // cron code end
 
 const server = express();
+server.use(forceHttps());
   
 server.use(helmet());
 if(process.env.BE_ENV === 'development'){
