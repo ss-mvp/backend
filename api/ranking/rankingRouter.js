@@ -76,7 +76,7 @@ router.get("/winner", async(req, res) => {
 async function checkIP(req, res, next) {
   //I'm not sure if X-Forwarded-For can be trailed through AWS.....
   //Potential disaster here. Watch closely.
-  const ipToCheck = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
+  let ipToCheck = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
 
   //If localhost reset to 127 localhost
   if (req.connection.remoteAddress === "::1")
@@ -91,7 +91,7 @@ async function checkIP(req, res, next) {
   const alreadyVoted = await db("votersIP").where({ ip: ipToCheck, date_voted: today }).first()
   if (alreadyVoted){
     console.log("Don't even try, cheater")
-    console.log("see? you did voted -->", alreadyVoted)
+    console.log("see? you did vote -->", alreadyVoted)
     res.status(400).json({ message: 'Cannot vote again today' })
   } else {
     req.userIP = ipToCheck
