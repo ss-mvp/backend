@@ -86,7 +86,7 @@ router.post('/remove_user_data/:email', adminRestricted, async (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-    if (req.body.username === process.env.ADMIN_USERNAME || 'admin' && req.body.password === process.env.ADMIN_PASSWORD || 'GraigAdminAccount2020') {
+    if (req.body.username === process.env.ADMIN_USERNAME && req.body.password === process.env.ADMIN_PASSWORD) {
       const { username, password } = req.body;
       const user = {username, password}
       const token = signToken(user)
