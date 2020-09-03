@@ -102,7 +102,7 @@ router.get('/activate', async (req, res) => {
         res.redirect(`http://localhost:3000/activated/${req.query.token}`);
       } else {
         res.redirect(
-          `https://server.storysquad.app/activated/${req.query.token}`
+          `https://contest.storysquad.app/activated/${req.query.token}`
         );
       }
       // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
