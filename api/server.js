@@ -178,7 +178,7 @@ if(process.env.BE_ENV === 'development'){
     //   res.setHeader("Access-Control-Allow-Origin", origin)
     // }
     res.header("Access-Control-Allow-Origin", "*");
-    // res.header("Access-Control-Allow-Origin", "https://goofy-shirley-2a2ca3.netlify.app"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "https://contest.storysquad.app"); // update to match the domain you will make the request from
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
     res.header('Access-Control-Allow-Credentials', true);
