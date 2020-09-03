@@ -144,7 +144,7 @@ if(process.env.BE_ENV === 'development'){
   // });
   // server.use(cors());
   server.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://contest.storysquad.app, https://adminconteststorysquad.netlify.app/')
+    res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Credentials', true)
     res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
