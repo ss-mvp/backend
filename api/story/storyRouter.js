@@ -67,7 +67,7 @@ router.post("/", restricted, async (req, res) => {
       .catch((err) => console.log(err));
 
     return res.status(201).json({ imageUrl: req.file.location });
-  });
+  })
 });
 
 router.get('/video', restricted, async (req, res) => {
@@ -132,14 +132,7 @@ router.get("/", restricted, async (req, res) => {
   return res.json({ prompts });
 });
 
-// This needs to be deleted/changed before release
-router.get("/story", restricted, async (req, res) => {
-  const userInfo = await users.getAllUsers();
 
-  const allStory = await story.allStories();
-
-  return res.json({ stories: allStory, userInfo });
-});
 
 router.put('/edit/:id', restricted, (req, res) => {
   // there needs to be id and edits in req packet

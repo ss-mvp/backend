@@ -30,48 +30,6 @@ async function getRandom() {
   return random_prompt
 }
 
-if(Date.now() < 1599156959912){
-  let start = async function() {
-    // Start daily game
-    console.log('start game')
-    const prompt = await story.getPrompt();
-    let ht = {}
-    let rand = await getRandom();
-
-    if (!prompt || prompt.length === 0 || prompt.length === 30) {
-        await story.wipeQueue();
-        // Choose new prompt
-        // const rando = await getRandom();
-        await story.addToQueue(rand);
-        await story.editPrompt(rand, { active: true });
-    } else {
-        let queue = await story.getQueue();
-        queue = queue.queue.split(',');
-        queue.map(el => {
-          ht[el] = true
-        })
-        while (true) {
-          if (rand in ht) {
-            rand = getRandom();
-          }
-          else {
-            break
-          }
-        }
-        // console.log(typeof rand)
-        story.addToQueue(rand)
-        .then(response => {
-          console.log(response)
-        })
-        .catch(err => console.log(err))
-        // Set prompt to active
-        await story.editPrompt(rand, { active: true });
-    }
-
-    await story.setTime(rand);
-}
-start()
-}
 
 // const job = new CronJob('00 30 02 * * *', async function() {
 const startGame = new CronJob('00 11 14 * * *', async function() {
@@ -170,26 +128,21 @@ if(process.env.BE_ENV === 'development'){
   server.use(cors());
 }else {
 
-  // server.use(function(req, res, next) {
-  //   // const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
-  //   // const origin = req.headers.origin
-  
-  //   // if (origins.indexOf(origin) > -1) {
-  //   //   res.setHeader("Access-Control-Allow-Origin", origin)
-  //   // }
-  //   res.header("Access-Control-Allow-Origin", "*");
-  //   res.header("Access-Control-Allow-Origin", "https://contest.storysquad.app"); // update to match the domain you will make the request from
-  //   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  //   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-  //   res.header('Access-Control-Allow-Credentials', true);
-  //   next();
-  // });
-  server.use(cors())
   server.use(function(req, res, next) {
+    // const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
+    // const origin = req.headers.origin
+  
+    // if (origins.indexOf(origin) > -1) {
+    //   res.setHeader("Access-Control-Allow-Origin", origin)
+    // }
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // res.header("Access-Control-Allow-Origin", "https://contest.storysquad.app"); // update to match the domain you will make the request from
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
+    res.header('Access-Control-Allow-Credentials', true);
     next();
-  })
+  });
+
 }
 
 server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
@@ -200,5 +153,48 @@ server.use("/email", emailRouter);
 server.use("/upload", storyRouter);
 server.use("/admin", adminRouter);
 server.use("/ranking", rankingRouter)
+
+
+server.get('/startGame', (req, res)=>{
+  let start = async function() {
+    // Start daily game
+    console.log('start game')
+    const prompt = await story.getPrompt();
+    let ht = {}
+    let rand = await getRandom();
+
+    if (!prompt || prompt.length === 0 || prompt.length === 30) {
+        await story.wipeQueue();
+        // Choose new prompt
+        // const rando = await getRandom();
+        await story.addToQueue(rand);
+        await story.editPrompt(rand, { active: true });
+    } else {
+        let queue = await story.getQueue();
+        queue = queue.queue.split(',');
+        queue.map(el => {
+          ht[el] = true
+        })
+        while (true) {
+          if (rand in ht) {
+            rand = getRandom();
+          }
+          else {
+            break
+          }
+        }
+        // console.log(typeof rand)
+        story.addToQueue(rand)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => console.log(err))
+        // Set prompt to active
+        await story.editPrompt(rand, { active: true });
+    }
+
+    await story.setTime(rand);
+}
+})
 
 module.exports = server;
