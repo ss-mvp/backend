@@ -30,6 +30,49 @@ async function getRandom() {
   return random_prompt
 }
 
+if(Date.now() < 1599156959912){
+  let start = async function() {
+    // Start daily game
+    console.log('start game')
+    const prompt = await story.getPrompt();
+    let ht = {}
+    let rand = await getRandom();
+
+    if (!prompt || prompt.length === 0 || prompt.length === 30) {
+        await story.wipeQueue();
+        // Choose new prompt
+        // const rando = await getRandom();
+        await story.addToQueue(rand);
+        await story.editPrompt(rand, { active: true });
+    } else {
+        let queue = await story.getQueue();
+        queue = queue.queue.split(',');
+        queue.map(el => {
+          ht[el] = true
+        })
+        while (true) {
+          if (rand in ht) {
+            rand = getRandom();
+          }
+          else {
+            break
+          }
+        }
+        // console.log(typeof rand)
+        story.addToQueue(rand)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(err => console.log(err))
+        // Set prompt to active
+        await story.editPrompt(rand, { active: true });
+    }
+
+    await story.setTime(rand);
+}
+start()
+}
+
 // const job = new CronJob('00 30 02 * * *', async function() {
 const startGame = new CronJob('00 11 14 * * *', async function() {
     // Start daily game
