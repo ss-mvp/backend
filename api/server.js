@@ -142,7 +142,7 @@ if(process.env.BE_ENV === 'development'){
   //   res.header('Access-Control-Allow-Credentials', true);
   //   next();
   // });
-  server.use(cors());
+  // server.use(cors());
   server.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', 'https://contest.storysquad.app, https://adminconteststorysquad.netlify.app/')
     res.header('Access-Control-Allow-Credentials', true)
