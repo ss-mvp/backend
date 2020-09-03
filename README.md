@@ -1,4 +1,4 @@
-`https://ss-mvp-be.herokuapp.com/` - Heroku deploy
+`https://server.storysquad.app` - Heroku deploy
 
 # API Documentation
 

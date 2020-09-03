@@ -48,7 +48,7 @@ router.post('/register', async (req, res) => {
   if (process.env.BE_ENV === 'development') {
     sendUrl = `http://localhost:5000/email/activate/?token=${validationHash}&email=${email}`;
   } else {
-    sendUrl = `https://ss-mvp.herokuapp.com/email/activate/?token=${validationHash}&email=${email}`;
+    sendUrl = `https://server.storysquad.app/email/activate/?token=${validationHash}&email=${email}`;
   }
 
   // send email to parent instead of user, if given.
@@ -102,7 +102,7 @@ router.get('/activate', async (req, res) => {
         res.redirect(`http://localhost:3000/activated/${req.query.token}`);
       } else {
         res.redirect(
-          `https://goofy-shirley-2a2ca3.netlify.app/activated/${req.query.token}`
+          `https://server.storysquad.app/activated/${req.query.token}`
         );
       }
       // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
