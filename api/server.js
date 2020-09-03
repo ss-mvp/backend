@@ -121,6 +121,8 @@ const server = express();
 
 
 
+server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
+server.use(bodyParser.json({ limit: "50mb" }));
 
 server.use(helmet());
 // server.use(cors());
@@ -152,8 +154,7 @@ if(process.env.BE_ENV === 'development'){
 
 }
 
-server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
-server.use(bodyParser.json({ limit: "50mb" }));
+
 // server.use(newUpload.array());
 
 server.use("/email", emailRouter);
