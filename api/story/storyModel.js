@@ -62,10 +62,11 @@ async function getPrompt() {
   if (queue.queue.length === 0) {
     return []
   } else {
-    const queue_id = queue.queue.slice(-1)[0];
+    const queue_id = queue.queue.split(",").slice(-1)[0];
+    // console.log(await getPromptById(queue_id));
     // console.log('queue', queue_id)
     // console.log('type', typeof queue_id)
-    return getPromptById(queue_id);
+    return await getPromptById(queue_id);
   }
 }
 
