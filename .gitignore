@@ -82,3 +82,6 @@ typings/
 # Python
 Pipfile
 Pipfile.lock
+
+# Package lock
+package-lock.json
