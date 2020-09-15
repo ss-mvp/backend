@@ -175,7 +175,7 @@ server.use(helmet());
 server.use(cors(
   {
     origin: function (origin, callback) {
-      if (process.env.BE_ENV === "development")
+      if (process.env.BE_ENV === "development" || !origin)
       {
         callback(null, true);
         return;
