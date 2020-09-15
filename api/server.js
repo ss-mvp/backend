@@ -186,9 +186,8 @@ server.use(cors(
       else
         callback("Not allowed by CORS", false);
     },
-    allowedHeaders: "*",
-    methods: "*",
-    credentials: true
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'Content-Length'],
+    methods: ['POST', 'GET', 'OPTIONS', 'PUT']
   }
 ));
 // if(process.env.BE_ENV === 'development'){
