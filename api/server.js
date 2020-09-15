@@ -185,7 +185,9 @@ server.use(cors(
         callback(null, true);
       else
         callback("Not allowed by CORS", false);
-    }
+    },
+    allowedHeaders: "*",
+    methods: "*"
   }
 ));
 // if(process.env.BE_ENV === 'development'){
