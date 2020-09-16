@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon index.js",
-    "start": "node index.js && npm run go",
+    "start": "pipenv run node index.js",
     "test": "cross-env NODE_ENV=testing jest --watch",
     "rollback": "knex migrate:rollback",
     "latest": "knex migrate:latest",
