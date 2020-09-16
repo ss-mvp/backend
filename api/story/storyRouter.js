@@ -39,13 +39,13 @@ router.post("/", restricted, async (req, res) => {
 
     let transcribed = await transcribe({ images });
     transcribed = JSON.parse(transcribed);
-    // console.log(transcribed);
+    console.log("TRANSCRIBEDDDD",transcribed);
 
     let readability = await readable({ story: transcribed.images[0] });
     readability = JSON.parse(readability);
     console.log(readability)
 
-    // if (e) return res.status(400).json({ error: e.message });
+    if (e) return res.status(400).json({ error: e.message });
 
     const sendPackage = {
       image: req.file.location,

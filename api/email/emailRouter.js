@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
     auth
       .getUser(req.body.email)
       .then((response) => {
-        console.log(response);
+
         if (validated === true) {
           if (bc.compareSync(req.body.password, response.password)) {
             const token = signToken(response);
