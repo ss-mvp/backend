@@ -53,7 +53,7 @@ const startGame = new CronJob('00 30 02 * * *', async function() {
         })
         while (true) {
           if (rand in ht) {
-            rand = getRandom();
+            rand = await getRandom();
           }
           else {
             break
