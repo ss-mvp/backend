@@ -33,6 +33,7 @@ const onlyTranscription = (data) => {
 
 router.post("/", restricted, async (req, res) => {
   const singleUpload = upload.single("image");
+
   singleUpload(req, res, async function (e) {
     const images = [];
     images.push(req.body.base64Image);
