@@ -2,6 +2,7 @@ const db = require('../../data/dbConfig.js');
 
 module.exports = {
   addReadability,
+  disableAll,
   getPrompt,
   getDate,
   addImage,
@@ -28,6 +29,10 @@ function getAllTimes(id) {
 
 function wipeQueue() {
   return db('prompt_queue').where({ id: 1 }).update({ queue: '' });
+}
+
+function disableAll() {
+  return db('submissions').update({ active: false, topThree: false, vote: false, voting: false });
 }
 
 function getPromptById(id) {
