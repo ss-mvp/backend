@@ -53,7 +53,7 @@ const startGame = new CronJob('00 30 02 * * *', async function() {
         })
         while (true) {
           if (rand in ht) {
-            rand = getRandom();
+            rand = await getRandom();
           }
           else {
             break
@@ -181,7 +181,9 @@ server.use(cors(
         return;
       }
 
+
       if (origin === "https://contest.storysquad.app" || origin === "https://adminconteststorysquad.netlify.app/" || origin === "https://server.storysquad.app")
+
         callback(null, true);
       else
         callback("Not allowed by CORS", false);
