@@ -41,7 +41,7 @@ async function getSubmissionsPerTime() {
     {
       active: true
     })
-    .orderBy('score')
+    .orderBy('score', 'desc')
     .limit(10)
     .join('users', 'users.id', 'submissions.userId')
     .select(
