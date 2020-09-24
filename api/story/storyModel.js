@@ -3,6 +3,7 @@ const db = require('../../data/dbConfig.js');
 module.exports = {
   addReadability,
   disableAll,
+  clearRanking,
   getPrompt,
   getDate,
   addImage,
@@ -33,6 +34,11 @@ function wipeQueue() {
 
 function disableAll() {
   return db('submissions').update({ active: false, topThree: false, vote: false, voting: false });
+}
+
+async function clearRanking() {
+  await db('topThree').where('*').del();
+  await db('ranking').where('*').del();
 }
 
 function getPromptById(id) {
