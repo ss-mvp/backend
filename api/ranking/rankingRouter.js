@@ -74,17 +74,26 @@ router.get("/winner", async(req, res) => {
 
 //helper function to checkIP
 async function checkIP(req, res, next) {
-  //I'm not sure if X-Forwarded-For can be trailed through AWS.....
-  //Potential disaster here. Watch closely.
-  let ipToCheck = req.headers['X-Forwarded-For'] || req.connection.remoteAddress;
+  //AWS Reverse IP is going to follow this format:
+  //  47.35.217.125, 172.31.24.10
+  //According to the Elastic IP's list, we won't see
+  //IPV6 Addresses, so we can assume we WILL have v4
+  //addresses only, and the latest IP should be the 1st
+  let ipToCheck = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  let Comma = ipToCheck.indexOf(',');
 
-  //If localhost reset to 127 localhost
-  if (req.connection.remoteAddress === "::1")
-    ipToCheck = "127.0.0.1";
+  if (Comma === -1)
+  {
+    //If localhost reset to 127 localhost
+    if (req.connection.remoteAddress === "::1")
+      ipToCheck = "127.0.0.1";
 
-  //If using default remoteaddr, the IP should lead with ::, so let's remove it
-  if (ipToCheck === req.connection.remoteAddress)
-    ipToCheck = req.connection.remoteAddress.replace(/^.*:/, '');
+    //If using default remoteaddr, the IP should lead with ::, so let's remove it
+    if (ipToCheck === req.connection.remoteAddress)
+      ipToCheck = req.connection.remoteAddress.replace(/^.*:/, '');
+  }
+  else
+    ipToCheck = ipToCheck.substr(0, Comma);
 
   const today = moment().format("MMM Do YY");
   
