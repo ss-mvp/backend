@@ -35,6 +35,11 @@ async function getRandom() {
 const startGame = new CronJob('00 30 02 * * *', async function() {
     // Start daily game
     console.log('start game')
+
+    // Clear previous games data
+    await story.disableAll();
+    await story.clearRanking();
+    
     const prompt = await story.getPrompt();
     let ht = {}
     let rand = await getRandom();
