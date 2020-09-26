@@ -81,6 +81,8 @@ router.get('/video', restricted, async (req, res) => {
 })
 
 router.get('/time', restricted, async (req, res) => {
+  console.log(JSON.stringify(req.headers));
+
   const prompt = await story.getPrompt();
   if (prompt) {
     const time = await story.getTime(prompt.id);
