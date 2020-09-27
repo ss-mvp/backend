@@ -37,8 +37,8 @@ function disableAll() {
 }
 
 async function clearRanking() {
-  await db('topThree').where('*').del();
-  await db('ranking').where('*').del();
+  await db('topThree').del();
+  await db('ranking').del();
 }
 
 function getPromptById(id) {
