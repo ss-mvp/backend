@@ -77,55 +77,6 @@ const startGame = new CronJob('00 30 02 * * *', async function() {
     await story.setTime(rand);
 })
 
-// async function x() {
-//   console.log('start game')
-  
-//   console.log("h")
-//   const prompt = await story.getPrompt();
-  
-//   console.log("e")
-//   let ht = {}
-//   let rand = await getRandom();
-
-//   console.log("f")
-//   if (!prompt || prompt.length === 0 || prompt.length === 30) {
-//       await story.wipeQueue();
-      
-//     console.log("g")
-      
-//       // Choose new prompt
-//       // const rando = await getRandom();
-//       await story.addToQueue(rand);
-//       await story.editPrompt(rand, { active: true });
-//   } else {
-//       let queue = await story.getQueue();
-//       queue = queue.queue.split(',');
-//       queue.map(el => {
-//         ht[el] = true
-//       })
-//       while (true) {
-//         if (rand in ht) {
-//           rand = getRandom();
-//         }
-//         else {
-//           break
-//         }
-//       }
-//       // console.log(typeof rand)
-//       story.addToQueue(rand)
-//       .then(response => {
-//         console.log(response)
-//       })
-//       .catch(err => console.log(err))
-//       // Set prompt to active
-//       await story.editPrompt(rand, { active: true });
-//   }
-
-//   await story.setTime(rand);
-// }
-
-// x();
-
 // const endSubmission = new CronJob('00 00 19 * * *', async function() {
 const endSubmission = new CronJob('00 00 19 * * *', async function() {
   const prompt = await story.getPrompt();
