@@ -36,7 +36,7 @@ router.post("/", restricted, async (req, res) => {
   singleUpload(req, res, async function (e) {
     const images = [];
     images.push(req.body.base64Image);
-    console.log(images);
+    console.log(req.body);
     let transcribed = await transcribe({ images });
     transcribed = JSON.parse(transcribed);
     console.log("TRANSCRIBEDDDD",transcribed);
