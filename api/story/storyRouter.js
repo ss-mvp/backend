@@ -159,7 +159,7 @@ router.post('/add', adminRestricted, (req, res) => {
 
 const runScript = (path, data, findResults) => {
   const newShell = new PythonShell(path, { stdio: "pipe" });
-  console.log(JSON.stringify(data));
+  console.log(data);
   return new Promise((resolve, reject) => {
     newShell.stdin.write(JSON.stringify(data));
     newShell.stdin.end();
