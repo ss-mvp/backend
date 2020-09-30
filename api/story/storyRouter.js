@@ -36,7 +36,7 @@ router.post("/", restricted, async (req, res) => {
   singleUpload(req, res, async function (e) {
     const images = [];
     images.push(req.body.base64Image);
-
+    console.log(images);
     let transcribed = await transcribe({ images });
     transcribed = JSON.parse(transcribed);
     console.log("TRANSCRIBEDDDD",transcribed);
@@ -159,7 +159,6 @@ router.post('/add', adminRestricted, (req, res) => {
 
 const runScript = (path, data, findResults) => {
   const newShell = new PythonShell(path, { stdio: "pipe" });
-  console.log(data);
   return new Promise((resolve, reject) => {
     newShell.stdin.write(JSON.stringify(data));
     newShell.stdin.end();
