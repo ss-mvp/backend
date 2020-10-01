@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const upload = require("../../services/file-upload.js");
+const s3 = require("../../services/file-upload.js");
 const story = require("./storyModel.js");
 const users = require("../email/emailModel.js");
 const admin = require("../admin/adminModel.js")
@@ -31,43 +31,71 @@ const onlyTranscription = (data) => {
 //   }
 // })
 
-router.post("/", restricted, async (req, res) => {
-  const singleUpload = upload.single("image");
-  singleUpload(req, res, async function (e) {
-    const images = [];
-    images.push(req.body.base64Image);
-    console.log(req.body);
-    let transcribed = await transcribe({ images });
-    transcribed = JSON.parse(transcribed);
-    console.log("TRANSCRIBEDDDD",transcribed);
+const fileUpload = require("express-fileupload");
+let _FileUploadConf = fileUpload(
+  {
+    limits: { fileSize: 25 * 1024 * 1024 },
+    abortOnLimit: true,
+    responseOnLimit: "File size too large",
+    uploadTimeout: 40000 //40 Sec
+  });
+router.post("/", restricted, _FileUploadConf, async (req, res) => {
+  //Convert to Base64
+  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
 
-    let readability = await readable({ story: transcribed.images[0] });
-    readability = JSON.parse(readability);
-    console.log(readability)
+  //Verify the image meets our standards here (More coming!)
+  if (!req.files.image.mimetype.includes("image"))
+    return res.status(400).json({ error: "Invalid image type" });
+  ///////////////////////////////////////////
 
-    if (e) return res.status(400).json({ error: e.message });
+  //Transcribe and rate the image
+  const images = [];
+  images.push(base64);
+  let transcribed = await transcribe({ images });
+  transcribed = JSON.parse(transcribed);
+  let readability = await readable({ story: transcribed.images[0] });
+  readability = JSON.parse(readability);
 
-    const sendPackage = {
-      image: req.file.location,
-      pages: transcribed,
-      readability,
-      prompt_id: req.body.promptId,
-      userId: req.userId,
-      flag: transcribed.flagged.flag,
-      flagged: transcribed.flagged.isFlagged,
-      score: readability.ranking_score
-    };
-    console.log('send', sendPackage)
+  //Upload to S3 Directly
+  s3.upload(
+    {
+      Bucket: "storysquad",
+      Key: Date.now().toString(),
+      Body: req.files.image.data
+    }, async function (err, data) {
+      if (err)
+      {
+        console.log(err);
+        return res.status(400).json({ error: err });
+      }
+      else
+      {
+        //Create the database insert
+        const sendPackage = {
+          image: data.Location,
+          pages: transcribed,
+          readability,
+          prompt_id: req.body.promptId,
+          userId: req.userId,
+          flag: transcribed.flagged.flag,
+          flagged: transcribed.flagged.isFlagged,
+          score: readability.ranking_score
+        };
 
-    await story
-      .addImage(sendPackage)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => console.log(err));
-
-    return res.status(201).json({ imageUrl: req.file.location });
-  })
+        //AddImage, this also has a select that's creating an error
+        //But the error isn't for anything useful so idk
+        await story
+          .addImage(sendPackage)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((err) => console.log(err));
+        
+        //Return the new S3 link url
+        return res.status(201).json({ imageUrl: data.Location });
+      }
+    }
+  )
 });
 
 router.get('/video', restricted, async (req, res) => {

@@ -1,8 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
-// const multer = require('multer');
-// const newUpload = multer();
 
 const forceHttps = require('@crystallize/elasticloadbalancer-express-force-https');
 
@@ -146,37 +144,9 @@ server.use(cors(
     methods: ['POST', 'GET', 'OPTIONS', 'PUT']
   }
 ));
-// if(process.env.BE_ENV === 'development'){
-//   server.use(cors());
-// }else {
 
-//   // server.use(function(req, res, next) {
-//   //   const origins = ['https://condescending-edison-aa86dd.netlify.app', 'https://goofy-shirley-2a2ca3.netlify.app']
-//   //   const origin = req.headers.origin
-  
-//   //   if (origins.indexOf(origin) > -1) {
-//   //     res.setHeader("Access-Control-Allow-Origin", origin)
-//   //   }
-//   //   // res.header("Access-Control-Allow-Origin", "*");
-//   //   // res.header("Access-Control-Allow-Origin", "https://contest.storysquad.app"); // update to match the domain you will make the request from
-//   //   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   //   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
-//   //   res.header('Access-Control-Allow-Credentials', true);
-//   //   next();
-//   // });
-//   // server.use(cors());
-//   server.use(function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*')
-//     res.header('Access-Control-Allow-Credentials', true)
-//     res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-//     next()
-//   })
-
-// }
-
-server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
-server.use(bodyParser.json({ limit: "50mb" }));
+server.use(bodyParser.urlencoded({ extended: false, limit: "25mb" }));
+server.use(bodyParser.json({ limit: "25mb" }));
 // server.use(newUpload.array());
 
 server.use("/email", emailRouter);
