@@ -31,6 +31,53 @@ const onlyTranscription = (data) => {
 //   }
 // })
 
+//SigFind uses a common methodology of scanning a files raw bytes of data
+//and comparing them to a given prerequisite to determine whether the file
+//contains the specified data, O(nm)
+function SigFind(buffer, sig)
+{
+    try
+    {
+        let SigBuf = Buffer.from(sig.replace(/ /g, ""), "hex");
+
+        for (let i = 0; i < buffer.length; i++)
+        {
+            for (let x = 0; x < SigBuf.length; x++)
+                if (buffer[i + x] !== SigBuf[x])
+                    break;
+                else if (x === SigBuf.length - 1)
+                    return i;
+        }
+
+        return -1;
+    }
+    catch
+    {
+        return -1;
+    }
+}
+
+function GoodFile(file)
+{
+  if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
+    return true;
+  else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
+    return true;
+  else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0)
+  {
+    //HEIC
+    let OutBuffer = await heicConvert({
+      buffer: file,
+      format: "JPEG",
+      quality: 0.5
+    });
+
+    return OutBuffer
+  }
+
+  return false;
+}
+
 const fileUpload = require("express-fileupload");
 let _FileUploadConf = fileUpload(
   {
@@ -40,13 +87,22 @@ let _FileUploadConf = fileUpload(
     uploadTimeout: 40000 //40 Sec
   });
 router.post("/", restricted, _FileUploadConf, async (req, res) => {
-  //Convert to Base64
-  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
-
   //Verify the image meets our standards here (More coming!)
   if (!req.files.image.mimetype.includes("image"))
     return res.status(400).json({ error: "Invalid image type" });
-  ///////////////////////////////////////////
+
+  let Translate = GoodFile(req.files.image.data);
+  if (Translate === false)
+    return res.status(400).json({ error: "File invalid" });
+  else if (Translate !== true)
+  {
+    //Use translated file
+    req.files.image.data = Translate;
+    req.files.image.mimetype = "image/jpeg";
+  }
+
+  //Convert to Base64
+  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
 
   //Transcribe and rate the image
   const images = [];
