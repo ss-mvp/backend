@@ -63,9 +63,9 @@ async function GoodFile(file)
     return true;
   else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
     return true;
-  else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0)
+  else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0) //HEIC
   {
-    //HEIC
+    //Convert because vision and browsers don't default show HEIC
     let OutBuffer = await heicConvert({
       buffer: file,
       format: "JPEG",
