@@ -61,7 +61,6 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
     {
       Bucket: "storysquad",
       Key: Date.now().toString(),
-      Metadata: { "Test": "Test Metadata" },
       Body: req.files.image.data
     }, async function (err, data) {
       if (err)
