@@ -44,7 +44,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
 
   //Verify the image meets our standards here (More coming!)
-  if (!req.files.image.mimetype.contains("image"))
+  if (!req.files.image.mimetype.includes("image"))
     return res.status(400).json({ error: "Invalid image type" });
   ///////////////////////////////////////////
 
