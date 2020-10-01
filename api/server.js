@@ -1,8 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
-// const multer = require('multer');
-// const newUpload = multer();
 
 const forceHttps = require('@crystallize/elasticloadbalancer-express-force-https');
 

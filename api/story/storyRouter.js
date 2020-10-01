@@ -89,41 +89,6 @@ router.post("/", restricted, fileUpload({ limits: { fileSize: 50 * 1024 * 1024 }
       }
     }
   )
-
-  // const singleUpload = upload.single("image");
-  // singleUpload(req, res, async function (e) {
-  //   const images = [];
-  //   images.push(`data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`);
-  //   let transcribed = await transcribe({ images });
-  //   transcribed = JSON.parse(transcribed);
-
-  //   let readability = await readable({ story: transcribed.images[0] });
-  //   readability = JSON.parse(readability);
-
-  //   if (e) return res.status(400).json({ error: e.message });
-
-  //   const sendPackage = {
-  //     image: req.file.location,
-  //     pages: transcribed,
-  //     readability,
-  //     prompt_id: req.body.promptId,
-  //     userId: req.userId,
-  //     flag: transcribed.flagged.flag,
-  //     flagged: transcribed.flagged.isFlagged,
-  //     score: readability.ranking_score
-  //   };
-
-  //   console.log(sendPackage);
-
-  //   await story
-  //     .addImage(sendPackage)
-  //     .then((response) => {
-  //       console.log(response);
-  //     })
-  //     .catch((err) => console.log(err));
-
-  //   return res.status(201).json({ imageUrl: req.file.location });
-  // })
 });
 
 router.get('/video', restricted, async (req, res) => {
