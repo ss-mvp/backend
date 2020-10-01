@@ -32,7 +32,7 @@ const onlyTranscription = (data) => {
 // })
 
 const fileUpload = require("express-fileupload");
-router.post("/", restricted, fileUpload({ limits: { fileSize: 50 * 1024 * 1024 }}), async (req, res) => {
+router.post("/", restricted, fileUpload({ limits: { fileSize: 25 * 1024 * 1024 }}), async (req, res) => {
   //Convert to Base64
   let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
 

@@ -145,8 +145,8 @@ server.use(cors(
   }
 ));
 
-server.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
-server.use(bodyParser.json({ limit: "50mb" }));
+server.use(bodyParser.urlencoded({ extended: false, limit: "25mb" }));
+server.use(bodyParser.json({ limit: "25mb" }));
 // server.use(newUpload.array());
 
 server.use("/email", emailRouter);
