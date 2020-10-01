@@ -63,7 +63,7 @@ router.post("/", restricted, fileUpload({ limits: { fileSize: 50 * 1024 * 1024 }
       }
       else
       {
-        //Create the databsse insert
+        //Create the database insert
         const sendPackage = {
           image: data.Location,
           pages: transcribed,
