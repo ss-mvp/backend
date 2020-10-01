@@ -57,7 +57,7 @@ function SigFind(buffer, sig)
     }
 }
 
-function GoodFile(file)
+async function GoodFile(file)
 {
   if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
     return true;
@@ -91,7 +91,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   if (!req.files.image.mimetype.includes("image"))
     return res.status(400).json({ error: "Invalid image type" });
 
-  let Translate = GoodFile(req.files.image.data);
+  let Translate = await GoodFile(req.files.image.data);
   if (Translate === false)
     return res.status(400).json({ error: "File invalid" });
   else if (Translate !== true)
