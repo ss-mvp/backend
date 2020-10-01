@@ -36,8 +36,9 @@ router.post("/", restricted, fileUpload({ limits: { fileSize: 25 * 1024 * 1024 }
   //Convert to Base64
   let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
 
-  //Verify the image meets our standards here
-
+  //Verify the image meets our standards here (More coming!)
+  if (!req.files.image.mimetype.contains("image"))
+    return res.status(400).json({ error: "Invalid image type" });
   ///////////////////////////////////////////
 
   //Transcribe and rate the image
