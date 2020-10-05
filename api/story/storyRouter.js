@@ -69,8 +69,6 @@ async function GoodFile(file, b64)
     // - LGV-0
     // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
     return true;
-  else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
-    return Buffer.from(piexif.remove(b64), "base64");
   else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0) //HEIC
   {
     //Convert because vision and browsers don't default show HEIC
@@ -82,6 +80,8 @@ async function GoodFile(file, b64)
 
     return OutBuffer
   }
+  else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
+    return Buffer.from(piexif.remove(b64), "base64");
 
   return false;
 }
