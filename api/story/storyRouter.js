@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const s3 = require("../../services/file-upload.js");
 const heicConvert = require("heic-convert");
+const fileUpload = require("express-fileupload");
 const piexif = require("piexifjs");
 const story = require("./storyModel.js");
 const users = require("../email/emailModel.js");
@@ -85,7 +86,6 @@ async function GoodFile(file, b64)
   return false;
 }
 
-const fileUpload = require("express-fileupload");
 let _FileUploadConf = fileUpload(
   {
     limits: { fileSize: 25 * 1024 * 1024 },
