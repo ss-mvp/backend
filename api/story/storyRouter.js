@@ -75,7 +75,7 @@ async function GoodFile(file, b64)
         quality: 0.5
       });
 
-      return OutBuffer
+      return OutBuffer;
     }
     else if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
       // PNG does now specify support for EXIF, whereas it used to purely be
@@ -121,6 +121,8 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
     //Use translated file
     req.files.image.data = Translate;
     req.files.image.mimetype = "image/jpeg";
+    //Re-doing this because we have converted the image (vision doesn't support HEIC)
+    base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
   }
 
   //Transcribe and rate the image
