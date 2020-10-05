@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const s3 = require("../../services/file-upload.js");
+const heicConvert = require("heic-convert");
+const piexif = require("piexifjs");
 const story = require("./storyModel.js");
 const users = require("../email/emailModel.js");
 const admin = require("../admin/adminModel.js")
@@ -57,12 +59,17 @@ function SigFind(buffer, sig)
     }
 }
 
-async function GoodFile(file)
+async function GoodFile(file, b64)
 {
   if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
+    // PNG does now specify support for EXIF, whereas it used to purely be
+    // metadata tags. Unsure of how widely this will be adopted, the most I can
+    // find in the wild is Adobe signing the software version on exported files.
+    // - LGV-0
+    // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
     return true;
   else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
-    return true;
+    return Buffer.from(piexif.remove(b64), "base64");
   else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0) //HEIC
   {
     //Convert because vision and browsers don't default show HEIC
@@ -91,7 +98,9 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   if (!req.files.image.mimetype.includes("image"))
     return res.status(400).json({ error: "Invalid image type" });
 
-  let Translate = await GoodFile(req.files.image.data);
+  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
+
+  let Translate = await GoodFile(req.files.image.data, base64);
   if (Translate === false)
     return res.status(400).json({ error: "File invalid" });
   else if (Translate !== true)
@@ -100,9 +109,6 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
     req.files.image.data = Translate;
     req.files.image.mimetype = "image/jpeg";
   }
-
-  //Convert to Base64
-  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
 
   //Transcribe and rate the image
   const images = [];
