@@ -62,28 +62,42 @@ function SigFind(buffer, sig)
 
 async function GoodFile(file, b64)
 {
-  if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
-    // PNG does now specify support for EXIF, whereas it used to purely be
-    // metadata tags. Unsure of how widely this will be adopted, the most I can
-    // find in the wild is Adobe signing the software version on exported files.
-    // - LGV-0
-    // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
-    return true;
-  else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0) //HEIC
+  try
   {
-    //Convert because vision and browsers don't default show HEIC
-    let OutBuffer = await heicConvert({
-      buffer: file,
-      format: "JPEG",
-      quality: 0.5
-    });
+    if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
+      // PNG does now specify support for EXIF, whereas it used to purely be
+      // metadata tags. Unsure of how widely this will be adopted, the most I can
+      // find in the wild is Adobe signing the software version on exported files.
+      // - LGV-0
+      // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
+      return true;
+    else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0) //HEIC
+    {
+      //Convert because vision and browsers don't default show HEIC
+      let OutBuffer = await heicConvert({
+        buffer: file,
+        format: "JPEG",
+        quality: 0.5
+      });
 
-    return OutBuffer
+      return OutBuffer
+    }
+    else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
+      return Buffer.from(piexif.remove(b64), "base64");
+
+    return false;
   }
-  else if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
-    return Buffer.from(piexif.remove(b64), "base64");
-
-  return false;
+  catch (ex)
+  {
+    /*
+      HEIC Conversion or Piexif EXIF cleaning may throw errors
+      Foreseeable possibilities of this happening:
+      - Image data corrupted
+      - JPEG is detected by signature but was sent as a .PNG
+    */
+    console.log(ex);
+    return false;
+  }
 }
 
 let _FileUploadConf = fileUpload(
