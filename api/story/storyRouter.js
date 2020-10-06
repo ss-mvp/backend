@@ -60,32 +60,46 @@ function SigFind(buffer, sig)
     }
 }
 
-async function GoodFile(file, b64)
+async function TranslateFile(File)
 {
   try
   {
-    if (SigFind(file, "FF D8 FF") === 0 && SigFind(file, "FF D9") != -1) //JPEG
-      return Buffer.from(piexif.remove(b64), "base64");
-    else if (SigFind(file, "66 74 79 70 68 65 69 63") - 4 === 0) //HEIC
+    if ((SigFind(File.data, "FF D8 FF") === 0 && SigFind(File.data, "FF D9") != -1) && File.mimetype.includes("image/jp")) //JPEG
+    {
+      //Remove EXIF Data
+      let b64New = piexif.remove(`data:image/jpg;base64,${File.data.toString('base64')}`);
+      
+      return {
+        Raw: Buffer.from(b64New.substring(22), "base64"),
+        Base64: b64New
+      };
+    }
+    else if (SigFind(File.data, "66 74 79 70 68 65 69 63") - 4 === 0 && File.mimetype === "application/octet-stream") //HEIC
     {
       //Convert because vision and browsers don't default show HEIC
       let OutBuffer = await heicConvert({
-        buffer: file,
+        buffer: File.data,
         format: "JPEG",
         quality: 0.5
       });
+      
+      //Remove EXIF Data
+      let b64New = piexif.remove(`data:image/jpg;base64,${OutBuffer.toString('base64')}`);
 
-      return OutBuffer;
+      return {
+        Raw: Buffer.from(b64New.substring(22), "base64"),
+        Base64: b64New
+      };
     }
-    else if (SigFind(file, "89 50 4E 47 0D 0A 1A 0A") != -1) //PNG
+    else if (SigFind(File.data, "89 50 4E 47 0D 0A 1A 0A") != -1 && File.mimetype.includes("image/png")) //PNG
       // PNG does now specify support for EXIF, whereas it used to purely be
       // metadata tags. Unsure of how widely this will be adopted, the most I can
       // find in the wild is Adobe signing the software version on exported files.
       // - LGV-0
       // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
-      return true;
+      return { Raw: File.data, Base64: `data:${File.mimetype};base64,${File.data.toString('base64')}` };
 
-    return false;
+    return -1;
   }
   catch (ex)
   {
@@ -96,7 +110,7 @@ async function GoodFile(file, b64)
       - JPEG is detected by signature but was sent as a .PNG
     */
     console.log(ex);
-    return false;
+    return -1;
   }
 }
 
@@ -108,26 +122,16 @@ let _FileUploadConf = fileUpload(
     uploadTimeout: 40000 //40 Sec
   });
 router.post("/", restricted, _FileUploadConf, async (req, res) => {
-  if (!req.files.image.mimetype.includes("image"))
-    return res.status(400).json({ error: "Invalid image type" });
+  let Out = await TranslateFile(req.files.image);
 
-  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
-
-  let Translate = await GoodFile(req.files.image.data, base64);
-  if (Translate === false)
+  if (Out === -1)
     return res.status(400).json({ error: "File invalid" });
-  else if (Translate !== true)
-  {
-    //Use translated file
-    req.files.image.data = Translate;
-    req.files.image.mimetype = "image/jpeg";
-    //Re-doing this because we have converted the image (vision doesn't support HEIC)
-    base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
-  }
+
+  let { Raw, Base64 } = Out;
 
   //Transcribe and rate the image
   const images = [];
-  images.push(base64);
+  images.push(Base64);
   let transcribed = await transcribe({ images });
   transcribed = JSON.parse(transcribed);
   let readability = await readable({ story: transcribed.images[0] });
@@ -138,7 +142,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
     {
       Bucket: "storysquad",
       Key: Date.now().toString(),
-      Body: req.files.image.data
+      Body: Raw
     }, async function (err, data) {
       if (err)
       {
