@@ -36,6 +36,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.10",
     "fs": "0.0.1-security",
+    "heic-convert": "^1.2.3",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.13",
@@ -45,6 +46,7 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "nodemailer-ses-transport": "^1.5.1",
     "pg": "^7.18.2",
+    "piexifjs": "^1.0.6",
     "postgres-cleaner": "^1.0.4",
     "python-shell": "^1.0.8"
   },

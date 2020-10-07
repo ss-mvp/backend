@@ -1,5 +1,8 @@
 const router = require("express").Router();
 const s3 = require("../../services/file-upload.js");
+const heicConvert = require("heic-convert");
+const fileUpload = require("express-fileupload");
+const piexif = require("piexifjs");
 const story = require("./storyModel.js");
 const users = require("../email/emailModel.js");
 const admin = require("../admin/adminModel.js")
@@ -31,7 +34,86 @@ const onlyTranscription = (data) => {
 //   }
 // })
 
-const fileUpload = require("express-fileupload");
+//SigFind uses a common methodology of scanning a files raw bytes of data
+//and comparing them to a given prerequisite to determine whether the file
+//contains the specified data, O(nm)
+function SigFind(buffer, sig)
+{
+    try
+    {
+        let SigBuf = Buffer.from(sig.replace(/ /g, ""), "hex");
+
+        for (let i = 0; i < buffer.length; i++)
+        {
+            for (let x = 0; x < SigBuf.length; x++)
+                if (buffer[i + x] !== SigBuf[x])
+                    break;
+                else if (x === SigBuf.length - 1)
+                    return i;
+        }
+
+        return -1;
+    }
+    catch
+    {
+        return -1;
+    }
+}
+
+async function TranslateFile(File)
+{
+  try
+  {
+    if ((SigFind(File.data, "FF D8 FF") === 0 && SigFind(File.data, "FF D9") != -1) && File.mimetype.includes("image/jp")) //JPEG
+    {
+      //Remove EXIF Data
+      let b64New = piexif.remove(`data:image/jpg;base64,${File.data.toString('base64')}`);
+      
+      return {
+        Raw: Buffer.from(b64New.substring(22), "base64"),
+        Base64: b64New
+      };
+    }
+    else if (SigFind(File.data, "66 74 79 70 68 65 69 63") - 4 === 0 && File.mimetype === "application/octet-stream") //HEIC
+    {
+      //Convert because vision and browsers don't default show HEIC
+      let OutBuffer = await heicConvert({
+        buffer: File.data,
+        format: "JPEG",
+        quality: 0.5
+      });
+      
+      //Remove EXIF Data
+      let b64New = piexif.remove(`data:image/jpg;base64,${OutBuffer.toString('base64')}`);
+
+      return {
+        Raw: Buffer.from(b64New.substring(22), "base64"),
+        Base64: b64New
+      };
+    }
+    else if (SigFind(File.data, "89 50 4E 47 0D 0A 1A 0A") != -1 && File.mimetype.includes("image/png")) //PNG
+      // PNG does now specify support for EXIF, whereas it used to purely be
+      // metadata tags. Unsure of how widely this will be adopted, the most I can
+      // find in the wild is Adobe signing the software version on exported files.
+      // - LGV-0
+      // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
+      return { Raw: File.data, Base64: `data:${File.mimetype};base64,${File.data.toString('base64')}` };
+
+    return -1;
+  }
+  catch (ex)
+  {
+    /*
+      HEIC Conversion or Piexif EXIF cleaning may throw errors
+      Foreseeable possibilities of this happening:
+      - Image data corrupted
+      - JPEG is detected by signature but was sent as a .PNG
+    */
+    console.log(ex);
+    return -1;
+  }
+}
+
 let _FileUploadConf = fileUpload(
   {
     limits: { fileSize: 25 * 1024 * 1024 },
@@ -40,17 +122,16 @@ let _FileUploadConf = fileUpload(
     uploadTimeout: 40000 //40 Sec
   });
 router.post("/", restricted, _FileUploadConf, async (req, res) => {
-  //Convert to Base64
-  let base64 = `data:${req.files.image.mimetype};base64,${req.files.image.data.toString('base64')}`;
+  let Out = await TranslateFile(req.files.image);
 
-  //Verify the image meets our standards here (More coming!)
-  if (!req.files.image.mimetype.includes("image"))
-    return res.status(400).json({ error: "Invalid image type" });
-  ///////////////////////////////////////////
+  if (Out === -1)
+    return res.status(400).json({ error: "File invalid" });
+
+  let { Raw, Base64 } = Out;
 
   //Transcribe and rate the image
   const images = [];
-  images.push(base64);
+  images.push(Base64);
   let transcribed = await transcribe({ images });
   transcribed = JSON.parse(transcribed);
   let readability = await readable({ story: transcribed.images[0] });
@@ -61,7 +142,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
     {
       Bucket: "storysquad",
       Key: Date.now().toString(),
-      Body: req.files.image.data
+      Body: Raw
     }, async function (err, data) {
       if (err)
       {
