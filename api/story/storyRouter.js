@@ -137,11 +137,13 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   let readability = await readable({ story: transcribed.images[0] });
   readability = JSON.parse(readability);
 
+  let newKey = Date.now().toString();
+
   //Upload to S3 Directly
   s3.upload(
     {
       Bucket: "storysquad",
-      Key: Date.now().toString(),
+      Key: newKey,
       Body: Raw
     }, async function (err, data) {
       if (err)
@@ -153,7 +155,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
       {
         //Create the database insert
         const sendPackage = {
-          image: data.Location,
+          image: newKey,
           pages: transcribed,
           readability,
           prompt_id: req.body.promptId,
@@ -173,7 +175,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
           .catch((err) => console.log(err));
         
         //Return the new S3 link url
-        return res.status(201).json({ imageUrl: data.Location });
+        return res.status(201).json({ imageUrl: newKey });
       }
     }
   )
