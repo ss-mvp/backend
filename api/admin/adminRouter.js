@@ -98,11 +98,12 @@ router.get("/image/:id", adminRestricted, async (req, res) =>
     }).on("httpHeaders", function(statusCode, headers) {
       res.set("Content-Length", headers["content-length"]);
       res.set("Content-Type", headers["content-type"]);
+      res.set("Cache-control", "private, max-age=86400");
       this.response.httpResponse.createUnbufferedStream().pipe(res);
       res.status(statusCode);
     }).on("error", function (err)
     {
-      res.status(err.statusCode).json({ error: "Error getting file from bucket" });
+      console.log(err);
     }).send();
 });
 

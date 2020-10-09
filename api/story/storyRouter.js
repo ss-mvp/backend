@@ -179,6 +179,40 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   )
 });
 
+router.get("/image/:id", restricted, async (req, res) =>
+{
+  let ID = req.params.id;
+
+  if (!ID)
+    return res.status(400).json({ error: "Invalid request paramaters" });
+  
+  ID = parseInt(ID);
+
+  //Get the name of the image
+  let Submission = await story.getSubmissionURLById(ID);
+
+  if (!Submission)
+    return res.status(404).json({ error: "Submission not found in DB" });
+
+  if (!Submission.active)
+    return res.status(403).json({ error: "You do not have access to this resource" });
+
+  s3.getObject(
+    {
+      Bucket: "storysquad",
+      Key: Submission.image
+    }).on("httpHeaders", function(statusCode, headers) {
+      res.set("Content-Length", headers["content-length"]);
+      res.set("Content-Type", headers["content-type"]);
+      res.set("Cache-control", "private, max-age=86400");
+      this.response.httpResponse.createUnbufferedStream().pipe(res);
+      res.status(statusCode);
+    }).on("error", function (err)
+    {
+      console.log(err);
+    }).send();
+});
+
 router.get('/video', restricted, async (req, res) => {
   const video = await story.getVideo();
   const returnPackage = {
