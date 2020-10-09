@@ -14,6 +14,7 @@ module.exports = {
   // getVideo,
   // getVideoById,
   updateTopThree,
+  getSubmissionURLById
   // getCurrentPromptTime,
   // getAllVotes
 }
@@ -94,6 +95,10 @@ function getUsers() {
 
 function getSubmissions() {
   return db('submissions').where('flagged', '=', 'false');
+}
+
+async function getSubmissionURLById(id) {
+  return (await db("submissions").select("image").where({ id: id }).first()).image;
 }
 
 function getFlag(id) {
