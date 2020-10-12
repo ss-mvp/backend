@@ -10,7 +10,6 @@ const emailRouter = require("../api/email/emailRouter.js");
 const storyRouter = require("../api/story/storyRouter.js");
 const rankingRouter = require("./ranking/rankingRouter.js");
 const adminRouter = require("../api/admin/adminRouter.js");
-const restricted = require("./middleware/restricted");
 
 
 // cron code start

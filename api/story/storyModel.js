@@ -20,6 +20,7 @@ module.exports = {
   setTime,
   getAllTimes,
   getSubmission,
+  getSubmissionURLByName,
   getVideo,
   getVideoById
 }
@@ -55,6 +56,10 @@ function addReadability(link, readability) {
 
 function getSubmission(id) {
   return db('submissions').where({ id });
+}
+
+async function getSubmissionURLByName(id) {
+  return await db("submissions").select("image", "active").where({ image: id }).first();
 }
 
 async function addImage(image) {

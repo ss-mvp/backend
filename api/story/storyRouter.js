@@ -137,11 +137,13 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   let readability = await readable({ story: transcribed.images[0] });
   readability = JSON.parse(readability);
 
+  let newKey = Date.now().toString();
+
   //Upload to S3 Directly
   s3.upload(
     {
       Bucket: "storysquad",
-      Key: Date.now().toString(),
+      Key: newKey,
       Body: Raw
     }, async function (err, data) {
       if (err)
@@ -153,7 +155,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
       {
         //Create the database insert
         const sendPackage = {
-          image: data.Location,
+          image: newKey,
           pages: transcribed,
           readability,
           prompt_id: req.body.promptId,
@@ -173,10 +175,44 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
           .catch((err) => console.log(err));
         
         //Return the new S3 link url
-        return res.status(201).json({ imageUrl: data.Location });
+        return res.status(201).json({ imageUrl: newKey });
       }
     }
   )
+});
+
+router.get("/image/:id", restricted, async (req, res) =>
+{
+  let ID = req.params.id;
+
+  if (!ID)
+    return res.status(400).json({ error: "Invalid request paramaters" });
+  
+  ID = parseInt(ID);
+
+  //Get the name of the image
+  let Submission = await story.getSubmissionURLByName(ID);
+
+  if (!Submission)
+    return res.status(404).json({ error: "Submission not found in DB" });
+
+  if (!Submission.active)
+    return res.status(403).json({ error: "You do not have access to this resource" });
+
+  s3.getObject(
+    {
+      Bucket: "storysquad",
+      Key: Submission.image
+    }).on("httpHeaders", function(statusCode, headers) {
+      res.set("Content-Length", headers["content-length"]);
+      res.set("Content-Type", headers["content-type"]);
+      res.set("Cache-control", "private, max-age=86400");
+      this.response.httpResponse.createUnbufferedStream().pipe(res);
+      res.status(statusCode);
+    }).on("error", function (err)
+    {
+      console.log(err);
+    }).send();
 });
 
 router.get('/video', restricted, async (req, res) => {

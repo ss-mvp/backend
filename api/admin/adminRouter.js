@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken')
 const story = require("../story/storyModel.js");
 const admin = require('./adminModel.js');
+const s3 = require("../../services/file-upload");
 const jwtSecret = process.env.JWT_SECRET || 'sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23';
 const adminRestricted = require('../middleware/adminRestricted');
 
@@ -74,6 +75,37 @@ router.get('/winners', adminRestricted, async (req, res) => {
     const subs = await admin.getSubmissionsPerTime();
     return res.json({ subs });
 })
+
+router.get("/image/:id", adminRestricted, async (req, res) =>
+{
+  let ID = req.params.id;
+
+  if (!ID)
+    return res.status(400).json({ error: "Invalid request paramaters" });
+  
+  ID = parseInt(ID);
+
+  //Get the name of the image
+  let URL = await admin.getSubmissionURLById(ID);
+
+  if (!URL)
+    return res.status(404).json({ error: "Submission not found in DB" });
+
+  s3.getObject(
+    {
+      Bucket: "storysquad",
+      Key: URL
+    }).on("httpHeaders", function(statusCode, headers) {
+      res.set("Content-Length", headers["content-length"]);
+      res.set("Content-Type", headers["content-type"]);
+      res.set("Cache-control", "private, max-age=86400");
+      this.response.httpResponse.createUnbufferedStream().pipe(res);
+      res.status(statusCode);
+    }).on("error", function (err)
+    {
+      console.log(err);
+    }).send();
+});
 
 router.post('/remove_user_data/:email', adminRestricted, async (req, res) => {
   const { email } = req.params;
