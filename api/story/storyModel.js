@@ -20,7 +20,7 @@ module.exports = {
   setTime,
   getAllTimes,
   getSubmission,
-  getSubmissionURLById,
+  getSubmissionURLByName,
   getVideo,
   getVideoById
 }
@@ -58,8 +58,8 @@ function getSubmission(id) {
   return db('submissions').where({ id });
 }
 
-async function getSubmissionURLById(id) {
-  return await db("submissions").select("image", "active").where({ id: id }).first();
+async function getSubmissionURLByName(id) {
+  return await db("submissions").select("image", "active").where({ image: id }).first();
 }
 
 async function addImage(image) {

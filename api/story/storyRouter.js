@@ -191,7 +191,7 @@ router.get("/image/:id", restricted, async (req, res) =>
   ID = parseInt(ID);
 
   //Get the name of the image
-  let Submission = await story.getSubmissionURLById(ID);
+  let Submission = await story.getSubmissionURLByName(ID);
 
   if (!Submission)
     return res.status(404).json({ error: "Submission not found in DB" });
