@@ -8,7 +8,6 @@ const users = require("../email/emailModel.js");
 const admin = require("../admin/adminModel.js")
 const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
-const { PythonShell } = require("python-shell");
 const dotenv = require("dotenv");
 const adminRestricted = require("../middleware/adminRestricted.js");
 const { TextProcess } = require("../../services/text-processing.js");
@@ -291,30 +290,5 @@ router.post('/add', adminRestricted, (req, res) => {
     return res.status(400).json({ error: "You must add writing prompt text to add a prompt." })
   }
 })
-
-const runScript = (path, data, findResults) => {
-  const newShell = new PythonShell(path, { stdio: "pipe" });
-  return new Promise((resolve, reject) => {
-    newShell.stdin.write(JSON.stringify(data));
-    newShell.stdin.end();
-
-    let out = [];
-    newShell.stderr.on("error", (...err) => reject(...err));
-    newShell.stdout.on("data", (...data) => (out = [...out, ...data]));
-    newShell.stdout.on("close", () => resolve(out));
-  });
-};
-
-function transcribe(data) {
-  return runScript("./scripts/transcription.py", data, (out) =>
-    out.map(attemptJSONParse).find(onlyTranscription)
-  );
-}
-
-function readable(story) {
-  return runScript("./scripts/readability.py", story, (out) =>
-    out.map(attemptJSONParse)
-  );
-}
 
 module.exports = router;
