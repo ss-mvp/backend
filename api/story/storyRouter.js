@@ -151,7 +151,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
           prompt_id: req.body.promptId,
           userId: req.userId,
           flag: flagged.flagged,
-          flagged: flagged.terms,
+          flagged: flagged.bad_terms,
           score: readability.ranking_score
         };
 

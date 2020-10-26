@@ -35,7 +35,29 @@ function ScoreImage(Transcription)
 
 function Flagged(Transcription)
 {
-    return { flagged: false, terms: "" };
+    //Check singles
+    let bad_terms = "";
+
+    {
+        const Singles = (fs.readFileSync("../data/resources/bad_single.csv")).split(",\n");
+        const Words = Transcription.toLowerCase().split(" ");
+
+        for (let i = 0; i < Singles.length; i++)
+            for (let e = 0; e < Words.length; e++)
+                if (Singles[i] === Words[e])
+                    bad_terms += Singles[i] + ",";
+    }
+
+    //Check phrases
+    {
+        const Phrases = (fs.readFileSync("../data/resources/bad_phrases.csv")).split(",\n");
+        
+        for (let i = 0; i < Phrases.length; i++)
+            if (Transcription.includes(Phrases[i]))
+                bad_terms += Phrases[i] + ",";
+    }
+
+    return { flagged: bad_terms.length !== 0, terms: bad_terms };
 }
 
 //ImageData must be a buffer. Returns:
