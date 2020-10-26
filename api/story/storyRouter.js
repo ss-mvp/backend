@@ -11,6 +11,7 @@ const restricted = require("../middleware/restricted.js");
 const { PythonShell } = require("python-shell");
 const dotenv = require("dotenv");
 const adminRestricted = require("../middleware/adminRestricted.js");
+const { TextProcess } = require("../../services/text-processing.js");
 dotenv.config();
 
 const attemptJSONParse = (data) => {
@@ -69,10 +70,7 @@ async function TranslateFile(File)
       //Remove EXIF Data
       let b64New = piexif.remove(`data:image/jpg;base64,${File.data.toString('base64')}`);
       
-      return {
-        Raw: Buffer.from(b64New.substring(22), "base64"),
-        Base64: b64New
-      };
+      return Buffer.from(b64New.substring(22), "base64");
     }
     else if (SigFind(File.data, "66 74 79 70 68 65 69 63") - 4 === 0 && File.mimetype === "application/octet-stream") //HEIC
     {
@@ -86,10 +84,7 @@ async function TranslateFile(File)
       //Remove EXIF Data
       let b64New = piexif.remove(`data:image/jpg;base64,${OutBuffer.toString('base64')}`);
 
-      return {
-        Raw: Buffer.from(b64New.substring(22), "base64"),
-        Base64: b64New
-      };
+      return Buffer.from(b64New.substring(22), "base64");
     }
     else if (SigFind(File.data, "89 50 4E 47 0D 0A 1A 0A") != -1 && File.mimetype.includes("image/png")) //PNG
       // PNG does now specify support for EXIF, whereas it used to purely be
@@ -97,7 +92,7 @@ async function TranslateFile(File)
       // find in the wild is Adobe signing the software version on exported files.
       // - LGV-0
       // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
-      return { Raw: File.data, Base64: `data:${File.mimetype};base64,${File.data.toString('base64')}` };
+      return File.data;
 
     return -1;
   }
@@ -127,15 +122,10 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   if (Out === -1)
     return res.status(400).json({ error: "File invalid" });
 
-  let { Raw, Base64 } = Out;
+  let Raw = Out;
 
   //Transcribe and rate the image
-  const images = [];
-  images.push(Base64);
-  let transcribed = await transcribe({ images });
-  transcribed = JSON.parse(transcribed);
-  let readability = await readable({ story: transcribed.images[0] });
-  readability = JSON.parse(readability);
+  let { transcription, readability, flagged } = await TextProcess(Raw);
 
   let newKey = Date.now().toString();
 
@@ -156,12 +146,12 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
         //Create the database insert
         const sendPackage = {
           image: newKey,
-          pages: transcribed,
+          pages: transcription,
           readability,
           prompt_id: req.body.promptId,
           userId: req.userId,
-          flag: transcribed.flagged.flag,
-          flagged: transcribed.flagged.isFlagged,
+          flag: flagged.flagged,
+          flagged: flagged.terms,
           score: readability.ranking_score
         };
 
