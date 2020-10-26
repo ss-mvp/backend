@@ -126,6 +126,9 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   //Transcribe and rate the image
   let { transcription, readability, flagged } = await TextProcess(Raw);
 
+  if (!transcription)
+    return res.status(400).json({ error: "Transcription error" });
+
   let newKey = Date.now().toString();
 
   //Upload to S3 Directly
