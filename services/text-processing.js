@@ -31,7 +31,6 @@ function ScoreImage(Transcription)
     let Item = Readability.getScores(Transcription);
 
     Item.doc_length = Transcription.length;
-    Item.quote_count = Transcription.match(/"/g).length;
 
     return Item;
 }
@@ -77,14 +76,15 @@ async function TextProcess(ImageData)
 
     if (Transcription === "Error090")
         return undefined;
-
+    
     let Score = ScoreImage(Transcription);
 
     let Accumulative = 0;
 
     Object.keys(Score).forEach((i) =>
     {
-        Accumulative += Score[i];
+        if (i !== "doc_length")
+            Accumulative += Score[i];
     });
 
     Score.ranking_score = Accumulative;

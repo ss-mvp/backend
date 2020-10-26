@@ -77,7 +77,7 @@ async function TranslateFile(File)
       let OutBuffer = await heicConvert({
         buffer: File.data,
         format: "JPEG",
-        quality: 0.5
+        quality: 0.85
       });
       
       //Remove EXIF Data
@@ -149,8 +149,8 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
           readability,
           prompt_id: req.body.promptId,
           userId: req.userId,
-          flag: flagged.flagged,
-          flagged: flagged.terms,
+          flag: flagged.terms,
+          flagged: flagged.flagged,
           score: readability.ranking_score
         };
 
