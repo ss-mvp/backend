@@ -77,7 +77,7 @@ async function TranslateFile(File)
       let OutBuffer = await heicConvert({
         buffer: File.data,
         format: "JPEG",
-        quality: 0.85
+        quality: 0.7
       });
       
       //Remove EXIF Data
