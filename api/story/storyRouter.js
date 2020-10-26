@@ -4,35 +4,11 @@ const heicConvert = require("heic-convert");
 const fileUpload = require("express-fileupload");
 const piexif = require("piexifjs");
 const story = require("./storyModel.js");
-const users = require("../email/emailModel.js");
-const admin = require("../admin/adminModel.js")
-const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
 const dotenv = require("dotenv");
 const adminRestricted = require("../middleware/adminRestricted.js");
 const { TextProcess } = require("../../services/text-processing.js");
 dotenv.config();
-
-const attemptJSONParse = (data) => {
-  try {
-    return JSON.parse(data);
-  } catch {
-    return data;
-  }
-};
-
-const onlyTranscription = (data) => {
-  data["images"] && data["metadata"];
-};
-
-// router.get('/user/:id', restricted, async (req, res) => {
-//   const user = await auth.findEmail(req.params.id);
-//   if (user) {
-//       return res.status(200).json({ user });
-//   } else {
-//       return res.status(400).json({ error: "No user found with that ID." });
-//   }
-// })
 
 //SigFind uses a common methodology of scanning a files raw bytes of data
 //and comparing them to a given prerequisite to determine whether the file
