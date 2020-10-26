@@ -16,7 +16,7 @@ async function TranscribeImage(ImageBuffer)
 
         if (!Transcribe.textAnnotations[0])
             return "No text found";
-        
+
         return Transcribe.textAnnotations[0].description.replace(/\r?\n|\r/g, " ");
     }
     catch (ex)
@@ -39,7 +39,7 @@ function Flagged(Transcription)
     let bad_terms = "";
 
     {
-        const Singles = (fs.readFileSync("../data/resources/bad_single.csv")).split(",\n");
+        const Singles = (fs.readFileSync("./data/resources/bad_single.csv")).toString().split(",\r\n");
         const Words = Transcription.toLowerCase().split(" ");
 
         for (let i = 0; i < Singles.length; i++)
@@ -50,7 +50,7 @@ function Flagged(Transcription)
 
     //Check phrases
     {
-        const Phrases = (fs.readFileSync("../data/resources/bad_phrases.csv")).split(",\n");
+        const Phrases = (fs.readFileSync("./data/resources/bad_phrases.csv")).toString().split(",\r\n");
         
         for (let i = 0; i < Phrases.length; i++)
             if (Transcription.includes(Phrases[i]))
