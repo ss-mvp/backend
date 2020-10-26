@@ -30,6 +30,9 @@ function ScoreImage(Transcription)
 {
     let Item = Readability.getScores(Transcription);
 
+    Item.doc_length = Transcription.length;
+    Item.quote_count = Transcription.match(/"/g).length;
+
     return Item;
 }
 
