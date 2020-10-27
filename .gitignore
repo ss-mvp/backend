@@ -85,3 +85,6 @@ Pipfile.lock
 
 # Package lock
 package-lock.json
+
+# Vision hack
+vision.json

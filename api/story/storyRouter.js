@@ -4,35 +4,11 @@ const heicConvert = require("heic-convert");
 const fileUpload = require("express-fileupload");
 const piexif = require("piexifjs");
 const story = require("./storyModel.js");
-const users = require("../email/emailModel.js");
-const admin = require("../admin/adminModel.js")
-const moment = require("moment");
 const restricted = require("../middleware/restricted.js");
-const { PythonShell } = require("python-shell");
 const dotenv = require("dotenv");
 const adminRestricted = require("../middleware/adminRestricted.js");
+const { TextProcess } = require("../../services/text-processing.js");
 dotenv.config();
-
-const attemptJSONParse = (data) => {
-  try {
-    return JSON.parse(data);
-  } catch {
-    return data;
-  }
-};
-
-const onlyTranscription = (data) => {
-  data["images"] && data["metadata"];
-};
-
-// router.get('/user/:id', restricted, async (req, res) => {
-//   const user = await auth.findEmail(req.params.id);
-//   if (user) {
-//       return res.status(200).json({ user });
-//   } else {
-//       return res.status(400).json({ error: "No user found with that ID." });
-//   }
-// })
 
 //SigFind uses a common methodology of scanning a files raw bytes of data
 //and comparing them to a given prerequisite to determine whether the file
@@ -69,10 +45,7 @@ async function TranslateFile(File)
       //Remove EXIF Data
       let b64New = piexif.remove(`data:image/jpg;base64,${File.data.toString('base64')}`);
       
-      return {
-        Raw: Buffer.from(b64New.substring(22), "base64"),
-        Base64: b64New
-      };
+      return Buffer.from(b64New.substring(22), "base64");
     }
     else if (SigFind(File.data, "66 74 79 70 68 65 69 63") - 4 === 0 && File.mimetype === "application/octet-stream") //HEIC
     {
@@ -80,16 +53,13 @@ async function TranslateFile(File)
       let OutBuffer = await heicConvert({
         buffer: File.data,
         format: "JPEG",
-        quality: 0.5
+        quality: 0.7
       });
       
       //Remove EXIF Data
       let b64New = piexif.remove(`data:image/jpg;base64,${OutBuffer.toString('base64')}`);
 
-      return {
-        Raw: Buffer.from(b64New.substring(22), "base64"),
-        Base64: b64New
-      };
+      return Buffer.from(b64New.substring(22), "base64");
     }
     else if (SigFind(File.data, "89 50 4E 47 0D 0A 1A 0A") != -1 && File.mimetype.includes("image/png")) //PNG
       // PNG does now specify support for EXIF, whereas it used to purely be
@@ -97,7 +67,7 @@ async function TranslateFile(File)
       // find in the wild is Adobe signing the software version on exported files.
       // - LGV-0
       // http://ftp-osl.osuosl.org/pub/libpng/documents/pngext-1.5.0.html#C.eXIf
-      return { Raw: File.data, Base64: `data:${File.mimetype};base64,${File.data.toString('base64')}` };
+      return File.data;
 
     return -1;
   }
@@ -127,15 +97,13 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   if (Out === -1)
     return res.status(400).json({ error: "File invalid" });
 
-  let { Raw, Base64 } = Out;
+  let Raw = Out;
 
   //Transcribe and rate the image
-  const images = [];
-  images.push(Base64);
-  let transcribed = await transcribe({ images });
-  transcribed = JSON.parse(transcribed);
-  let readability = await readable({ story: transcribed.images[0] });
-  readability = JSON.parse(readability);
+  let { transcription, readability, flagged } = await TextProcess(Raw);
+
+  if (!transcription)
+    return res.status(400).json({ error: "Transcription error" });
 
   let newKey = Date.now().toString();
 
@@ -156,12 +124,12 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
         //Create the database insert
         const sendPackage = {
           image: newKey,
-          pages: transcribed,
+          pages: transcription,
           readability,
           prompt_id: req.body.promptId,
           userId: req.userId,
-          flag: transcribed.flagged.flag,
-          flagged: transcribed.flagged.isFlagged,
+          flag: flagged.terms,
+          flagged: flagged.flagged,
           score: readability.ranking_score
         };
 
@@ -301,30 +269,5 @@ router.post('/add', adminRestricted, (req, res) => {
     return res.status(400).json({ error: "You must add writing prompt text to add a prompt." })
   }
 })
-
-const runScript = (path, data, findResults) => {
-  const newShell = new PythonShell(path, { stdio: "pipe" });
-  return new Promise((resolve, reject) => {
-    newShell.stdin.write(JSON.stringify(data));
-    newShell.stdin.end();
-
-    let out = [];
-    newShell.stderr.on("error", (...err) => reject(...err));
-    newShell.stdout.on("data", (...data) => (out = [...out, ...data]));
-    newShell.stdout.on("close", () => resolve(out));
-  });
-};
-
-function transcribe(data) {
-  return runScript("./scripts/transcription.py", data, (out) =>
-    out.map(attemptJSONParse).find(onlyTranscription)
-  );
-}
-
-function readable(story) {
-  return runScript("./scripts/readability.py", story, (out) =>
-    out.map(attemptJSONParse)
-  );
-}
 
 module.exports = router;
