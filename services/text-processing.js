@@ -38,6 +38,7 @@ function ScoreImage(Transcription)
 {
     let Item = Readability.getScores(Transcription);
 
+    Item.quoteCount = Transcription.split('"').length - 1;
     Item.doc_length = Transcription.length;
 
     return Item;
@@ -81,7 +82,7 @@ function Flagged(Transcription)
 async function TextProcess(ImageData)
 {
     let Transcription = await TranscribeImage(ImageData);
-
+    
     if (Transcription === "Error090" || Transcription === "No text found")
         return undefined;
     
