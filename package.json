@@ -27,6 +27,7 @@
     "@crystallize/elasticloadbalancer-express-force-https": "^2.4.0",
     "@google-cloud/vision": "^2.1.2",
     "aws-sdk": "^2.648.0",
+    "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

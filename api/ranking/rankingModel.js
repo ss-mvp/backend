@@ -8,10 +8,11 @@ module.exports = {
     addIP,
     getWinner,
     get,
-    getVotes
+    getVotes,
+    getUser,
+    getSubmission,
+    getTodaysScores
 };
-
-
 
 async function getTopThree(){
     return await db("topThree")
@@ -34,7 +35,6 @@ async function get(){
 async function getVotes(){
     return await db("ranking")
 }
-
 
 async function getFinalScores(){
     //return 3 ids
@@ -65,6 +65,18 @@ async function getFinalScores(){
         .limit(3)
 
 };
+
+function getUser(email) {
+    return db('users').where({ email }).first();
+}
+
+function getSubmission(userid) {
+    return db('submissions').where({ "userId": userid, "active": true }).first();
+}
+
+function getTodaysScores() {
+    return db('submissions').select("score").where("active", "=", true);
+}
 
 async function rankIt(topThreeId, rank){
     const newRanking = {topthree_id: topThreeId, rank}
