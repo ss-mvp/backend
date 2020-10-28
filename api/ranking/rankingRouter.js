@@ -4,7 +4,7 @@ const router = require("express").Router();
 const db = require("../../data/dbConfig");
 const restricted = require('../middleware/restricted');
 
-const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP, getVotes, getUser } = require("./rankingModel");
+const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP, getVotes, getUser, getTodaysScores, getSubmission } = require("./rankingModel");
 
 // hello heroku
 
@@ -59,26 +59,33 @@ router.post("/", checkIP, async(req, res) => {
 
 router.get("/histogram", restricted, async (req, res) =>
 {
-  //All scores
-  let TodaysScores = await getTodaysScores();
+  try
+  {
+    //All scores
+    let TodaysScores = await getTodaysScores();
 
-  //Current users scores
-  let UserData = await getUser(req.username);
-  let CurrentUserSubmission = await getSubmission(UserData.id);
+    //Current users scores
+    let UserData = await getUser(req.username);
+    let CurrentUserSubmission = await getSubmission(UserData.id);
 
-  Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", 
+    Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", 
+    {
+      "GradeList": TodaysScores.map(el => el.score),
+      "StudentScore": CurrentUserSubmission.score
+    }).then((resA) =>
+    {
+      return res.status(200).json(JSON.parse(resA.data));
+    }).catch((err) =>
+    {
+      console.log(err);
+      return res.status(400).json({ err: "Internal server error [DS]" });
+    });
+  }
+  catch (ex)
   {
-    "GradeList": TodaysScores.map(el => el.score),
-    "StudentScore": CurrentUserSubmission.score
-  }).then((res) =>
-  {
-    console.log(res);
-    return res.status(200).json(res.data);
-  }).catch((err) =>
-  {
-    console.log(err);
-    return res.status(400).json({ err: "Internal server error [DS]" });
-  });
+    console.log(ex);
+    return res.status(400).json({ err: "Internal server error" });
+  }
 });
 
 router.get("/winner", async(req, res) => {
