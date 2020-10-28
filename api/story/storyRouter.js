@@ -139,7 +139,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
         if ((await story.addImage(sendPackage)) === -1)
         {
           console.log(`DB Error inserting for image key ${newKey}`);
-          return res.status(500).json({ error: "Internal server error" })
+          return res.status(500).json({ error: "Internal server error" });
         }
         
         //Return the new S3 link url
