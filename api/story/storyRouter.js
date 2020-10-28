@@ -133,14 +133,14 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
           score: readability.ranking_score
         };
 
-        //AddImage, this also has a select that's creating an error
-        //But the error isn't for anything useful so idk
-        await story
-          .addImage(sendPackage)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((err) => console.log(err));
+        //If this fails, we've got an image in the s3 with no DB link, in practice,
+        //this image is "lost" and we need some way to "know" this happened so our
+        //data isn't going in untracked. Potentially dangerous.
+        if ((await story.addImage(sendPackage)) === -1)
+        {
+          console.log(`DB Error inserting for image key ${newKey}`);
+          return res.status(500).json({ error: "Internal server error" })
+        }
         
         //Return the new S3 link url
         return res.status(201).json({ imageUrl: newKey });

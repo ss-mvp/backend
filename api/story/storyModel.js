@@ -73,8 +73,8 @@ async function getSubmissionURLByName(id) {
 }
 
 async function addImage(image) {
-  const [id] = await db('submissions').insert(image).returning('id');
-  return getSubmission(id);
+  try { return (await db('submissions').insert(image).returning('id'))[0]; }
+  catch (ex) { console.log(ex); return -1; }
 }
 
 function getDate() {
