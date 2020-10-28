@@ -22,11 +22,13 @@ module.exports = {
   getSubmission,
   getSubmissionURLByName,
   getVideo,
-  getVideoById
-}
+  getVideoById,
+};
 
 function getAllTimes(id) {
-  return db('prompt_time').join("prompts", "prompts.id", "prompt_time.prompt_id").where({ prompt_id: id });
+  return db('prompt_time')
+    .join('prompts', 'prompts.id', 'prompt_time.prompt_id')
+    .where({ prompt_id: id });
 }
 
 function wipeQueue() {
@@ -34,7 +36,12 @@ function wipeQueue() {
 }
 
 function disableAll() {
-  return db('submissions').update({ active: false, topThree: false, vote: false, voting: false });
+  return db('submissions').update({
+    active: false,
+    topThree: false,
+    vote: false,
+    voting: false,
+  });
 }
 
 async function clearRanking() {
@@ -51,7 +58,7 @@ function deletePrompt(id) {
 }
 
 function addReadability(link, readability) {
-    return db('submissions').where('image', '=', link).update({ readability })
+  return db('submissions').where('image', '=', link).update({ readability });
 }
 
 function getSubmission(id) {
@@ -59,12 +66,15 @@ function getSubmission(id) {
 }
 
 async function getSubmissionURLByName(id) {
-  return await db("submissions").select("image", "active").where({ image: id }).first();
+  return await db('submissions')
+    .select('image', 'active')
+    .where({ image: id })
+    .first();
 }
 
 async function addImage(image) {
-  const { id } = await db('submissions').insert(image);
-  return getSubmission(id);
+  try { return (await db('submissions').insert(image).returning('id'))[0]; }
+  catch (ex) { console.log(ex); return -1; }
 }
 
 function getDate() {
@@ -76,9 +86,9 @@ async function getPrompt() {
   const queue = await getQueue();
   // console.log(queue)
   if (queue.queue.length === 0) {
-    return []
+    return [];
   } else {
-    const queue_id = queue.queue.split(",").slice(-1)[0];
+    const queue_id = queue.queue.split(',').slice(-1)[0];
     // console.log(await getPromptById(queue_id));
     // console.log('queue', queue_id)
     // console.log('type', typeof queue_id)
@@ -94,14 +104,14 @@ async function getVideo() {
   const videos = await db('admin');
   let id = 0;
   let largest = 0;
-  videos.map(element => {
+  videos.map((element) => {
     if (parseInt(element.video_time) > largest) {
-      largest = element.video_time
-      id = element.id
+      largest = element.video_time;
+      id = element.id;
     }
-  })
+  });
   const return_video = await getVideoById(id);
-  return return_video
+  return return_video;
 }
 
 function allPrompts() {
@@ -120,12 +130,12 @@ async function addToQueue(id) {
   let queue = await getQueue();
 
   if (queue.queue.length === 0) {
-    newQueue = [] // empty string
-    newQueue.push(id)
-    console.log('queue',newQueue)
+    newQueue = []; // empty string
+    newQueue.push(id);
+    console.log('queue', newQueue);
     write_queue = {
-      queue: newQueue.join()
-    }
+      queue: newQueue.join(),
+    };
     return db('prompt_queue').where('id', '=', 1).update(write_queue);
   } else {
     queue = queue.queue.split(',');
@@ -133,14 +143,16 @@ async function addToQueue(id) {
       queue.push(id);
       queue = queue.splice(1, queue.length - 1).join();
     } else if (queue.length < 30) {
-      queue.push(id)
-      return db('prompt_queue').where('id', '=', 1).update({ queue: queue.join() });
+      queue.push(id);
+      return db('prompt_queue')
+        .where('id', '=', 1)
+        .update({ queue: queue.join() });
     }
   }
 }
 
 function addPrompt(newPrompt) {
-  return db('prompts').insert(newPrompt)
+  return db('prompts').insert(newPrompt);
 }
 
 function editPrompt(id, edits) {
@@ -148,11 +160,20 @@ function editPrompt(id, edits) {
 }
 
 async function getTime(prompt_id) {
-  const start = await db('prompt_time').where({ prompt_id }).select('time').first();
-  const end = await db('prompt_time').where({ prompt_id }).select('end').first();
-  const newGame = await db('prompt_time').where({ prompt_id }).select('newGame').first();
+  const start = await db('prompt_time')
+    .where({ prompt_id })
+    .select('time')
+    .first();
+  const end = await db('prompt_time')
+    .where({ prompt_id })
+    .select('end')
+    .first();
+  const newGame = await db('prompt_time')
+    .where({ prompt_id })
+    .select('newGame')
+    .first();
   console.log(start, end, newGame);
-  return {start, end, newGame}
+  return { start, end, newGame };
 }
 
 function setTime(id) {
