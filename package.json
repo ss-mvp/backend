@@ -48,8 +48,7 @@
     "nodemailer-ses-transport": "^1.5.1",
     "pg": "^8.4.2",
     "piexifjs": "^1.0.6",
-    "postgres-cleaner": "^1.0.4",
-    "textstat": "^0.8.0"
+    "postgres-cleaner": "^1.0.4"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
