@@ -73,6 +73,7 @@ router.get("/histogram", restricted, async (req, res) =>
   }).then((res) =>
   {
     console.log(res);
+    return res.status(200).json(res.data);
   }).catch((err) =>
   {
     console.log(err);
