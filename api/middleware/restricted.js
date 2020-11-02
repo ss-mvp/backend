@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
           console.log(err)
         return res.status(401).json({ error: "Token is not valid."})
       } else {
-        req.username = decodedToken.email;
+        req.username = decodedToken.username;
         req.userId = decodedToken.id;
         next();
       }

@@ -13,14 +13,14 @@ async function TranscribeImage(ImageBuffer)
         let Client = new Vision.ImageAnnotatorClient({ keyFile: "vision.json" });
 
         let Transcribe = (await Client.textDetection(
-                { 
-                    image: ImageBuffer,
-                    imageContext:
-                    {
-                        language_hints: ['en-t-i0-handwrit']
-                    }
+            {
+                image: ImageBuffer,
+                imageContext:
+                {
+                    languageHints: ["en-t-i0-handwrit"]
                 }
-            ))[0];
+            }
+        ))[0];
 
         if (!Transcribe.textAnnotations[0])
             return "No text found";

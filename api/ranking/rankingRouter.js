@@ -1,8 +1,10 @@
-const moment = require('moment')
+const { default: Axios } = require('axios');
+const moment = require('moment');
 const router = require("express").Router();
-const db = require("../../data/dbConfig")
+const db = require("../../data/dbConfig");
+const restricted = require('../middleware/restricted');
 
-const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP, getVotes } = require("./rankingModel");
+const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP, getVotes, getUser, getTodaysScores, getSubmission } = require("./rankingModel");
 
 // hello heroku
 
@@ -54,6 +56,37 @@ router.post("/", checkIP, async(req, res) => {
     return res.status(500).json({ message: `${err}` })
   }
 })
+
+router.get("/histogram", restricted, async (req, res) =>
+{
+  try
+  {
+    //All scores
+    let TodaysScores = await getTodaysScores();
+
+    //Current users scores
+    let UserData = await getUser(req.username);
+    let CurrentUserSubmission = await getSubmission(UserData.id);
+
+    Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", 
+    {
+      "GradeList": TodaysScores.map(el => el.score),
+      "StudentScore": CurrentUserSubmission.score
+    }).then((resA) =>
+    {
+      return res.status(200).json(JSON.parse(resA.data));
+    }).catch((err) =>
+    {
+      console.log(err);
+      return res.status(400).json({ err: "Internal server error [DS]" });
+    });
+  }
+  catch (ex)
+  {
+    console.log(ex);
+    return res.status(400).json({ err: "Internal server error" });
+  }
+});
 
 router.get("/winner", async(req, res) => {
   try {

@@ -27,6 +27,7 @@
     "@crystallize/elasticloadbalancer-express-force-https": "^2.4.0",
     "@google-cloud/vision": "^2.1.2",
     "aws-sdk": "^2.648.0",
+    "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -48,8 +49,7 @@
     "nodemailer-ses-transport": "^1.5.1",
     "pg": "^8.4.2",
     "piexifjs": "^1.0.6",
-    "postgres-cleaner": "^1.0.4",
-    "textstat": "^0.8.0"
+    "postgres-cleaner": "^1.0.4"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
