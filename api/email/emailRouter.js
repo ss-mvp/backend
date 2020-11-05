@@ -9,55 +9,52 @@ dotenv.config();
 const restricted = require('../middleware/restricted.js');
 const jwtSecret = process.env.JWT_SECRET;
 const ses = require('nodemailer-ses-transport');
+const { v4: uuidv4 } = require('uuid');
 
-router.get('/activation/:email', async (req, res) => {
+router.get('/activation/:email', async (req, res) =>
+{
   return res.json(await auth.checkActivation(req.params.email));
 });
 
-router.post('/register', async (req, res) => {
-  if (!req.body.email || !req.body.password || !req.body.username) {
-    return res
-      .status(400)
-      .json({ error: 'Username and Password are required.' });
-  }
+router.post('/register', async (req, res) =>
+{
+  if (!req.body.email || !req.body.password || !req.body.username || !req.body.age)
+    return res.status(400).json({ error: 'Username, email, age, and password are required' });
 
-  const { email, password, username, age, parentEmail } = req.body;
+  let { email, password, username, age, parentEmail } = req.body;
 
-  const existingUser = await auth.getUserId(email);
-  if (existingUser) {
-    return res
-      .status(400)
-      .json({ error: 'User already exists. Please sign in.' });
-  }
+  let existingEmail = await auth.getUserIdByEmail(email);
+  if (existingEmail)
+    return res.status(400).json({ error: 'Email already in use' });
 
-  const combineForHash = email + password;
-  const validationHash = bc.hashSync(combineForHash, 10);
+  let existingUsername = await auth.getUserIdByUsername(username);
+  if (existingUsername)
+    return res.status(400).json({ error: 'Username already in use' });
 
-  const newUser = {
+  let validationToken = uuidv4();
+
+  let newUser =
+  {
     email,
     username,
     password: bc.hashSync(password, 10),
     age,
     parentEmail,
-    validationUrl: validationHash,
+    validationUrl: validationToken,
   };
-  await auth.addUser(newUser);
 
-  let sendUrl = '';
+  if (!(await auth.addUser(newUser)))
+    return res.status(500).json({ error: "Unknown server error" });
 
-  if (process.env.BE_ENV === 'development') {
-    sendUrl = `http://localhost:5000/email/activate/?token=${validationHash}&email=${email}`;
-  } else {
-    sendUrl = `https://server.storysquad.app/email/activate/?token=${validationHash}&email=${email}`;
-  }
+  let sendUrl = (process.env.BE_ENV === 'development') ?
+    `http://localhost:5000/email/activate/?token=${validationToken}&email=${email}` :
+    `https://server.storysquad.app/email/activate/?token=${validationToken}&email=${email}`;
 
   // send email to parent instead of user, if given.
   // ToDo: change this to a separate ToS/PP confirmation email
   sendEmail(parentEmail || email, sendUrl);
 
-  return res
-    .status(200)
-    .json({ message: 'User created, waiting for validation.' });
+  return res.status(200).json({ message: 'User created' });
 });
 
 router.post('/login', async (req, res) => {
@@ -131,7 +128,7 @@ router.post('/activatedLogin', async (req, res) => {
 // This also needs to delete all user submissions
 router.delete('/:email', (req, res) => {
   auth
-    .getUserId(req.params.email)
+    .getUserIdByEmail(req.params.email)
     .then(async (response) => {
       if (response) {
         await auth.removeUser(response.id);
@@ -147,24 +144,14 @@ router.delete('/:email', (req, res) => {
 
 
 
-router.get('/video', (req, res)=>{
+router.get('/video', (req, res) => {
   auth.getVideo()
-    .then(video=>res.status(200).json(video))
-    .catch(err=>{
+    .then(video => res.status(200).json(video))
+    .catch(err => {
       console.log(err)
-      res.status(500).json({messsage: err})
+      res.status(500).json({ messsage: err })
     })
 })
-
-
-
-
-
-
-
-
-
-
 
 function sendEmail(email, url) {
   const transporter = nm.createTransport(

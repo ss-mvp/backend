@@ -5,7 +5,8 @@ module.exports = {
     getUser,
     findEmail,
     addUser,
-    getUserId,
+    getUserIdByEmail,
+    getUserIdByUsername,
     checkActivation,
     activateEmail,
     toggleFirstLogin,
@@ -27,13 +28,18 @@ function findEmail(id) {
     return db('users').where({ id });
 };
 
-function addUser(user) {
-    return db('users').insert(user);
+async function addUser(user) {
+    try  { await db('users').insert(user); return true; }
+    catch (ex) { console.log(ex); return false; }
 };
 
-function getUserId(email) {
+function getUserIdByEmail(email) {
     return db('users').where({ email }).select('id').first();
 };
+
+function getUserIdByUsername(username) {
+    return db('users').where({ username }).select('id').first();
+}
 
 function checkActivation(email) {
     return db('users').where({ email }).select('validated').first();
