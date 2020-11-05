@@ -57,35 +57,29 @@ router.post('/register', async (req, res) =>
   return res.status(200).json({ message: 'User created' });
 });
 
-router.post('/login', async (req, res) => {
-  if (req.body.email && req.body.password) {
-    const { validated } = await auth.checkActivation(req.body.email);
-    console.log(validated);
+router.post('/login', async (req, res) =>
+{
+  try
+  {
+    if (!req.body.email && !req.body.password)
+      return res.status(400).json({ error: 'Email and Password required for login' });
 
-    auth
-      .getUser(req.body.email)
-      .then((response) => {
+    let { validated } = await auth.checkActivation(req.body.email);
 
-        if (validated === true) {
-          if (bc.compareSync(req.body.password, response.password)) {
-            const token = signToken(response);
-            return res.status(201).json({ username: response.username, token });
-          } else {
-            return res
-              .status(400)
-              .json({ error: 'Incorrect login information.' });
-          }
-        } else {
-          return res
-            .status(400)
-            .json({ error: 'Your account must be validated.' });
-        }
-      })
-      .catch((err) => console.log(err));
-  } else {
-    return res
-      .status(400)
-      .json({ error: 'Email and Password required for login.' });
+    let User = await auth.getUser(req.body.email);
+
+    if (!validated)
+      return res.status(400).json({ error: 'Your account must be validated' });
+    
+    if (bc.compareSync(req.body.password, User.password))
+      return res.status(201).json({ username: User.username, signToken(User) });
+    else
+      return res.status(400).json({ error: 'Incorrect login information' });
+  }
+  catch (ex)
+  {
+    console.log(ex);
+    return res.status(500).json({ error: "Unknown server error" });
   }
 });
 
