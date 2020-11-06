@@ -83,37 +83,40 @@ router.post('/login', async (req, res) =>
   }
 });
 
-router.get('/activate', async (req, res) => {
-  if (req.query.token) {
-    const token = await auth.getToken(req.query.email);
-    if (req.query.token === token.validationUrl) {
-      // const activation = await auth.activateEmail(req.query.email, { validated: true });
-      await auth.activateEmail(req.query.email, { validated: true });
-      if (process.env.BE_ENV === 'development') {
-        res.redirect(`http://localhost:3000/activated/${req.query.token}`);
-      } else {
-        res.redirect(
-          `https://contest.storysquad.app/activated/${req.query.token}`
-        );
-      }
-      // return res.status(200).json({ message: `${req.query.email} activation status = ${activation.validated}` });
-    }
-  } else {
-    return res
-      .status(400)
-      .json({ error: 'This token is invalid for activation.' });
-  }
+router.get('/activate', async (req, res) =>
+{
+  if (!req.query.token || !req.query.email)
+    return res.status(300).json({ error: 'Token and email are required for validation' });
+
+  const data = await auth.getToken(req.query.email);
+
+  if (!data)
+    return res.status(500).json({ error: "User info invalid" });
+
+  if (data.validated)
+    return res.status(400).json({ error: "Account is already validated" });
+
+  if (req.query.token !== data.validationUrl)
+    return res.status(400).json({ error: 'This token is invalid for activation.' });
+
+  await auth.activateEmail(req.query.email, { validated: true });
+
+  if (process.env.BE_ENV === 'development')
+    res.redirect(`http://localhost:3000/activated/${req.query.token}`);
+  else
+    res.redirect(`https://contest.storysquad.app/activated/${req.query.token}`);
 });
 
 //this route is called when user activates email to issue a token so they can be automatically logged in
 router.post('/activatedLogin', async (req, res) => {
   const activatedUser = await auth.issueActivatedToken(req.body.token);
-  console.log('body', req.body.token);
-  console.log('activatedUser', activatedUser);
-  if (activatedUser) {
+  if (activatedUser)
+  {
     let token = signToken(activatedUser);
     res.status(200).json({ username: activatedUser.username, token: token });
-  } else {
+  }
+  else
+  {
     res.status(400).json({ message: 'invalid token' });
   }
 });

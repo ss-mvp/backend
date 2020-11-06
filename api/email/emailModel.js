@@ -46,7 +46,7 @@ function checkActivation(email) {
 };
 
 function getToken(email) {
-    return db('users').where({ email }).select('validationUrl').first();
+    return db('users').where({ email }).select('validationUrl', 'validated').first();
 };
 
 function issueActivatedToken(validationUrl) {
@@ -58,9 +58,8 @@ function removeUser(id) {
     // return db('users').where({ id })
 }
 
-async function activateEmail(email, validate) {
-    await db('users').where({ email }).update(validate);
-    return checkActivation(email);
+function activateEmail(email, validate) {
+    return db('users').where({ email }).update(validate);
 };
 
 async function toggleFirstLogin(email) {
