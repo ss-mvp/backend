@@ -121,26 +121,6 @@ router.post('/activatedLogin', async (req, res) => {
   }
 });
 
-// This needs self user or admin user verification
-// This also needs to delete all user submissions
-router.delete('/:email', (req, res) => {
-  auth
-    .getUserIdByEmail(req.params.email)
-    .then(async (response) => {
-      if (response) {
-        await auth.removeUser(response.id);
-        return res.status(201).json({ message: 'user removed' });
-      } else {
-        res.status(400).json({ error: 'User does not exist.' });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-
-
 router.get('/video', (req, res) => {
   auth.getVideo()
     .then(video => res.status(200).json(video))
