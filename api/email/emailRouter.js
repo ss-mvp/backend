@@ -72,7 +72,7 @@ router.post('/login', async (req, res) =>
       return res.status(400).json({ error: 'Your account must be validated' });
     
     if (bc.compareSync(req.body.password, User.password))
-      return res.status(201).json({ username: User.username, signToken(User) });
+      return res.status(201).json({ username: User.username, token: signToken(User) });
     else
       return res.status(400).json({ error: 'Incorrect login information' });
   }
