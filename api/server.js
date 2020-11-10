@@ -70,8 +70,6 @@ const startGame = new CronJob('00 30 02 * * *', async function() {
         // Set prompt to active
         await story.editPrompt(rand, { active: true });
     }
-
-    await story.setTime(rand);
 })
 
 // const endSubmission = new CronJob('00 00 19 * * *', async function() {

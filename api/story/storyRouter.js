@@ -193,20 +193,6 @@ router.get('/video', restricted, async (req, res) => {
   return res.json({ returnPackage });
 })
 
-router.get('/time', restricted, async (req, res) => {
-  const prompt = await story.getPrompt();
-  if (prompt) {
-    const time = await story.getTime(prompt.id);
-    if (time) {
-      return res.status(200).json({ time });
-    } else {
-      return res.status(400).json({ error: "Something went wrong." })
-    }
-  } else {
-    return res.status(400).json({ error: "No active prompt." })
-  }
-})
-
 router.get("/prompt", restricted, async (req, res) => {
   const prompt = await story.getPrompt();
   if (prompt.length === 0) {

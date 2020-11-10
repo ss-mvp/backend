@@ -14,26 +14,12 @@ module.exports = {
   deletePrompt,
   getPromptById,
   editPrompt,
-  wipeQueue,
-  getTime,
   getQueue,
-  setTime,
-  getAllTimes,
   getSubmission,
   getSubmissionURLByName,
   getVideo,
   getVideoById,
 };
-
-function getAllTimes(id) {
-  return db('prompt_time')
-    .join('prompts', 'prompts.id', 'prompt_time.prompt_id')
-    .where({ prompt_id: id });
-}
-
-function wipeQueue() {
-  return db('prompt_queue').where({ id: 1 }).update({ queue: '' });
-}
 
 function disableAll() {
   return db('submissions').update({
@@ -122,11 +108,8 @@ function allStories() {
   return db('submissions');
 }
 
-function getQueue() {
-  return db('prompt_queue').select('queue').first();
-}
-
 async function addToQueue(id) {
+  //Get queue
   let queue = await getQueue();
 
   if (queue.queue.length === 0) {
@@ -157,25 +140,4 @@ function addPrompt(newPrompt) {
 
 function editPrompt(id, edits) {
   return db('prompts').where({ id }).update(edits);
-}
-
-async function getTime(prompt_id) {
-  const start = await db('prompt_time')
-    .where({ prompt_id })
-    .select('time')
-    .first();
-  const end = await db('prompt_time')
-    .where({ prompt_id })
-    .select('end')
-    .first();
-  const newGame = await db('prompt_time')
-    .where({ prompt_id })
-    .select('newGame')
-    .first();
-  console.log(start, end, newGame);
-  return { start, end, newGame };
-}
-
-function setTime(id) {
-  return db('prompt_time').where({ id }).insert({ prompt_id: id });
 }
