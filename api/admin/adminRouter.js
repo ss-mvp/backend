@@ -132,9 +132,7 @@ router.post('/setwinners/:prompt_id', adminRestricted, async (req, res) => {
   try
   {
     const { prompt_id } = req.params;
-
-    const now = new Date().getTime();
-
+    
     try
     {
       req.body.forEach(async (el) => {

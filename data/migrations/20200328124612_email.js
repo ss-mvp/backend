@@ -1,18 +1,20 @@
 exports.up = function(knex) {
   return knex.schema.createTable('users', table => {
-      table.increments().notNullable()
-      table.string('username', 128).unique().notNullable().index()
+      table.increments().notNullable();
+      table.string('username', 128).unique().notNullable().index();
       table.string('email', 128).unique().notNullable().index();
       table.string('password').notNullable();
       table.string('validationUrl').notNullable();
       table.boolean('validated').defaultTo(false);
+      table.boolean('voted').defaultTo(false);
   })
   .createTable('prompts', table => {
-    table.increments().notNullable()
+    table.increments().notNullable();
     table.string('prompt');
     table.boolean('active').defaultTo(false);
     table.boolean('topThree').defaultTo(false);
     table.boolean('voting').defaultTo(false);
+    table.boolean('today').defaultTo(false);
   })
   .createTable('submissions', table => {
       table.increments().notNullable()

@@ -231,7 +231,10 @@ router.get("/", restricted, async (req, res) => {
   return res.json({ prompts });
 });
 
-
+router.get("/tomorrow", restricted, async (req, res) => {
+  let today = await story.getPrompt();
+  return res.status(200).json( await story.getPromptById(today.id + 1) );
+});
 
 router.put('/edit/:id', restricted, (req, res) => {
   // there needs to be id and edits in req packet

@@ -4,17 +4,16 @@ module.exports = {
   addReadability,
   disableAll,
   clearRanking,
+  clearVotes,
   getPrompt,
-  getDate,
   addImage,
   allPrompts,
   allStories,
-  addToQueue,
   addPrompt,
+  nextPrompt,
   deletePrompt,
   getPromptById,
   editPrompt,
-  getQueue,
   getSubmission,
   getSubmissionURLByName,
   getVideo,
@@ -27,12 +26,38 @@ function disableAll() {
     topThree: false,
     vote: false,
     voting: false,
+    today: false
   });
 }
 
 async function clearRanking() {
   await db('topThree').del();
   await db('ranking').del();
+}
+
+async function clearVotes() {
+  try
+  {
+    await db('users').update({ voted: false }).whereIn(
+      "id",
+      (await db('users').select("id").where("voted", true).pluck("id"))
+    );
+  } catch (ex) { console.log(ex); }
+}
+
+async function nextPrompt() {
+  try
+  {
+    let currentPrompt = await getPrompt();
+
+    currentPrompt.active = currentPrompt.topThree = currentPrompt.voting = currentPrompt.today = false;
+
+    await db('prompts').update(currentPrompt).where("id", currentPrompt.id);
+
+    //By simply doing +1 we assume a prompt id will *never* be deleted.
+    return await db('prompts').update({ active: true, today: true }).where("id", currentPrompt.id + 1);
+  }
+  catch (ex) { console.log(ex); return -1; }
 }
 
 function getPromptById(id) {
@@ -63,23 +88,10 @@ async function addImage(image) {
   catch (ex) { console.log(ex); return -1; }
 }
 
-function getDate() {
-  return db('prompts').select('date');
-}
-
 async function getPrompt() {
-  // return db('prompt').where({ date }).first();
-  const queue = await getQueue();
-  // console.log(queue)
-  if (queue.queue.length === 0) {
-    return [];
-  } else {
-    const queue_id = queue.queue.split(',').slice(-1)[0];
-    // console.log(await getPromptById(queue_id));
-    // console.log('queue', queue_id)
-    // console.log('type', typeof queue_id)
-    return await getPromptById(queue_id);
-  }
+    return (await db('prompts')
+      .where("today", true)
+      .first());
 }
 
 function getVideoById(id) {
@@ -106,32 +118,6 @@ function allPrompts() {
 
 function allStories() {
   return db('submissions');
-}
-
-async function addToQueue(id) {
-  //Get queue
-  let queue = await getQueue();
-
-  if (queue.queue.length === 0) {
-    newQueue = []; // empty string
-    newQueue.push(id);
-    console.log('queue', newQueue);
-    write_queue = {
-      queue: newQueue.join(),
-    };
-    return db('prompt_queue').where('id', '=', 1).update(write_queue);
-  } else {
-    queue = queue.queue.split(',');
-    if (queue.length === 30) {
-      queue.push(id);
-      queue = queue.splice(1, queue.length - 1).join();
-    } else if (queue.length < 30) {
-      queue.push(id);
-      return db('prompt_queue')
-        .where('id', '=', 1)
-        .update({ queue: queue.join() });
-    }
-  }
 }
 
 function addPrompt(newPrompt) {
