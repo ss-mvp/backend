@@ -6,6 +6,7 @@ module.exports = {
   clearRanking,
   clearVotes,
   getPrompt,
+  hasVoted,
   hasSubmitted,
   addImage,
   allPrompts,
@@ -68,6 +69,13 @@ async function hasSubmitted(userId) {
         .first();
   }
   catch (ex) { console.log(ex); return false; }
+}
+
+async function hasVoted(userId) {
+  return (await db("users")
+    .select("voted")
+    .where({ id: userId })
+    .first()).voted;
 }
 
 function getPromptById(id) {

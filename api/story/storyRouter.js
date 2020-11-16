@@ -236,8 +236,11 @@ router.get("/", restricted, async (req, res) => {
 });
 
 router.get("/tomorrow", restricted, async (req, res) => {
+  if (!await story.hasVoted(req.userId))
+    return res.status(300).json({ error: "You have not voted yet" });
+
   let today = await story.getPrompt();
-  return res.status(200).json( await story.getPromptById(today.id + 1) );
+  return res.status(200).json( { prompt: (await story.getPromptById(today.id + 1)).prompt } );
 });
 
 router.put('/edit/:id', restricted, (req, res) => {

@@ -64,14 +64,12 @@ router.post('/login', async (req, res) =>
     if (!req.body.email && !req.body.password)
       return res.status(400).json({ error: "Email and Password required for login" });
 
-    let { validated } = await auth.checkActivation(req.body.email);
-
     let User = await auth.getUser(req.body.email);
 
     if (!User)
       return res.status(400).json({ error: "Account does not exist" });
 
-    if (!validated)
+    if (!await auth.checkActivation(req.body.email))
       return res.status(400).json({ error: "Your account must be validated" });
     
     if (bc.compareSync(req.body.password, User.password))
