@@ -12,7 +12,6 @@ module.exports = {
   allStories,
   addPrompt,
   nextPrompt,
-  deletePrompt,
   getPromptById,
   editPrompt,
   getSubmission,
@@ -73,10 +72,6 @@ async function hasSubmitted(userId) {
 
 function getPromptById(id) {
   return db('prompts').where({ id }).first();
-}
-
-function deletePrompt(id) {
-  return db('prompts').where({ id }).del();
 }
 
 function addReadability(link, readability) {
