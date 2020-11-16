@@ -26,8 +26,7 @@ function disableAll() {
     active: false,
     topThree: false,
     vote: false,
-    voting: false,
-    today: false
+    voting: false
   });
 }
 
