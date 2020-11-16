@@ -92,6 +92,9 @@ let _FileUploadConf = fileUpload(
     uploadTimeout: 40000 //40 Sec
   });
 router.post("/", restricted, _FileUploadConf, async (req, res) => {
+  if (await story.hasSubmitted(req.userId))
+    return res.status(400).json({ error: "You have already submitted today" });
+  
   let Out = await TranslateFile(req.files.image);
 
   if (Out === -1)
@@ -117,7 +120,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
       if (err)
       {
         console.log(err);
-        return res.status(400).json({ error: err });
+        return res.status(400).json({ error: "Error uploading file to LTS" });
       }
       else
       {
@@ -180,6 +183,7 @@ router.get("/image/:id", restricted, async (req, res) =>
     }).on("error", function (err)
     {
       console.log(err);
+      return res.status(400).json({ error: "Error finding file specified" });
     }).send();
 });
 

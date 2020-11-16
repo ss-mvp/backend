@@ -7,7 +7,6 @@ module.exports = {
     rankIt,
     addIP,
     getWinner,
-    get,
     getVotes,
     getUser,
     getSubmission,
@@ -26,10 +25,6 @@ async function getTopThree(){
         'submissions.image',
         'submissions.pages'
     )
-}
-
-async function get(){
-    return await db("topThree").orderBy('id', 'desc').limit(3)
 }
 
 async function getVotes(){
@@ -78,6 +73,7 @@ function getTodaysScores() {
     return db('submissions').select("score").where("active", "=", true);
 }
 
+//This needs to be redone, might be very abusable from clients
 async function rankIt(topThreeId, rank){
     const newRanking = {topthree_id: topThreeId, rank}
     return await db("ranking").insert(newRanking)

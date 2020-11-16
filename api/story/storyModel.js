@@ -6,6 +6,7 @@ module.exports = {
   clearRanking,
   clearVotes,
   getPrompt,
+  hasSubmitted,
   addImage,
   allPrompts,
   allStories,
@@ -58,6 +59,17 @@ async function nextPrompt() {
     return await db('prompts').update({ active: true, today: true }).where("id", currentPrompt.id + 1);
   }
   catch (ex) { console.log(ex); return -1; }
+}
+
+async function hasSubmitted(userId) {
+  try
+  {
+    return await db("submissions")
+        .select("id")
+        .where({ active: true, userId: userId })
+        .first();
+  }
+  catch (ex) { console.log(ex); return false; }
 }
 
 function getPromptById(id) {
