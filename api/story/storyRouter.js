@@ -219,17 +219,6 @@ router.get('/all_prompts', adminRestricted, async (req, res) => {
   }
 })
 
-router.delete('/prompts/:id', adminRestricted, async (req, res) => {
-  const prompt = await story.getPromptById(req.params.id);
-  if (prompt) {
-    story.deletePrompt(req.params.id).then(response => {
-      return res.status(201).json({ message: `Prompt ID ${req.params.id} was removed.` })
-    }).catch(err => console.log(err));
-  } else {
-    return res.status(400).json({ error: "Prompt doesn't exist." })
-  }
-})
-
 router.get("/", restricted, async (req, res) => {
   const prompts = await story.allPrompts();
   return res.json({ prompts });
@@ -243,7 +232,7 @@ router.get("/tomorrow", restricted, async (req, res) => {
   return res.status(200).json( { prompt: (await story.getPromptById(today.id + 1)).prompt } );
 });
 
-router.put('/edit/:id', restricted, (req, res) => {
+router.put('/edit/:id', adminRestricted, (req, res) => {
   // there needs to be id and edits in req packet
   console.log(req.body)
   if (req.params.id && req.body.prompt) {
