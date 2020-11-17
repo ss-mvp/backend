@@ -173,7 +173,8 @@ function sendEmail(email, url) {
 
 function signToken(user) {
   const payload = {
-    username: user.email,
+    username: user.username,
+    email: user.email,
     id: user.id,
   };
 
