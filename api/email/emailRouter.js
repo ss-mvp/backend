@@ -11,11 +11,6 @@ const jwtSecret = process.env.JWT_SECRET;
 const ses = require('nodemailer-ses-transport');
 const { v4: uuidv4 } = require('uuid');
 
-router.get('/activation/:email', async (req, res) =>
-{
-  return res.json(await auth.checkActivation(req.params.email));
-});
-
 router.post('/register', async (req, res) =>
 {
   if (!req.body.email || !req.body.password || !req.body.username || !req.body.age)
