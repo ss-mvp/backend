@@ -14,7 +14,7 @@ const adminRouter = require("../api/admin/adminRouter.js");
 const CronJob = require('cron').CronJob;
 const story = require("../api/story/storyModel.js");
 
-const startGame = new CronJob('00 30 02 * * *', async function() {
+const startGame = new CronJob('00 30 20 * * *', async function() {
     // Clear previous games data
     await story.disableAll();
     await story.clearRanking();
@@ -28,7 +28,7 @@ const startGame = new CronJob('00 30 02 * * *', async function() {
     }
 });
 
-const endSubmission = new CronJob('00 00 19 * * *', async function() {
+const endSubmission = new CronJob('00 00 17 * * *', async function() {
   const prompt = await story.getPrompt();
   console.log('end submission')
   if (!prompt || prompt.length === 0) {
@@ -38,7 +38,7 @@ const endSubmission = new CronJob('00 00 19 * * *', async function() {
   }
 });
 
-const startVoting = new CronJob('00 30 19 * * *', async function() {
+const startVoting = new CronJob('00 30 17 * * *', async function() {
   const prompt = await story.getPrompt();
   console.log('start vote')
   if (!prompt || prompt.length === 0) {
@@ -48,7 +48,7 @@ const startVoting = new CronJob('00 30 19 * * *', async function() {
   }
 });
 
-const endVoting = new CronJob('00 00 22 * * *', async function() {
+const endVoting = new CronJob('00 00 20 * * *', async function() {
   const prompt = await story.getPrompt();
   console.log('end vote')
   if (!prompt || prompt.length === 0) {
