@@ -3,57 +3,64 @@ const moment = require('moment');
 const router = require("express").Router();
 const db = require("../../data/dbConfig");
 const restricted = require('../middleware/restricted');
+const { getPrompt } = require('../story/storyModel');
 
-const { get, getWinner, getTopThree, rankIt, getFinalScores, addIP, getVotes, getUser, getTodaysScores, getSubmission } = require("./rankingModel");
-
-// hello heroku
+const { getTopThree, rankIt, getFinalScores, addIP, getVotes, getUser, getTodaysScores, getSubmission } = require("./rankingModel");
 
 router.get("/", async (req, res) => {
-  try {
-    const top = await getTopThree()
-    console.log(top)
-    res.status(200).json(top)
+  try
+  {
+    let Today = await getPrompt();
+
+    if (!Today.voting)
+      return res.status(400).json({ error: "Voting has not started today" });
+
+    const top = await getTopThree();
+    res.status(200).json(top);
   }
-  catch(err){
-    res.status(500).json({ message: 'Cannot get Top Three', error: err })
+  catch(err)
+  {
+    res.status(500).json({ error: "Internal Server Error" });
+    console.log(err);
   }
 });
 
 router.get("/votes", async (req, res) => {
-  try {
-    const top = await getVotes()
-    console.log(top)
-    res.status(200).json(top)
+  try
+  {
+    const top = await getVotes();
+    console.log(top);
+    res.status(200).json(top);
   }
-  catch(err){
-    res.status(500).json({ message: 'Cannot get Votes', error: err })
+  catch(err)
+  {
+    res.status(500).json({ error: "Cannot get Votes" });
+    console.log(err);
   }
 });
 
 router.post("/", checkIP, async(req, res) => {
 // router.post("/", async(req, res) => {
   try {
-    try{
-      console.log('tryin to save ranks')
-      let ranks = req.body.map(el => {
-        rankIt(el.topthree_id, el.rank)
-      })
-      await Promise.all(ranks)
-    } catch(error){
-      return res.status(500).json({ message: `Cannot save your ranks` })
-    }
-    
-    try{
-      console.log('tryin to save IP')
-      await addIP(req.userIP)
-    } catch(error){
-      return res.status(500).json({ message: `Cannot save IP` })
-    }
+    let Today = await getPrompt();
 
-    return res.status(200).json({ message: 'ranking successful' })
+    if (!Today.voting)
+      return res.status(400).json({ error: "Voting has not started today" });
+
+    let ranks = req.body.map(el => {
+      rankIt(el.topthree_id, el.rank)
+    });
+
+    await Promise.all(ranks);
+
+    await addIP(req.userIP);
+
+    return res.status(200).json({ message: "ranking successful" });
   }
-  catch(err){
-    return res.status(500).json({ message: `${err}` })
+  catch(err)
+  {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 })
 
@@ -61,11 +68,16 @@ router.get("/histogram", restricted, async (req, res) =>
 {
   try
   {
+    let Today = await getPrompt();
+    
+    if (!Today.voting)
+      return res.status(400).json({ error: "Voting has not started today" });
+
     //All scores
     let TodaysScores = await getTodaysScores();
 
     //Current users scores
-    let UserData = await getUser(req.username);
+    let UserData = await getUser(req.email);
     let CurrentUserSubmission = await getSubmission(UserData.id);
 
     Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", 
@@ -89,19 +101,27 @@ router.get("/histogram", restricted, async (req, res) =>
 });
 
 router.get("/winner", async(req, res) => {
-  try {
-    let allThree
-    try{
+  try
+  {
+    let Today = await getPrompt();
+    if (Today.voting || Today.topThree || Today.active || !Today)
+      return res.status(400).json({ error: "No winners declared yet" });
+
+    let allThree;
+    try
+    {
       allThree = await getFinalScores()
       console.log(allThree)
       return res.status(200).json(allThree)
-    } catch (err){
-      return res.status(500).json({ message: `Cannot get 3 winners because ${err}` })
     }
-    
+    catch (err)
+    {
+      return res.status(500).json({ error: `Cannot get 3 winners because ${err}` })
+    }
   }
-  catch(err){
-    return res.status(500).json({ message: `${err}` })
+  catch(err)
+  {
+    return res.status(500).json({ error: `${err}` })
   }
 })
 

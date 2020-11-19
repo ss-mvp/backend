@@ -129,36 +129,38 @@ router.post('/login', (req, res) => {
 })
 
 router.post('/setwinners/:prompt_id', adminRestricted, async (req, res) => {
-  try {
+  try
+  {
     const { prompt_id } = req.params;
-    const times = await story.getAllTimes(prompt_id);
-    let prompt_time_id;
-    const now = new Date().getTime();
-    if (times.length > 0) {
-      times.map(element => {
-        if (element.time < now && element.end > now) {
-          prompt_time_id = element.id
-        }
-      })
-    }
-    try {
+    
+    try
+    {
       req.body.forEach(async (el) => {
-        await admin.updateTopThree(parseInt(el.story_id))
-      })
-    } catch(err){
-      return status(500).json({ message: `cannot update due to ${err}` })
-    }
-    try {
-      req.body.forEach(async (el) => {
-        await admin.setWinner({ ...el, prompt_id, prompt_time_id})
+        await admin.updateTopThree(parseInt(el.story_id));
       });
-    } catch(err){
-      return status(500).json({ message: `cannot add top 3 due to ${err}` })
     }
-    return res.status(200).json({ submissions: await admin.getSubmissionsPerTime(), users: await admin.getUsers()})
+    catch(err)
+    {
+      return status(500).json({ message: `cannot update due to ${err}` });
+    }
 
-  } catch(err) {
-    return res.status(500).json({ error: "Something went wrong." })
+    try
+    {
+      req.body.forEach(async (el) => {
+        await admin.setWinner({ ...el, prompt_id});
+      });
+    }
+    catch(err)
+    {
+      return status(500).json({ message: `cannot add top 3 due to ${err}` });
+    }
+    
+    return res.status(200).json({ submissions: await admin.getSubmissionsPerTime(), users: await admin.getUsers()});
+
+  }
+  catch(err)
+  {
+    return res.status(500).json({ error: "Something went wrong." });
   }
 })
 
