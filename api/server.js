@@ -63,15 +63,7 @@ endVoting.start();
 startVoting.start();
 startGame.start();
 
-// cron code end
-
-
-
 const server = express();
-
-
-
-
 
 server.use(helmet());
 server.use(cors(
