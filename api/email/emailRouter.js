@@ -11,11 +11,6 @@ const jwtSecret = process.env.JWT_SECRET;
 const ses = require('nodemailer-ses-transport');
 const { v4: uuidv4 } = require('uuid');
 
-router.get('/activation/:email', async (req, res) =>
-{
-  return res.json(await auth.checkActivation(req.params.email));
-});
-
 router.post('/register', async (req, res) =>
 {
   if (!req.body.email || !req.body.password || !req.body.username || !req.body.age)
@@ -62,19 +57,20 @@ router.post('/login', async (req, res) =>
   try
   {
     if (!req.body.email && !req.body.password)
-      return res.status(400).json({ error: 'Email and Password required for login' });
-
-    let { validated } = await auth.checkActivation(req.body.email);
+      return res.status(400).json({ error: "Email and Password required for login" });
 
     let User = await auth.getUser(req.body.email);
 
-    if (!validated)
-      return res.status(400).json({ error: 'Your account must be validated' });
+    if (!User)
+      return res.status(400).json({ error: "Account does not exist" });
+
+    if (!await auth.checkActivation(req.body.email))
+      return res.status(400).json({ error: "Your account must be validated" });
     
     if (bc.compareSync(req.body.password, User.password))
       return res.status(201).json({ username: User.username, token: signToken(User) });
     else
-      return res.status(400).json({ error: 'Incorrect login information' });
+      return res.status(400).json({ error: "Incorrect login information" });
   }
   catch (ex)
   {

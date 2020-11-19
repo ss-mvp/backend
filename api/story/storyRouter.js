@@ -92,6 +92,9 @@ let _FileUploadConf = fileUpload(
     uploadTimeout: 40000 //40 Sec
   });
 router.post("/", restricted, _FileUploadConf, async (req, res) => {
+  if (await story.hasSubmitted(req.userId))
+    return res.status(400).json({ error: "You have already submitted today" });
+  
   let Out = await TranslateFile(req.files.image);
 
   if (Out === -1)
@@ -117,7 +120,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
       if (err)
       {
         console.log(err);
-        return res.status(400).json({ error: err });
+        return res.status(400).json({ error: "Error uploading file to LTS" });
       }
       else
       {
@@ -164,7 +167,7 @@ router.get("/image/:id", restricted, async (req, res) =>
   if (!Submission)
     return res.status(404).json({ error: "Submission not found in DB" });
 
-  if (!Submission.active)
+  if (!Submission.active && Submission.userId != req.userId)
     return res.status(403).json({ error: "You do not have access to this resource" });
 
   s3.getObject(
@@ -180,6 +183,7 @@ router.get("/image/:id", restricted, async (req, res) =>
     }).on("error", function (err)
     {
       console.log(err);
+      return res.status(400).json({ error: "Error finding file specified" });
     }).send();
 });
 
@@ -191,20 +195,6 @@ router.get('/video', restricted, async (req, res) => {
   }
   // console.log(video)
   return res.json({ returnPackage });
-})
-
-router.get('/time', restricted, async (req, res) => {
-  const prompt = await story.getPrompt();
-  if (prompt) {
-    const time = await story.getTime(prompt.id);
-    if (time) {
-      return res.status(200).json({ time });
-    } else {
-      return res.status(400).json({ error: "Something went wrong." })
-    }
-  } else {
-    return res.status(400).json({ error: "No active prompt." })
-  }
 })
 
 router.get("/prompt", restricted, async (req, res) => {
@@ -229,25 +219,28 @@ router.get('/all_prompts', adminRestricted, async (req, res) => {
   }
 })
 
-router.delete('/prompts/:id', adminRestricted, async (req, res) => {
-  const prompt = await story.getPromptById(req.params.id);
-  if (prompt) {
-    story.deletePrompt(req.params.id).then(response => {
-      return res.status(201).json({ message: `Prompt ID ${req.params.id} was removed.` })
-    }).catch(err => console.log(err));
-  } else {
-    return res.status(400).json({ error: "Prompt doesn't exist." })
-  }
-})
+router.get('/mystories', restricted, async (req, res) => {
+  const submissions = await story.allSubmissionsByUser(req.userId);
+  if (!submissions)
+    return res.status(404).json({ error: "No submissions found for the user with that id" });
+  else
+    return res.status(200).json(submissions);
+});
 
 router.get("/", restricted, async (req, res) => {
   const prompts = await story.allPrompts();
   return res.json({ prompts });
 });
 
+router.get("/tomorrow", restricted, async (req, res) => {
+  if (!await story.hasVoted(req.userId))
+    return res.status(300).json({ error: "You have not voted yet" });
 
+  let today = await story.getPrompt();
+  return res.status(200).json( { prompt: (await story.getPromptById(today.id + 1)).prompt } );
+});
 
-router.put('/edit/:id', restricted, (req, res) => {
+router.put('/edit/:id', adminRestricted, (req, res) => {
   // there needs to be id and edits in req packet
   console.log(req.body)
   if (req.params.id && req.body.prompt) {

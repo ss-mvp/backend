@@ -23,9 +23,6 @@ exports.up = function(knex) {
       .onDelete('CASCADE');
       table.integer('score').defaultTo(0)
       // table.timestamp('date_competed').defaultTo(moment(new Date(), MMM-DD-YYYY))
-      table.integer('prompt_time_id').unsigned()
-      .references('id').inTable('prompt_time')
-      .onDelete('CASCADE');
       // table.integer('score').defaultTo(0)
   })
 

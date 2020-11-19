@@ -84,7 +84,7 @@ async function TextProcess(ImageData)
     let Transcription = await TranscribeImage(ImageData);
     
     if (Transcription === "Error090" || Transcription === "No text found")
-        return undefined;
+        return { transcription: undefined, readability: undefined, flagged: undefined }; // Do not ask
     
     let Score = ScoreImage(Transcription);
 
