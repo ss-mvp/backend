@@ -219,6 +219,14 @@ router.get('/all_prompts', adminRestricted, async (req, res) => {
   }
 })
 
+router.get('/mystories', restricted, async (req, res) => {
+  const submissions = await story.allSubmissionsByUser(req.userId);
+  if (!submissions)
+    return res.status(404).json({ error: "No submissions found for the user with that id" });
+  else
+    return res.status(200).json(submissions);
+});
+
 router.get("/", restricted, async (req, res) => {
   const prompts = await story.allPrompts();
   return res.json({ prompts });

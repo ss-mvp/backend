@@ -17,6 +17,7 @@ module.exports = {
   editPrompt,
   getSubmission,
   getSubmissionURLByName,
+  allSubmissionsByUser,
   getVideo,
   getVideoById,
 };
@@ -95,6 +96,13 @@ async function getSubmissionURLByName(id) {
     .select('image', 'active')
     .where({ image: id })
     .first();
+}
+
+function allSubmissionsByUser(user_id) {
+  return db('submissions')
+    .orderBy('score', 'desc')
+    .select('image', 'score')
+    .where('userId', user_id)
 }
 
 async function addImage(image) {
