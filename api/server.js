@@ -75,7 +75,7 @@ server.use(cors(
         return;
       }
 
-      if (origin === "https://contest.storysquad.app" || origin === "https://adminconteststorysquad.netlify.app" || origin === "https://server.storysquad.app" || origin === "https://fdsc-production.netlify.app")
+      if (origin === "https://contest.storysquad.app" || origin === "https://adminconteststorysquad.netlify.app" || origin === "https://server.storysquad.app" || origin === "https://fdsc-production.netlify.app" || origin === "https://fdsc-development.netlify.app")
         callback(null, true);
       else
         callback("Not allowed by CORS", false);
