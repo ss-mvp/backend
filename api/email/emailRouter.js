@@ -100,7 +100,7 @@ router.get('/activate', async (req, res) =>
   if (process.env.BE_ENV === 'development')
     res.redirect(`http://localhost:3000/activated?token=${req.query.token}`);
   else
-    res.redirect(`https://fdsc-production.netlify.app/activated?token=${req.query.token}`);
+    res.redirect(`https://contest.storysquad.app/activated?token=${req.query.token}`);
 });
 
 //this route is called when user activates email to issue a token so they can be automatically logged in
