@@ -56,7 +56,7 @@ async function getFinalScores(){
         .join("submissions", 'topThree.story_id', "submissions.id")
         // .groupBy('topThree.prompt_time_id')
         .orderBy('topThree.score', 'desc')
-        // .select("users.username", "submissions.image", 'topThree.id')
+        .select("users.username", "submissions.image", 'users.id as userId', 'submissions.id')
         .limit(3)
 
 };
