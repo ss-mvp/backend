@@ -57,7 +57,7 @@ async function getFinalScores(){
         // .groupBy('topThree.prompt_time_id')
         .orderBy('topThree.score', 'desc')
         .select("users.username", "submissions.image", 'users.id as userId', 'submissions.id')
-        .limit(3)
+        .first();
 
 };
 
