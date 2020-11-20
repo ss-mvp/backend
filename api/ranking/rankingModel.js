@@ -56,8 +56,8 @@ async function getFinalScores(){
         .join("submissions", 'topThree.story_id', "submissions.id")
         // .groupBy('topThree.prompt_time_id')
         .orderBy('topThree.score', 'desc')
-        // .select("users.username", "submissions.image", 'topThree.id')
-        .limit(3)
+        .select("users.username", "submissions.image", 'users.id as userId', 'topThree.id')
+        .first();
 
 };
 
@@ -90,6 +90,6 @@ async function getWinner(winnerId){
     .where({ id: winnerId })
     .join("users", "topThree.user_id", "users.id")
     .join("submissions", "topThree.story_id", "submissions.id")
-    .select("users.username", "topThree.id", "submissions.images")
+    .select("users.username", "users.id as userId", "submissions.id", "submissions.image")
     .first()
 }
