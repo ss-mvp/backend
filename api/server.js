@@ -26,7 +26,7 @@ const startGame = new CronJob('00 30 20 * * *', async function() {
     {
       console.log("Start game failure");
     }
-});
+}, null, true, "America/New_York");
 
 const endSubmission = new CronJob('00 00 17 * * *', async function() {
   const prompt = await story.getPrompt();
@@ -36,7 +36,7 @@ const endSubmission = new CronJob('00 00 17 * * *', async function() {
   } else {
      await story.editPrompt(prompt.id, { active: false, topThree: true });
   }
-});
+}, null, true, "America/New_York");
 
 const startVoting = new CronJob('00 30 17 * * *', async function() {
   const prompt = await story.getPrompt();
@@ -46,7 +46,7 @@ const startVoting = new CronJob('00 30 17 * * *', async function() {
   } else {
       await story.editPrompt(prompt.id, { topThree: false, voting: true });
   }
-});
+}, null, true, "America/New_York");
 
 const endVoting = new CronJob('00 00 20 * * *', async function() {
   const prompt = await story.getPrompt();
@@ -56,7 +56,7 @@ const endVoting = new CronJob('00 00 20 * * *', async function() {
   } else {
       await story.editPrompt(prompt.id, { voting: false })
   }
-});
+}, null, true, "America/New_York");
 
 endSubmission.start();
 endVoting.start();
