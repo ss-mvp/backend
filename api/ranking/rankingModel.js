@@ -10,7 +10,7 @@ module.exports = {
     getVotes,
     getUser,
     getSubmission,
-    getTodaysScores
+    getScoresByPromptID
 };
 
 async function getTopThree(){
@@ -61,16 +61,16 @@ async function getFinalScores(){
 
 };
 
-function getUser(email) {
-    return db('users').where({ email }).first();
+function getUser(id) {
+    return db('users').where({ id }).first();
 }
 
-function getSubmission(userid) {
-    return db('submissions').where({ "userId": userid, "active": true }).first();
+function getSubmission(userid, promptid) {
+    return db('submissions').where({ "userId": userid, "prompt_id": promptid }).first();
 }
 
-function getTodaysScores() {
-    return db('submissions').select("score").where("active", "=", true);
+function getScoresByPromptID(promptid) {
+    return db('submissions').select("score").where("prompt_id", promptid);
 }
 
 //This needs to be redone, might be very abusable from clients

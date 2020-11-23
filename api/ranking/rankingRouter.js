@@ -5,7 +5,7 @@ const db = require("../../data/dbConfig");
 const restricted = require('../middleware/restricted');
 const { getPrompt } = require('../story/storyModel');
 
-const { getTopThree, rankIt, getFinalScores, addIP, getVotes, getUser, getTodaysScores, getSubmission } = require("./rankingModel");
+const { getTopThree, rankIt, getFinalScores, addIP, getVotes, getScoresByPromptID, getSubmission } = require("./rankingModel");
 
 router.get("/", async (req, res) => {
   try
@@ -68,21 +68,17 @@ router.get("/histogram", restricted, async (req, res) =>
 {
   try
   {
-    let Today = await getPrompt();
-    
-    if (!Today.voting)
-      return res.status(400).json({ error: "Voting has not started today" });
-
-    //All scores
-    let TodaysScores = await getTodaysScores();
+    //Given that we need to know the _previous_ days scores, we need to get the previous
+    //days prompt, and get the tied submissions to that prompt
+    let Yesterday = await story.getPromptById((await getPrompt()).id - 1);
 
     //Current users scores
-    let UserData = await getUser(req.email);
-    let CurrentUserSubmission = await getSubmission(UserData.id);
+    let CurrentUserSubmission = await getSubmission(req.userId, Yesterday.id);
+    let AllScores = await getScoresByPromptID(Yesterday.id);
 
     Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", 
     {
-      "GradeList": TodaysScores.map(el => el.score),
+      "GradeList": AllScores.map(el => el.score),
       "StudentScore": CurrentUserSubmission.score
     }).then((resA) =>
     {

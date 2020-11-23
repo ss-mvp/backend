@@ -199,15 +199,10 @@ router.get('/video', restricted, async (req, res) => {
 
 router.get("/prompt", restricted, async (req, res) => {
   const prompt = await story.getPrompt();
-  if (prompt.length === 0) {
-    return res.status(500).json({ error: 'Something went wrong.' })
-  } else {
-    if (prompt.active === true) {
-      return res.status(200).json({ prompt });
-    } else {
-      return res.status(500).json({ error: 'Prompt not active.' })
-    }
-  }
+  if (!prompt)
+    return res.status(500).json({ error: 'Something went wrong.' });
+  else
+    return { prompt: prompt.prompt, active: prompt.active, submitted: (await story.hasSubmitted(req.userId)) };
 })
 
 router.get('/all_prompts', adminRestricted, async (req, res) => {
@@ -225,11 +220,6 @@ router.get('/mystories', restricted, async (req, res) => {
     return res.status(404).json({ error: "No submissions found for the user with that id" });
   else
     return res.status(200).json(submissions);
-});
-
-router.get("/", restricted, async (req, res) => {
-  const prompts = await story.allPrompts();
-  return res.json({ prompts });
 });
 
 router.get("/tomorrow", restricted, async (req, res) => {

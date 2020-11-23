@@ -17,7 +17,6 @@ const story = require("../api/story/storyModel.js");
 const startGame = new CronJob('00 30 20 * * *', async function() {
     // Clear previous games data
     await story.disableAll();
-    await story.clearRanking();
     await story.clearVotes();
 
     //Set the current active prompt to false
@@ -30,7 +29,9 @@ const startGame = new CronJob('00 30 20 * * *', async function() {
 
 const endSubmission = new CronJob('00 00 17 * * *', async function() {
   const prompt = await story.getPrompt();
-  console.log('end submission')
+  
+  await story.clearRanking();
+
   if (!prompt || prompt.length === 0) {
       console.log('No prompt');
   } else {
