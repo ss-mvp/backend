@@ -77,7 +77,7 @@ router.get("/histogram", restricted, async (req, res) =>
     let TodaysScores = await getTodaysScores();
 
     //Current users scores
-    let UserData = await getUser(req.email);
+    let UserData = await getUser(req.userId);
     let CurrentUserSubmission = await getSubmission(UserData.id);
 
     Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", 

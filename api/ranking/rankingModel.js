@@ -61,8 +61,8 @@ async function getFinalScores(){
 
 };
 
-function getUser(email) {
-    return db('users').where({ email }).first();
+function getUser(id) {
+    return db('users').where({ id }).first();
 }
 
 function getSubmission(userid) {

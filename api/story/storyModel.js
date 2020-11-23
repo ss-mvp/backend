@@ -64,10 +64,10 @@ async function nextPrompt() {
 async function hasSubmitted(userId) {
   try
   {
-    return await db("submissions")
+    return (await db("submissions")
         .select("id")
         .where({ active: true, userId: userId })
-        .first();
+        .first()) !== undefined;
   }
   catch (ex) { console.log(ex); return false; }
 }
@@ -93,7 +93,7 @@ function getSubmission(id) {
 
 async function getSubmissionURLByName(id) {
   return await db('submissions')
-    .select('image', 'active')
+    .select('image', 'active', 'userId')
     .where({ image: id })
     .first();
 }
