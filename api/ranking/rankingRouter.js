@@ -70,7 +70,7 @@ router.get("/histogram", restricted, async (req, res) =>
   {
     //Given that we need to know the _previous_ days scores, we need to get the previous
     //days prompt, and get the tied submissions to that prompt
-    let Yesterday = await story.getPromptById((await getPrompt()).id + 1);
+    let Yesterday = await story.getPromptById((await getPrompt()).id - 1);
 
     //Current users scores
     let CurrentUserSubmission = await getSubmission(req.userId, Yesterday.id);
