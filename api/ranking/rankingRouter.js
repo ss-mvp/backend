@@ -3,7 +3,7 @@ const moment = require('moment');
 const router = require("express").Router();
 const db = require("../../data/dbConfig");
 const restricted = require('../middleware/restricted');
-const { getPrompt } = require('../story/storyModel');
+const { getPrompt, getPromptById } = require('../story/storyModel');
 
 const { getTopThree, rankIt, getFinalScores, addIP, getVotes, getScoresByPromptID, getSubmission } = require("./rankingModel");
 
@@ -70,7 +70,7 @@ router.get("/histogram", restricted, async (req, res) =>
   {
     //Given that we need to know the _previous_ days scores, we need to get the previous
     //days prompt, and get the tied submissions to that prompt
-    let Yesterday = await story.getPromptById((await getPrompt()).id - 1);
+    let Yesterday = await getPromptById((await getPrompt()).id - 1);
 
     //Current users scores
     let CurrentUserSubmission = await getSubmission(req.userId, Yesterday.id);

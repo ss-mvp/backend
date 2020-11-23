@@ -202,7 +202,7 @@ router.get("/prompt", restricted, async (req, res) => {
   if (!prompt)
     return res.status(500).json({ error: 'Something went wrong.' });
   else
-    return { prompt: prompt.prompt, active: prompt.active, submitted: (await story.hasSubmitted(req.userId)) };
+    return res.status(200).json({ prompt: prompt.prompt, active: prompt.active, submitted: (await story.hasSubmitted(req.userId)) });
 })
 
 router.get('/all_prompts', adminRestricted, async (req, res) => {
