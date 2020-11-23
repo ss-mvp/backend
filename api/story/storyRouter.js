@@ -129,7 +129,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
           image: newKey,
           pages: transcription,
           readability,
-          prompt_id: req.body.promptId,
+          prompt_id: (await story.getPrompt()).id,
           userId: req.userId,
           flag: flagged.terms,
           flagged: flagged.flagged,
