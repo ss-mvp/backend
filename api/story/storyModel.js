@@ -18,6 +18,7 @@ module.exports = {
   getSubmission,
   getSubmissionURLByName,
   allSubmissionsByUser,
+  top5SubmissionsByUser,
   getVideo,
   getVideoById,
 };
@@ -36,6 +37,7 @@ async function clearRanking() {
   await db('ranking').del();
 }
 
+//Not being used as the tomorrow prompt is being moved as a limited easter-egg upon voting
 async function clearVotes() {
   try
   {
@@ -103,6 +105,14 @@ function allSubmissionsByUser(user_id) {
     .orderBy('score', 'desc')
     .select('image', 'score')
     .where('userId', user_id)
+}
+
+function top5SubmissionsByUser(user_id) {
+  return db('submissions')
+    .orderBy('score', 'desc')
+    .select('image', 'score')
+    .where('userId', user_id)
+    .limit(5);
 }
 
 async function addImage(image) {

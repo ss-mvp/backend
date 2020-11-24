@@ -1,4 +1,4 @@
-`https://server.storysquad.app` - Heroku deploy
+`https://server.storysquad.app` - AWS Deployment
 
 # API Documentation
 
@@ -24,51 +24,49 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 
 | Method | Endpoint                   | Access Control | Description                                 |
 | ------ | -------------------------- | -------------- | ------------------------------------------- |
-| GET    | `/email/activation/:email` | anyone         | Returns user if email was validated. |
-| POST   | `email/register`           | anyone         | Creates new user and sends validation email. |
-| POST   | `email/login`              | anyone         | Returns authorization if user exists and email validated. |
-| POST   | `email/activate`           | anyone         | Validates email for a new user if given a valid query string. |
-| POST   | `email/activatedLogin`     | anyone         | Returns aothorization if user email validated. |
-| DELETE | `email/:email`             | anyone         | Delete user account. |
-| GET    | `email/video`              | anyone         | Returns link for winners announcement YouTube video stream. |
+| POST   | `/email/register`           | anyone         | Creates new user and sends validation email |
+| POST   | `/email/login`              | anyone         | Returns authorization if user exists and email validated |
+| POST   | `/email/activate`           | anyone         | Validates email for a new user if given a valid query string |
+| POST   | `/email/activatedLogin`     | anyone         | Returns aothorization if user email validated |
+| GET    | `/email/video`              | anyone         | Returns link for winners announcement YouTube video stream |
 
 #### Story Routes
 
 | Method | Endpoint             | Access Control | Description                       |
 | ------ | -------------------- | -------------- | --------------------------------- |
-| GET    | `/upload/`           | user           | Get all prevuous prompt data. |
-| POST   | `/upload/`           | user           | Save new submission. |
-| GET    | `/upload/video`      | user           | Returns link for winners announcement YouTube video stream. |
-| GET    | `/upload/time`       | user           | Get prompt start, end, and next game times. |
-| GET    | `/upload/prompt`     | user           | Get prompt data. |
-| GET    | `/upload/story`      | user           | Get all past submissions and all user data :triangular_flag_on_post:. |
-| PUT    | `/upload/edit/:id`   | user           | Edit the daily prompt. |
-| GET    | `/upload/all_prompt` | admin          | Get all previous prompt data. |
-| DELETE | `/upload/prompt/:id` | admin          | Delete a previous prompt. |
-| POST   | `/upload/add`        | admin          | Add a new daily prompt. |
+| POST   | `/upload/`           | user           | Save new submission |
+| GET    | `/upload/image/:id` | user | Request an image |
+| GET    | `/upload/mytopstories` | user | Get the current users top 5 stories |
+| GET    | `/upload/video`      | user           | Returns link for winners announcement YouTube video stream |
+| GET    | `/upload/prompt`     | user           | Get current prompt and user-relative state |
+| PUT    | `/upload/edit/:id`   | admin           | Edit a prompt |
+| GET    | `/upload/all_prompts` | admin          | Get all previous prompt data |
+| POST   | `/upload/add`        | admin          | Add a new prompt |
 
 #### Admin Routes
 
 | Method | Endpoint                         | Access Control | Description               |
 | ------ | -------------------------------- | -------------- | ------------------------- |
-| GET    | `/admin/`                        | admin          | Returns all unflagged user submissions. |
-| GET    | `/admin/users`                   | admin          | Returns all usernames. |
-| POST   | `/admin/video`                   | admin          | Set YouTube video stream url. |
-| GET    | `/admin/flag/:id`                | admin          | Returns a specific flagged submission. |
-| POST   | `/admin/flag/:id`                | admin          | Toggles flagged status on a submission. |
-| GET    | `/admin/winners`                 | admin          | Returns top 10 submissions for today's prompt. |
-| POST   | `/admin/remove_user_data/:email` | admin          | Delete all submissions from a user. |
-| POST   | `/admin/login`                   | admin          | Verify admin user login. |
-| POST   | `/admin/setwinners/:prompt_id`   | admin          | Set winners for today's prompt. |
+| GET    | `/admin/`                        | admin          | Returns all active user submissions |
+| GET    | `/admin/users`                   | admin          | Returns all usernames |
+| POST   | `/admin/video`                   | admin          | Set YouTube video stream url |
+| GET    | `/admin/flag/:id`                | admin          | Returns a specific flagged submission |
+| POST   | `/admin/flag/:id`                | admin          | Toggles flagged status on a submission |
+| GET    | `/admin/winners`                 | admin          | Returns top 10 submissions for today's prompt |
+| GET    | `/admin/image/:id`               | admin          | Request an image (no checks under /admin)
+| POST   | `/admin/remove_user_data/:email` | admin          | Delete all submissions from a user |
+| POST   | `/admin/login`                   | admin          | Verify admin user login |
+| POST   | `/admin/setwinners/:prompt_id`   | admin          | Set winners for today's prompt |
 
 #### Ranking Routes
 
 | Method | Endpoint          | Access Control | Description                       |
 | ------ | ----------------- | -------------- | --------------------------------- |
-| GET    | `/ranking/`       | anyone         | Get the 3 winner submissions. |
-| POST   | `/ranking/`       | anyone         | Submit my ranking of the 3 submissions. |
-| GET    | `/ranking/votes`  | anyone         | Get current vote counts. |
-| GET    | `/ranking/winner` | anyone         | Get the 3 winner submissions final ranking. |
+| GET    | `/ranking/`       | anyone         | Get the 3 winner submissions |
+| POST   | `/ranking/`       | anyone         | Submit ranking of the 3 submissions |
+| GET    | `/ranking/votes`  | anyone         | Get current vote counts |
+| GET    | `/ranking/winner` | anyone         | Get the 3 winner submissions final ranking |
+| GET    | `/ranking/histogram` | user      | Get histogram data from previous day |
 
 ## Documentation
 

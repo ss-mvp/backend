@@ -40,7 +40,6 @@ router.get("/votes", async (req, res) => {
 });
 
 router.post("/", checkIP, async(req, res) => {
-// router.post("/", async(req, res) => {
   try {
     let Today = await getPrompt();
 
@@ -55,7 +54,7 @@ router.post("/", checkIP, async(req, res) => {
 
     await addIP(req.userIP);
 
-    return res.status(200).json({ message: "ranking successful" });
+    return res.status(200).json({ message: "Submitted", tomorrow: (await getPromptById(Today.id + 1)).prompt });
   }
   catch(err)
   {
@@ -157,6 +156,5 @@ async function checkIP(req, res, next) {
     next()
   }
 }
-
 
 module.exports = router;
