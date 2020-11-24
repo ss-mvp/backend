@@ -40,7 +40,6 @@ router.get("/votes", async (req, res) => {
 });
 
 router.post("/", checkIP, async(req, res) => {
-// router.post("/", async(req, res) => {
   try {
     let Today = await getPrompt();
 
@@ -157,6 +156,5 @@ async function checkIP(req, res, next) {
     next()
   }
 }
-
 
 module.exports = router;

@@ -11,22 +11,9 @@ module.exports = {
   getFlag,
   addVideo,
   removeSubmissionsByEmail,
-  // getVideo,
-  // getVideoById,
   updateTopThree,
   getSubmissionURLById
-  // getCurrentPromptTime,
-  // getAllVotes
 }
-
-// This needs to get fixed
-// async function getAllVotes(story_id, prompt_id, prompt_time_id) {
-//   return db('submissions')
-//   .join('prompts', 'prompt_id', 'submission.prompt_id')
-//   .join('prompt_time', 'prompt_time.prompt_id', 'submissions.prompt_id')
-//   .join('topThree', 'topThree.story_id', 'submissions.id')
-//   .select('topThree.score', )
-// }
 
 async function removeSubmissionsByEmail(email) {
   const { id } = await db('users').where({ email })
@@ -60,33 +47,6 @@ async function getSubmissionsPerTime() {
       'submissions.voting',
       'submissions.score'
     );
-  // const subs = await db('submissions')
-  //   .join('prompts', 'submissions.prompt_id', 'prompts.id')
-  //   .join('prompt_time', 'submissions.prompt_id', 'prompt_time.prompt_id')
-  //   .join('users', 'users.id', 'submissions.userId')
-  //   // .where('prompt_time.prompt_id', '=', 'prompt_id')
-  //   .whereNot("submissions.flagged", true)
-  //   // .where('prompt_time.time', '<', 'submissions.date')
-  //   // .andWhere('prompt_time.newGame', '>', Date.parse(new Date()))
-  //   // .select(
-  //   //   'submissions.id as id',
-  //   //   'submissions.userId',
-  //   //   'users.username',
-  //   //   'submissions.prompt_id',
-  //   //   'submissions.active',
-  //   //   'submissions.topThree',
-  //   //   'submissions.image',
-  //   //   'submissions.pages',
-  //   //   'submissions.flagged',
-  //   //   'submissions.flag',
-  //   //   'submissions.vote',
-  //   //   'submissions.voting',
-  //   //   'submissions.readability',
-  //   //   'submissions.score'
-  //   // )
-  //   // .orderBy('score', 'desc')
-  //   .limit(10)
-  // return subs
 }
 
 function getUsers() {
