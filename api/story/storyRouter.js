@@ -222,14 +222,6 @@ router.get('/mystories', restricted, async (req, res) => {
     return res.status(200).json(submissions);
 });
 
-router.get("/tomorrow", restricted, async (req, res) => {
-  if (!await story.hasVoted(req.userId))
-    return res.status(300).json({ error: "You have not voted yet" });
-
-  let today = await story.getPrompt();
-  return res.status(200).json( { prompt: (await story.getPromptById(today.id + 1)).prompt } );
-});
-
 router.put('/edit/:id', adminRestricted, (req, res) => {
   // there needs to be id and edits in req packet
   console.log(req.body)

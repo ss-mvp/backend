@@ -36,6 +36,7 @@ async function clearRanking() {
   await db('ranking').del();
 }
 
+//Not being used as the tomorrow prompt is being moved as a limited easter-egg upon voting
 async function clearVotes() {
   try
   {

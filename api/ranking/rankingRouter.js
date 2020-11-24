@@ -55,7 +55,7 @@ router.post("/", checkIP, async(req, res) => {
 
     await addIP(req.userIP);
 
-    return res.status(200).json({ message: "ranking successful" });
+    return res.status(200).json({ message: "Submitted", tomorrow: (await getPromptById(Today.id + 1)).prompt });
   }
   catch(err)
   {
