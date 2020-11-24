@@ -7,7 +7,7 @@ module.exports = {
     addUser,
     getUserIdByEmail,
     getUserIdByUsername,
-    checkActivation,
+    isActivated,
     activateEmail,
     toggleFirstLogin,
     getToken,
@@ -41,8 +41,8 @@ function getUserIdByUsername(username) {
     return db('users').where({ username }).select('id').first();
 }
 
-function checkActivation(email) {
-    return db('users').where({ email }).select('validated').first();
+async function isActivated(email) {
+    return (await db('users').where({ email }).select('validated').first())['validated'];
 };
 
 function getToken(email) {

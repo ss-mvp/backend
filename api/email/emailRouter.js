@@ -64,7 +64,7 @@ router.post('/login', async (req, res) =>
     if (!User)
       return res.status(400).json({ error: "Account does not exist" });
 
-    if (!await auth.checkActivation(req.body.email))
+    if (!await auth.isActivated(req.body.email))
       return res.status(400).json({ error: "Your account must be validated" });
     
     if (bc.compareSync(req.body.password, User.password))
