@@ -56,7 +56,7 @@ router.post('/login', async (req, res) =>
 {
   try
   {
-    if (!req.body.email && !req.body.password)
+    if (!req.body.email || !req.body.password)
       return res.status(400).json({ error: "Email and Password required for login" });
 
     let User = await auth.getUser(req.body.email);
