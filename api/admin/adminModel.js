@@ -1,6 +1,7 @@
 const db = require('../../data/dbConfig.js');
 
 module.exports = {
+  isAdmin,
   setWinner,
   removeWinner,
   flagContent,
@@ -13,6 +14,15 @@ module.exports = {
   removeSubmissionsByEmail,
   updateTopThree,
   getSubmissionURLById
+}
+
+async function isAdmin(id) {
+  let Admin = await db("admins").where({ uid: id }).first();
+  
+  if (Admin && Admin.uid == id)
+    return true;
+
+  return false;
 }
 
 async function removeSubmissionsByEmail(email) {

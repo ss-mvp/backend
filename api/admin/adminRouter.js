@@ -2,6 +2,7 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken')
 const story = require("../story/storyModel.js");
 const admin = require('./adminModel.js');
+const auth = require("../email/emailModel");
 const s3 = require("../../services/file-upload");
 const jwtSecret = process.env.JWT_SECRET || 'sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23';
 const adminRestricted = require('../middleware/adminRestricted');
@@ -115,17 +116,6 @@ router.post('/remove_user_data/:email', adminRestricted, async (req, res) => {
   } else {
     return res.status(200).json({ message: "There were no submissions" })
   }
-})
-
-router.post('/login', (req, res) => {
-    if (req.body.username === process.env.ADMIN_USERNAME && req.body.password === process.env.ADMIN_PASSWORD) {
-      const { username, password } = req.body;
-      const user = {username, password}
-      const token = signToken(user)
-      return res.status(201).json({ token });
-    } else {
-        return res.status(400).json({ error: 'Incorrect Username/Password' });
-    }
 })
 
 router.post('/setwinners/:prompt_id', adminRestricted, async (req, res) => {
