@@ -154,17 +154,4 @@ router.post('/setwinners/:prompt_id', adminRestricted, async (req, res) => {
   }
 })
 
-function signToken(user) {
-    const payload = {
-      username: user.username,
-      role: 'admin'
-    }
-  
-    const options = {
-      expiresIn: '1d'
-    }
-  
-    return jwt.sign(payload, jwtSecret, options);
-}
-
 module.exports = router;
