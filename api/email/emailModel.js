@@ -48,11 +48,6 @@ function getToken(email) {
     return db('users').where({ email }).select('validationUrl', 'validated').first();
 };
 
-function removeUser(id) {
-    return db('users').where({ id }).del();
-    // return db('users').where({ id })
-}
-
 function activateEmail(email, validate) {
     return db('users').where({ email }).update(validate);
 };
