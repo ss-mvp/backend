@@ -103,20 +103,6 @@ router.get('/activate', async (req, res) =>
     res.redirect(`https://contest.storysquad.app/activated?token=${req.query.token}`);
 });
 
-//this route is called when user activates email to issue a token so they can be automatically logged in
-router.post('/activatedLogin', async (req, res) => {
-  const activatedUser = await auth.issueActivatedToken(req.body.token);
-  if (activatedUser)
-  {
-    let token = signToken(activatedUser);
-    res.status(200).json({ username: activatedUser.username, token: token });
-  }
-  else
-  {
-    res.status(400).json({ message: 'invalid token' });
-  }
-});
-
 router.get('/video', (req, res) => {
   auth.getVideo()
     .then(video => res.status(200).json(video))
