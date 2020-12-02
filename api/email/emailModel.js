@@ -10,8 +10,6 @@ module.exports = {
     isActivated,
     activateEmail,
     getToken,
-    removeUser,
-    issueActivatedToken,
     getVideo
 }
 
