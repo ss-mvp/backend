@@ -9,10 +9,7 @@ module.exports = {
     getUserIdByUsername,
     isActivated,
     activateEmail,
-    toggleFirstLogin,
     getToken,
-    removeUser,
-    issueActivatedToken,
     getVideo
 }
 
@@ -49,22 +46,8 @@ function getToken(email) {
     return db('users').where({ email }).select('validationUrl', 'validated').first();
 };
 
-function issueActivatedToken(validationUrl) {
-    return db('users').where({validationUrl}).first()
-}
-
-function removeUser(id) {
-    return db('users').where({ id }).del();
-    // return db('users').where({ id })
-}
-
 function activateEmail(email, validate) {
     return db('users').where({ email }).update(validate);
-};
-
-async function toggleFirstLogin(email) {
-    await db('users').where({ email }).update({ firstLogin: false });
-    return db('users').where({ email }).select('firstLogin').first();
 };
 
 function getVideo(){
