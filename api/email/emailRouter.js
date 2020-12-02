@@ -82,18 +82,13 @@ router.post('/login', async (req, res) =>
 router.get('/activate', async (req, res) =>
 {
   if (!req.query.token || !req.query.email)
-    return res.status(300).json({ error: 'Token and email are required for validation' });
+    res.redirect("https://contest.storysquad.app/");
+    //return res.status(300).json({ error: 'Token and email are required for validation' });
 
   const data = await auth.getToken(req.query.email);
 
-  if (!data)
-    return res.status(500).json({ error: "User info invalid" });
-
-  if (data.validated)
-    return res.status(400).json({ error: "Account is already validated" });
-
-  if (req.query.token !== data.validationUrl)
-    return res.status(400).json({ error: 'This token is invalid for activation.' });
+  if (!data || data.validated || (req.query.token !== data.validationUrl))
+    res.redirect("https://contest.storysquad.app/");
 
   await auth.activateEmail(req.query.email, { validated: true });
 
