@@ -13,7 +13,7 @@ const adminRouter = require("../api/admin/adminRouter.js");
 
 const CronJob = require("cron").CronJob;
 const story = require("../api/story/storyModel.js");
-const { addWinner } = require("../api/ranking/rankingModel");
+const ranking = require("../api/ranking/rankingModel");
 
 const startGame = new CronJob(
   "00 30 20 * * *",
@@ -77,7 +77,7 @@ const endVoting = new CronJob(
       await story.editPrompt(prompt.id, { voting: false });
 
       // addWinner will add a winning submission to the winning_stories table
-      addWinner();
+      await ranking.addWinner();
     }
   },
   null,

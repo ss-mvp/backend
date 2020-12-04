@@ -75,7 +75,13 @@ async function addWinner() {
     .select("prompt_id", "story_id")
     .first();
 
-  return db("winning_stories").insert(winner);
+  // if there is no winner then return and error
+  if (!winner) {
+    return "There was no winner today?";
+  } else {
+    // otherwise return the `db("winning_stories").insert(winner);`
+    return db("winning_stories").insert(winner);
+  }
 }
 
 function getUser(id) {
