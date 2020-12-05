@@ -10,6 +10,7 @@ const restricted = require('../middleware/restricted.js');
 const jwtSecret = process.env.JWT_SECRET;
 const ses = require('nodemailer-ses-transport');
 const { v4: uuidv4 } = require('uuid');
+const querystring = require("querystring");
 
 router.post('/register', async (req, res) =>
 {
@@ -41,9 +42,11 @@ router.post('/register', async (req, res) =>
   if (!(await auth.addUser(newUser)))
     return res.status(500).json({ error: "Unknown server error" });
 
+  let Query = querystring.stringify({ token: validationToken, email: email });
+
   let sendUrl = (process.env.BE_ENV === 'development') ?
-    `http://localhost:5000/email/activate/?token=${validationToken}&email=${email}` :
-    `https://server.storysquad.app/email/activate/?token=${validationToken}&email=${email}`;
+    `http://localhost:5000/email/activate/?${Query}` :
+    `https://server.storysquad.app/email/activate/?${Query}`;
 
   // send email to parent instead of user, if given.
   // ToDo: change this to a separate ToS/PP confirmation email
