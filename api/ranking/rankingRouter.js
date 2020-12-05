@@ -98,10 +98,6 @@ router.get("/histogram", restricted, async (req, res) =>
 router.get("/winner", async(req, res) => {
   try
   {
-    let Today = await getPrompt();
-    if (Today.voting || Today.topThree || Today.active || !Today)
-      return res.status(400).json({ error: "No winners declared yet" });
-
     let allThree;
     try
     {
