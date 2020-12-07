@@ -143,6 +143,42 @@ router.get("/reset", async (req, res) =>
   return res.status(200).json({ message: "Code created, email sent" });
 });
 
+router.post("/reset", async (req, res) =>
+{
+  if (!req.body.email || !req.body.code || !req.body.password)
+    return res.status(300).json({ error: "Email, code, and password are required" });
+  
+  let User = await auth.getUser(req.body.email);
+
+  if (!User)
+    return res.status(300).json({ error: "Invalid email provided" });
+
+  let ResetTime = await auth.getResetByUID(User.id);
+
+  if (!ResetTime)
+    return res.status(500).json({ error: "Expired code" });
+
+  if (ResetTime > 10) //Password reset is 10 minutes old
+  {
+    await auth.deleteResetsByUID(User.id); //Delete
+    return res.status(500).json({ error: "Expired code" });
+  }
+
+  //Strict compare code
+  let FullCode = await auth.getFullResetRow(User.id);
+
+  if (!FullCode || FullCode.code != req.body.code)
+    return res.status(500).json({ error: "Expired code" });
+
+  //Update password
+  await auth.updatePassword(User.id, bc.hashSync(req.body.password, 10));
+
+  //Delete reset code
+  await auth.deleteResetsByUID(User.id);
+
+  return res.status(200).json({ message: "Updated password" });
+});
+
 router.get('/video', (req, res) => {
   auth.getVideo()
     .then(video => res.status(200).json(video))
