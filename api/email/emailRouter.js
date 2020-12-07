@@ -9,7 +9,8 @@ dotenv.config();
 const restricted = require('../middleware/restricted.js');
 const jwtSecret = process.env.JWT_SECRET;
 const ses = require('nodemailer-ses-transport');
-const { v4: uuidv4 } = require('uuid');
+const uuid = require('uuid');
+const uuidNamespace = "d6d91fb8-cccc-4909-94f7-b22e17f6de22";
 const querystring = require("querystring");
 
 router.post('/register', async (req, res) =>
@@ -99,6 +100,47 @@ router.get('/activate', async (req, res) =>
     res.redirect(`http://localhost:3000/activated?token=${req.query.token}`);
   else
     res.redirect(`https://contest.storysquad.app/activated?token=${req.query.token}`);
+});
+
+router.get("/reset", async (req, res) =>
+{
+  if (!req.query.email)
+    return res.status(300).json({ error: "Invalid email provided" });
+  
+  let User = await auth.getUser(req.query.email);
+
+  if (!User)
+    return res.status(300).json({ error: "Invalid email provided" });
+
+  if (!User.validated)
+    return res.status(400).json({ error: "Your account must be validated" });
+
+  //Check if there is an active code
+  let ResetTime = await auth.getResetByUID(User.id);
+
+  if (ResetTime) //A code is in our DB
+  {
+    if (ResetTime === -1)
+      return res.status(500).json({ error: "Unknown server error" });
+
+    if (ResetTime < 10) //If it's less than 10 minutes old
+      //Rate limit the creation of another code
+      return res.status(502).json({ error: "A code was created less than 10 minutes ago for this email" });
+
+    //Otherwise delete old codes
+    await auth.deleteResetsByUID(User.id);
+  }
+
+  //Create new code
+  let newCode = uuid.v4();
+
+  //Store new code
+  if (await auth.saveResetCode(User.id, newCode) === -1)
+    return res.status(500).json({ error: "Unknown server error" });
+
+  //E-Mail new code
+
+  return res.status(200).json({ message: "Code created, email sent" });
 });
 
 router.get('/video', (req, res) => {
