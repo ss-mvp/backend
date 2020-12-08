@@ -13,6 +13,7 @@ const adminRouter = require("../api/admin/adminRouter.js");
 
 const CronJob = require("cron").CronJob;
 const story = require("../api/story/storyModel.js");
+const ranking = require("../api/ranking/rankingModel");
 
 const startGame = new CronJob(
   "00 30 20 * * *",
@@ -74,6 +75,9 @@ const endVoting = new CronJob(
       console.log("No prompt");
     } else {
       await story.editPrompt(prompt.id, { voting: false });
+
+      // addWinner will add a winning submission to the winning_stories table
+      await ranking.addWinner();
     }
   },
   null,
@@ -102,8 +106,7 @@ server.use(
         origin === "https://adminconteststorysquad.netlify.app" ||
         origin === "https://server.storysquad.app" ||
         origin === "https://fdsc-production.netlify.app" ||
-        origin === "https://fdsc-development.netlify.app" ||
-        origin === "https://adminconteststorysquaddev.netlify.app"
+        origin === "https://fdsc-development.netlify.app"
       )
         callback(null, true);
       else callback("Not allowed by CORS", false);
