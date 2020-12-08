@@ -27,7 +27,6 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | POST   | `/email/register`           | anyone         | Creates new user and sends validation email |
 | POST   | `/email/login`              | anyone         | Returns authorization if user exists and email validated |
 | POST   | `/email/activate`           | anyone         | Validates email for a new user if given a valid query string |
-| POST   | `/email/activatedLogin`     | anyone         | Returns aothorization if user email validated |
 | GET    | `/email/video`              | anyone         | Returns link for winners announcement YouTube video stream |
 
 #### Story Routes
@@ -55,7 +54,6 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | GET    | `/admin/winners`                 | admin          | Returns top 10 submissions for today's prompt |
 | GET    | `/admin/image/:id`               | admin          | Request an image (no checks under /admin)
 | POST   | `/admin/remove_user_data/:email` | admin          | Delete all submissions from a user |
-| POST   | `/admin/login`                   | admin          | Verify admin user login |
 | POST   | `/admin/setwinners/:prompt_id`   | admin          | Set winners for today's prompt |
 
 #### Ranking Routes
