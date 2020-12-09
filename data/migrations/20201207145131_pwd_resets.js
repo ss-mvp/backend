@@ -6,7 +6,7 @@ exports.up = function(knex)
         table.integer("uid").notNullable().unique();
 
         //Reset code
-        table.string("code", 36).unique().notNullable();
+        table.string("code", 36).notNullable();
 
         table.timestamp("time", true).notNullable().defaultTo(knex.fn.now());
     });
