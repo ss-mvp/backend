@@ -11,20 +11,6 @@ const transporter = nm.createTransport(
     )
 );
 
-const handlebarOptions = {
-    viewEngine:
-    {
-        extName: '.handlebars',
-        partialsDir: './templates/',
-        layoutsDir: './templates/',
-        defaultLayout: 'activation.handlebars',
-    },
-    viewPath: './templates/',
-    extName: '.handlebars',
-};
-
-transporter.use('compile', hbs(handlebarOptions));
-
 function SendMail(
         toAddress, // E-Mail to send to
         subject, //E-Mail subject line
@@ -32,6 +18,20 @@ function SendMail(
         paramaterObject // Object containing paramaters to place inside email
     )
 {
+    const handlebarOptions = {
+        viewEngine:
+        {
+            extName: '.handlebars',
+            partialsDir: './templates/',
+            layoutsDir: './templates/',
+            defaultLayout: `${templateFile}.handlebars`,
+        },
+        viewPath: './templates/',
+        extName: '.handlebars',
+    };
+    
+    transporter.use('compile', hbs(handlebarOptions));
+
     let MailOptions = {
         from: 'support@storysquad.app',
         to: toAddress,

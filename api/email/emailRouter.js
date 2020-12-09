@@ -140,7 +140,7 @@ router.get("/reset", async (req, res) =>
     `http://localhost:3000/passwordreset?${Query}` :
     `https://contest.storysquad.app/passwordreset?${Query}`;
 
-  console.log(sendUrl);
+  await mailer.SendMail(User.email, "Story Squad Password Reset", "resetpassword", { url: sendUrl, username: User.username });
 
   return res.status(200).json({ message: "Code created, email sent" });
 });
