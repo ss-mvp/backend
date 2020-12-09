@@ -27,6 +27,8 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | POST   | `/email/register`           | anyone         | Creates new user and sends validation email |
 | POST   | `/email/login`              | anyone         | Returns authorization if user exists and email validated |
 | POST   | `/email/activate`           | anyone         | Validates email for a new user if given a valid query string |
+| GET    | `/email/reset`              | anyone         | Request a password reset for a given email |
+| POST   | `/email/reset`              | anyone         | Submit password reset information for a given email |
 | GET    | `/email/video`              | anyone         | Returns link for winners announcement YouTube video stream |
 
 #### Story Routes
