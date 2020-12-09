@@ -190,47 +190,6 @@ router.get('/video', (req, res) => {
     })
 })
 
-function sendEmail(email, url) {
-  const transporter = nm.createTransport(
-    ses({
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
-    })
-  );
-
-  const handlebarOptions = {
-    viewEngine: {
-      extName: '.handlebars',
-      partialsDir: './templates/',
-      layoutsDir: './templates/',
-      defaultLayout: 'email.handlebars',
-    },
-    viewPath: './templates/',
-    extName: '.handlebars',
-  };
-
-  transporter.use('compile', hbs(handlebarOptions));
-
-  transporter.sendMail(
-    {
-      from: 'support@storysquad.app',
-      to: email,
-      subject: 'Activate your Story Squad account',
-      context: {
-        url: url,
-      },
-      template: 'email',
-    },
-    (err, info) => {
-      if (err) console.log(err);
-      if (info) {
-        console.log(info.envelope);
-        console.log(info.messageId);
-      }
-    }
-  );
-}
-
 function signToken(user) {
   const payload = {
     username: user.username,
