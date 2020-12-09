@@ -1,17 +1,14 @@
 const router = require('express').Router();
 const bc = require('bcrypt');
 const auth = require('./emailModel.js');
-const nm = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const hbs = require('nodemailer-express-handlebars');
 const dotenv = require('dotenv');
 dotenv.config();
-const restricted = require('../middleware/restricted.js');
 const jwtSecret = process.env.JWT_SECRET;
-const ses = require('nodemailer-ses-transport');
 const uuid = require('uuid');
 const uuidNamespace = "d6d91fb8-cccc-4909-94f7-b22e17f6de22";
 const querystring = require("querystring");
+const mailer = require("../../services/mailer");
 
 router.post('/register', async (req, res) =>
 {
@@ -28,7 +25,7 @@ router.post('/register', async (req, res) =>
   if (existingUsername)
     return res.status(400).json({ error: 'Username already in use' });
 
-  let validationToken = uuidv4();
+  let validationToken = uuid.v5(username, uuidNamespace);
 
   let newUser =
   {
@@ -49,9 +46,7 @@ router.post('/register', async (req, res) =>
     `http://localhost:5000/email/activate/?${Query}` :
     `https://server.storysquad.app/email/activate/?${Query}`;
 
-  // send email to parent instead of user, if given.
-  // ToDo: change this to a separate ToS/PP confirmation email
-  sendEmail(parentEmail || email, sendUrl);
+  await mailer.SendMail(parentEmail || email, "Activate your Story Squad account", "activation", { url: sendUrl });
 
   return res.status(200).json({ message: 'User created' });
 });
@@ -139,6 +134,13 @@ router.get("/reset", async (req, res) =>
     return res.status(500).json({ error: "Unknown server error" });
 
   //E-Mail new code
+  let Query = querystring.stringify({ code: newCode, email: User.email });
+
+  let sendUrl = (process.env.BE_ENV === 'development') ?
+    `http://localhost:3000/passwordreset?${Query}` :
+    `https://contest.storysquad.app/passwordreset?${Query}`;
+
+  console.log(sendUrl);
 
   return res.status(200).json({ message: "Code created, email sent" });
 });
