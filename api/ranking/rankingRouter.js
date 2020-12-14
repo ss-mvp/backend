@@ -67,7 +67,7 @@ router.post("/", checkIP, async (req, res) => {
   }
 });
 
-router.get("/histogram", restricted, async (req, res) => {
+router.get("/histogram", restricted(), async (req, res) => {
   try {
     //Given that we need to know the _previous_ days scores, we need to get the previous
     //days prompt, and get the tied submissions to that prompt
