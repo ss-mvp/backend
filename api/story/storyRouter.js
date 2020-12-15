@@ -91,7 +91,7 @@ let _FileUploadConf = fileUpload(
     responseOnLimit: "File size too large",
     uploadTimeout: 40000 //40 Sec
   });
-router.post("/", restricted, _FileUploadConf, async (req, res) => {
+router.post("/", restricted(), _FileUploadConf, async (req, res) => {
   if (await story.hasSubmitted(req.userId))
     return res.status(400).json({ error: "You have already submitted today" });
   
@@ -152,7 +152,7 @@ router.post("/", restricted, _FileUploadConf, async (req, res) => {
   )
 });
 
-router.get("/image/:id", restricted, async (req, res) =>
+router.get("/image/:id", restricted(), async (req, res) =>
 {
   let ID = req.params.id;
 
@@ -187,7 +187,7 @@ router.get("/image/:id", restricted, async (req, res) =>
     }).send();
 });
 
-router.get('/video', restricted, async (req, res) => {
+router.get('/video', restricted(), async (req, res) => {
   const video = await story.getVideo();
   const returnPackage = {
     video_id: video.video_id,
@@ -197,12 +197,16 @@ router.get('/video', restricted, async (req, res) => {
   return res.json({ returnPackage });
 })
 
-router.get("/prompt", restricted, async (req, res) => {
+router.get("/prompt", restricted(false), async (req, res) => {
   const prompt = await story.getPrompt();
   if (!prompt)
     return res.status(500).json({ error: 'Something went wrong.' });
-  else
-    return res.status(200).json({ prompt: prompt.prompt, active: prompt.active, submitted: (await story.hasSubmitted(req.userId)) });
+  else {
+    let submitted = false;
+    if (req.userId) submitted = await story.hasSubmitted(req.userId);
+
+    return res.status(200).json({ prompt: prompt.prompt, active: prompt.active, submitted });
+  }
 })
 
 router.get('/all_prompts', adminRestricted, async (req, res) => {
@@ -214,7 +218,7 @@ router.get('/all_prompts', adminRestricted, async (req, res) => {
   }
 })
 
-router.get('/mytopstories', restricted, async (req, res) => {
+router.get('/mytopstories', restricted(), async (req, res) => {
   const submissions = await story.top5SubmissionsByUser(req.userId);
   if (!submissions)
     return res.status(404).json({ error: "No submissions found for the user with that id" });
