@@ -134,13 +134,13 @@ router.get("/reset", async (req, res) =>
     return res.status(500).json({ error: "Unknown server error" });
 
   //E-Mail new code
-  let Query = querystring.stringify({ code: newCode, email: User.email });
+  let Query = querystring.stringify({ code: newCode, email: User.parentEmail });
 
   let sendUrl = (process.env.BE_ENV === 'development') ?
     `http://localhost:3000/passwordreset?${Query}` :
     `https://contest.storysquad.app/passwordreset?${Query}`;
 
-  await mailer.SendMail(User.email, "Story Squad Password Reset", "resetpassword", { url: sendUrl, username: User.username });
+  await mailer.SendMail(User.parentEmail, "Story Squad Password Reset", "resetpassword", { url: sendUrl, username: User.username });
 
   return res.status(200).json({ message: "Code created, email sent" });
 });
