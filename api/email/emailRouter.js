@@ -134,7 +134,7 @@ router.get("/reset", async (req, res) =>
     return res.status(500).json({ error: "Unknown server error" });
 
   //E-Mail new code
-  let Query = querystring.stringify({ code: newCode, email: User.parentEmail });
+  let Query = querystring.stringify({ code: newCode, email: User.email });
 
   let sendUrl = (process.env.BE_ENV === 'development') ?
     `http://localhost:3000/passwordreset?${Query}` :
