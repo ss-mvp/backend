@@ -10,7 +10,12 @@ module.exports = {
     isActivated,
     activateEmail,
     getToken,
-    getVideo
+    getVideo,
+    updatePassword,
+    getResetByUID,
+    getFullResetRow,
+    deleteResetsByUID,
+    saveResetCode
 }
 
 function getAllUsers() {
@@ -52,4 +57,28 @@ function activateEmail(email, validate) {
 
 function getVideo(){
     return db('admin').select('video_link')
+};
+
+function updatePassword(uid, password) {
+    return db('users').where("id", uid).update({password});
+}
+
+async function getResetByUID(uid) {
+    try {
+        return (await db.raw("SELECT EXTRACT(EPOCH FROM (now() - (SELECT time FROM password_resets WHERE uid=?))) / 60 AS minutes LIMIT 1", [uid])).rows[0].minutes;
+    } catch (ex) { console.log(ex); return -1; }
+}
+
+function getFullResetRow(uid) {
+    return db('password_resets').where({ uid }).first();
+}
+
+function deleteResetsByUID(uid) {
+    return db('password_resets').where({ uid }).del();
+}
+
+async function saveResetCode(uid, code) {
+    try { //Using this to catch any issues with the unique column requirement
+        return await db('password_resets').insert({ uid, code });
+    } catch (ex) { console.log(ex); return -1; }
 }
