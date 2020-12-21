@@ -152,7 +152,7 @@ router.post("/", restricted(), _FileUploadConf, async (req, res) => {
   )
 });
 
-router.get("/image/:id", restricted(), async (req, res) =>
+router.get("/image/:id", async (req, res) =>
 {
   let ID = req.params.id;
 
