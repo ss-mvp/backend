@@ -117,7 +117,7 @@ router.post("/", restricted(), _FileUploadConf, async (req, res) => {
       else
       {
         //Call DS Component
-        let DSInfo = await TextProcess(data.location, require("crypto").createHash("sha512").update(OutBuffer).digest("hex"));
+        let DSInfo = await TextProcess(data.Location, require("crypto").createHash("sha512").update(OutBuffer).digest("hex"));
 
         if (!DSInfo)
         {
@@ -132,11 +132,10 @@ router.post("/", restricted(), _FileUploadConf, async (req, res) => {
         //Create the database insert
         const sendPackage = {
           image: newKey,
-          readability,
           prompt_id: (await story.getPrompt()).id,
           userId: req.userId,
           flagged: DSInfo.ModerationFlag,
-          score: DSInfo.Rotation,
+          score: DSInfo.Complexity,
           rotation: DSInfo.Rotation
         };
 
