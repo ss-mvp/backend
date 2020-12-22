@@ -13,7 +13,6 @@ module.exports = (authRequired = true) => (req, res, next) => {
         return res.status(401).json({ error: "Token is not valid."})
       } else {
         if (decodedToken) {
-          console.log('decoding...')
           req.username = decodedToken.username;
           req.userId = decodedToken.id;
         }
