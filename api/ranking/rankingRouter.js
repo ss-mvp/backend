@@ -67,33 +67,6 @@ router.post("/", checkIP, async (req, res) => {
   }
 });
 
-router.get("/histogram", restricted(), async (req, res) => {
-  try {
-    //Given that we need to know the _previous_ days scores, we need to get the previous
-    //days prompt, and get the tied submissions to that prompt
-    let Yesterday = await getPromptById((await getPrompt()).id - 1);
-
-    //Current users scores
-    let CurrentUserSubmission = await getSubmission(req.userId, Yesterday.id);
-    let AllScores = await getScoresByPromptID(Yesterday.id);
-
-    Axios.post("https://ss-mvp-ds.herokuapp.com/viz/histogram", {
-      GradeList: AllScores.map((el) => el.score),
-      StudentScore: CurrentUserSubmission.score,
-    })
-      .then((resA) => {
-        return res.status(200).json(JSON.parse(resA.data));
-      })
-      .catch((err) => {
-        console.log(err);
-        return res.status(400).json({ err: "Internal server error [DS]" });
-      });
-  } catch (ex) {
-    console.log(ex);
-    return res.status(400).json({ err: "Internal server error" });
-  }
-});
-
 router.get("/winner", async (req, res) => {
   try {
     let Today = await getPrompt();
