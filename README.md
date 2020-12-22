@@ -66,7 +66,6 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | POST   | `/ranking/`       | anyone         | Submit ranking of the 3 submissions |
 | GET    | `/ranking/votes`  | anyone         | Get current vote counts |
 | GET    | `/ranking/winner` | anyone         | Get the 3 winner submissions final ranking |
-| GET    | `/ranking/histogram` | user      | Get histogram data from previous day |
 
 ## Documentation
 
