@@ -5,7 +5,7 @@ async function TextProcess(url, checksum)
     try
     {
         return (await Axios.post(
-            `${process.env.DS_URL}/submission/text`,
+            `${process.env.DS_API_URL}/submission/text`,
             {
                 "SubmissionID": 0,
                 "StoryId": 0,
