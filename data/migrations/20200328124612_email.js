@@ -19,11 +19,10 @@ exports.up = function(knex) {
   .createTable('submissions', table => {
       table.increments().notNullable()
       table.string('image').index();
-      table.string('pages', 2000000);
       table.boolean('flagged').defaultTo(false);
-      table.string('flag').defaultTo('None')
       table.jsonb('readability');
-      table.float('score')
+      table.float('score');
+      table.integer('rotation');
       table.integer('prompt_id').unsigned()
       .references('id').inTable('prompts')
       .onDelete('CASCADE');
