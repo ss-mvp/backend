@@ -25,7 +25,8 @@ async function getTopThree() {
       "submissions.userId",
       "users.username",
       "submissions.image",
-      "submissions.pages"
+      "submissions.pages",
+      "submissions.rotation"
     );
 }
 
@@ -63,6 +64,7 @@ async function getFinalScores() {
     .select(
       "users.username",
       "submissions.image",
+      "submissions.rotation",
       "users.id as userId",
       "topThree.id"
     )
@@ -119,7 +121,8 @@ async function getWinner(winnerId) {
       "users.username",
       "users.id as userId",
       "submissions.id",
-      "submissions.image"
+      "submissions.image",
+      "submissions.rotation"
     )
     .first();
 }

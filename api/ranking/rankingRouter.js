@@ -12,8 +12,6 @@ const {
   addWinner,
   addIP,
   getVotes,
-  getScoresByPromptID,
-  getSubmission,
 } = require("./rankingModel");
 
 router.get("/", async (req, res) => {

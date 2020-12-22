@@ -110,7 +110,7 @@ function allSubmissionsByUser(user_id) {
 function top5SubmissionsByUser(user_id) {
   return db('submissions')
     .orderBy('score', 'desc')
-    .select('image', 'score')
+    .select('image', 'score', 'rotation')
     .where('userId', user_id)
     .limit(5);
 }
