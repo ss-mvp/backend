@@ -20,7 +20,6 @@ exports.up = function(knex) {
       table.increments().notNullable()
       table.string('image').index();
       table.boolean('flagged').defaultTo(false);
-      table.jsonb('readability');
       table.float('score');
       table.integer('rotation');
       table.integer('prompt_id').unsigned()
