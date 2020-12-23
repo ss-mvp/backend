@@ -12,6 +12,7 @@ const {
   addWinner,
   addIP,
   getVotes,
+  getYesterdaysWinner,
 } = require("./rankingModel");
 
 router.get("/", async (req, res) => {
@@ -68,8 +69,14 @@ router.post("/", checkIP, async (req, res) => {
 router.get("/winner", async (req, res) => {
   try {
     let Today = await getPrompt();
-    if (Today.voting || Today.topThree || Today.active || !Today)
-      return res.status(400).json({ error: "No winners declared yet" });
+    let yesterdaysWinner;
+    if (Today.voting || Today.topThree || Today.active || !Today) {
+      // OLD CODE >> return res.status(400).json({ error: "No winners declared yet" });
+
+      // return the result of our getYesterdayWinner function
+      yesterdaysWinner = await getYesterdaysWinner();
+      return res.status(200).json({ yesterday: true, yesterdaysWinner });
+    }
 
     let allThree;
     try {
@@ -122,16 +129,25 @@ async function checkIP(req, res, next) {
   }
 }
 
-// dummy router to test addWinner()
-router.post("/addwinner", (req, res) => {
-  addWinner()
-    .then((winner) => {
-      res.status(201).json(winner);
-      // console.log("The winner is: ", winner);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "There was a server error" });
-    });
-});
+// // dummy router to test addWinner()
+// router.post("/addwinner", (req, res) => {
+//   addWinner()
+//     .then((winner) => {
+//       res.status(201).json(winner);
+//       // console.log("The winner is: ", winner);
+//     })
+//     .catch((err) => {
+//       res.status(500).json({ message: "There was a server error" });
+//     });
+// });
+
+// // dummy router to test for yesterday's
+// router.get("/yesterdayWinner", (req, res) => {
+//   getYesterdaysWinner()
+//     .then((winner) => [res.status(200).json({ yesterday: true, winner })])
+//     .catch((err) => {
+//       res.status(500).json({ message: "Cannot find winner" });
+//     });
+// });
 
 module.exports = router;
