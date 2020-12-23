@@ -21,7 +21,7 @@ exports.up = function(knex) {
       table.string('image').index();
       table.boolean('flagged').defaultTo(false);
       table.float('score');
-      table.integer('rotation');
+      table.integer('rotation').defaultTo(0);
       table.integer('prompt_id').unsigned()
       .references('id').inTable('prompts')
       .onDelete('CASCADE');
