@@ -1,6 +1,6 @@
 const { default: Axios } = require("axios");
 
-async function TextProcess(url, checksum)
+async function TextProcess(file_key, checksum)
 {
     try
     {
@@ -13,7 +13,7 @@ async function TextProcess(url, checksum)
                 {
                     "1":
                     {
-                        "URL": url,
+                        "filekey": file_key,
                         "Checksum": checksum
                     }
                 }

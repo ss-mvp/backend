@@ -117,7 +117,7 @@ router.post("/", restricted(), _FileUploadConf, async (req, res) => {
       else
       {
         //Call DS Component
-        let DSInfo = await TextProcess(data.Location, require("crypto").createHash("sha512").update(OutBuffer).digest("hex"));
+        let DSInfo = await TextProcess(newKey, require("crypto").createHash("sha512").update(OutBuffer).digest("hex"));
 
         if (!DSInfo)
         {
