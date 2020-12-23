@@ -1,5 +1,5 @@
 [
-    {"prompt": "Set your pirate story aboard the fastest ship on the high seas.", "active": true},
+    {"prompt": "Set your pirate story aboard the fastest ship on the high seas.", "active": true, "today": true},
     {"prompt": "Write a story that includes a flying magic carpet.", "active": false},
     {"prompt": "Your sports team has a rematch against the defending champions that crushed you the last time you played, but this time you have a secret weapon.  What is it and how does it help you win this time around?", "active": false},
     {"prompt": "Imagine it's 2120 and when your arrive to school, you find out you have a math test you haven't studied for. What do you do?", "active": false},
