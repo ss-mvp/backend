@@ -25,7 +25,8 @@ async function getTopThree() {
       "submissions.userId",
       "users.username",
       "submissions.image",
-      "submissions.pages"
+      "submissions.pages",
+      "submissions.rotation"
     );
 }
 
@@ -63,6 +64,7 @@ async function getFinalScores() {
     .select(
       "users.username",
       "submissions.image",
+      "submissions.rotation",
       "users.id as userId",
       "topThree.id"
     )
@@ -106,7 +108,6 @@ async function rankIt(topThreeId, rank) {
 
 async function addIP(newIP) {
   const today = moment().format("MMM Do YY");
-  console.log(await db("votersIP"));
   return await db("votersIP").insert({ ip: newIP, date_voted: today });
 }
 
@@ -119,7 +120,8 @@ async function getWinner(winnerId) {
       "users.username",
       "users.id as userId",
       "submissions.id",
-      "submissions.image"
+      "submissions.image",
+      "submissions.rotation"
     )
     .first();
 }
