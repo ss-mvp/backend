@@ -12,6 +12,7 @@ module.exports = {
   getUser,
   getSubmission,
   getScoresByPromptID,
+  getYesterdaysWinner,
 };
 
 async function getTopThree() {
@@ -121,5 +122,17 @@ async function getWinner(winnerId) {
       "submissions.id",
       "submissions.image"
     )
+    .first();
+}
+
+/**
+ * SELECT *
+FROM submissions
+INNER JOIN winning_stories ON submissions.id = winning_stories.story_id
+ */
+// return the last item in our db("winning_stories")
+async function getYesterdaysWinner() {
+  return await db("winning_stories")
+    .join("winning_stories", "winning_stories.story_id", "submissions.id")
     .first();
 }

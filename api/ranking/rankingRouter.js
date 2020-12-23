@@ -14,6 +14,7 @@ const {
   getVotes,
   getScoresByPromptID,
   getSubmission,
+  getYesterdaysWinner,
 } = require("./rankingModel");
 
 router.get("/", async (req, res) => {
@@ -97,8 +98,14 @@ router.get("/histogram", restricted, async (req, res) => {
 router.get("/winner", async (req, res) => {
   try {
     let Today = await getPrompt();
-    if (Today.voting || Today.topThree || Today.active || !Today)
-      return res.status(400).json({ error: "No winners declared yet" });
+    let yesterdaysWinner;
+    if (Today.voting || Today.topThree || Today.active || !Today) {
+      // OLD CODE >> return res.status(400).json({ error: "No winners declared yet" });
+
+      // return the result of our getYesterdayWinner function
+      yesterdaysWinner = getYesterdaysWinner();
+      return res.status(200).json(yesterdaysWinner);
+    }
 
     let allThree;
     try {
@@ -160,6 +167,15 @@ router.post("/addwinner", (req, res) => {
     })
     .catch((err) => {
       res.status(500).json({ message: "There was a server error" });
+    });
+});
+
+// dummy router to test for yesterday's
+router.get("/yesterdayWinner", (req, res) => {
+  getYesterdaysWinner()
+    .then((winner) => [res.status(200).json(winner)])
+    .catch((err) => {
+      res.status(500).json({ message: "Cannot find winner" });
     });
 });
 
