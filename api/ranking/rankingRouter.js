@@ -75,7 +75,7 @@ router.get("/winner", async (req, res) => {
 
       // return the result of our getYesterdayWinner function
       yesterdaysWinner = await getYesterdaysWinner();
-      return res.status(200).json({ yesterday: true, yesterdaysWinner });
+      return res.status(200).json(yesterdaysWinner);
     }
 
     let allThree;
