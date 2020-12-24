@@ -10,6 +10,7 @@ const emailRouter = require("../api/email/emailRouter.js");
 const storyRouter = require("../api/story/storyRouter.js");
 const rankingRouter = require("./ranking/rankingRouter.js");
 const adminRouter = require("../api/admin/adminRouter.js");
+const leaderBoardRouter = require("./leaderboard/leaderboardRouter.js");
 
 const CronJob = require("cron").CronJob;
 const story = require("../api/story/storyModel.js");
@@ -85,10 +86,27 @@ const endVoting = new CronJob(
   "America/New_York"
 );
 
+const resetLeaderboard = new CronJob(
+  "* 00 * * sun",
+  async () => {
+    await db("leaderboard")
+      .select("u.id", "image", "username")
+      .sum("s.score as score")
+      .from("submissions as s")
+      .join("users as u", "u.id", "s.userId")
+      .groupBy("u.id", "s.image")
+      .orderBy("score", "desc");
+  },
+  null,
+  true,
+  "America/New_York"
+);
+
 endSubmission.start();
 endVoting.start();
 startVoting.start();
 startGame.start();
+resetLeaderboard.start();
 
 const server = express();
 
@@ -130,5 +148,6 @@ server.use("/email", emailRouter);
 server.use("/upload", storyRouter);
 server.use("/admin", adminRouter);
 server.use("/ranking", rankingRouter);
+server.use("/leaderboard", leaderBoardRouter);
 
 module.exports = server;
