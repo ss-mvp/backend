@@ -1,0 +1,24 @@
+name: Pre-Check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  coverage:
+    name: Base check
+    runs-on: ubuntu-latest
+    steps:	
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+
+      # Verify packge list is OK
+      - run: npm install
+
+      # Verify linting is OK
+      - run: npm run lint
