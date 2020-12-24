@@ -11,7 +11,9 @@
     "latest": "knex migrate:latest",
     "seed": "knex seed:run",
     "go": "npm run server",
-    "dev": "npm run rollback && npm run latest && npm run seed && npm run go"
+    "dev": "npm run rollback && npm run latest && npm run seed && npm run go",
+    "lint": "npx eslint ./api/**.js ./services/**.js",
+    "format": "npx eslint ./api/**.js ./services/**.js --fix"
   },
   "repository": {
     "type": "git",
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
+    "eslint": "^7.16.0",
     "jest": "^26.4.0",
     "nodemon": "^2.0.4",
     "supertest": "^4.0.2"
