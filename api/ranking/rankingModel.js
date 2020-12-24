@@ -140,17 +140,17 @@ async function getWinner(winnerId)
         .first();
 }
 
-/**
- * SELECT *
-FROM submissions
-INNER JOIN winning_stories ON submissions.id = winning_stories.story_id
- */
-// Return the last item in our db("winning_stories")
-async function getYesterdaysWinner() 
-{
-    return await db("submissions")
-        .join("winning_stories", "winning_stories.story_id", "submissions.id")
-        .select("*")
-        .orderBy("winning_stories.date", "desc")
-        .first();
+// return the last item in our db("winning_stories")
+async function getYesterdaysWinner() {
+  return await db("submissions")
+    .join("winning_stories", "winning_stories.story_id", "submissions.id")
+    .join("users", "users.id", "submissions.userId")
+    .select(
+      "users.username",
+      "submissions.image",
+      "submissions.rotation",
+      "users.id as userId"
+    )
+    .orderBy("winning_stories.date", "desc")
+    .first();
 }

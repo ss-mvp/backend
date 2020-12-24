@@ -88,10 +88,10 @@ router.get("/winner", async (req, res) =>
         {
             // OLD CODE >> return res.status(400).json({ error: "No winners declared yet" });
 
-            // Return the result of our getYesterdayWinner function
-            yesterdaysWinner = await getYesterdaysWinner();
-            return res.status(200).json({ yesterday: true, yesterdaysWinner });
-        }
+      // return the result of our getYesterdayWinner function
+      yesterdaysWinner = await getYesterdaysWinner();
+      return res.status(200).json(yesterdaysWinner);
+    }
 
         let allThree;
         try 
@@ -153,26 +153,5 @@ async function checkIP(req, res, next)
         next();
     }
 }
-
-// // dummy router to test addWinner()
-// Router.post("/addwinner", (req, res) => {
-//   AddWinner()
-//     .then((winner) => {
-//       Res.status(201).json(winner);
-//       // console.log("The winner is: ", winner);
-//     })
-//     .catch((err) => {
-//       Res.status(500).json({ message: "There was a server error" });
-//     });
-// });
-
-// // dummy router to test for yesterday's
-// Router.get("/yesterdayWinner", (req, res) => {
-//   GetYesterdaysWinner()
-//     .then((winner) => [res.status(200).json({ yesterday: true, winner })])
-//     .catch((err) => {
-//       Res.status(500).json({ message: "Cannot find winner" });
-//     });
-// });
 
 module.exports = router;
