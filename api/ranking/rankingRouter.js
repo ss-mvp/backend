@@ -88,10 +88,10 @@ router.get("/winner", async (req, res) =>
         {
             // OLD CODE >> return res.status(400).json({ error: "No winners declared yet" });
 
-      // return the result of our getYesterdayWinner function
-      yesterdaysWinner = await getYesterdaysWinner();
-      return res.status(200).json(yesterdaysWinner);
-    }
+            // Return the result of our getYesterdayWinner function
+            yesterdaysWinner = await getYesterdaysWinner();
+            return res.status(200).json(yesterdaysWinner);
+        }
 
         let allThree;
         try 
