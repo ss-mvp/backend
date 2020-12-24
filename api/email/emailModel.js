@@ -16,69 +16,100 @@ module.exports = {
     getFullResetRow,
     deleteResetsByUID,
     saveResetCode
-}
+};
 
-function getAllUsers() {
+function getAllUsers() 
+{
     return db('users');
 }
 
-function getUser(email) {
+function getUser(email) 
+{
     return db('users').where({ email }).first();
 }
 
-function findEmail(id) {
+function findEmail(id) 
+{
     return db('users').where({ id });
 };
 
-async function addUser(user) {
-    try  { await db('users').insert(user); return true; }
-    catch (ex) { console.log(ex); return false; }
+async function addUser(user) 
+{
+    try  
+    {
+        await db('users').insert(user); return true;
+    }
+    catch (ex) 
+    {
+        console.log(ex); return false;
+    }
 };
 
-function getUserIdByEmail(email) {
+function getUserIdByEmail(email) 
+{
     return db('users').where({ email }).select('id').first();
 };
 
-function getUserIdByUsername(username) {
+function getUserIdByUsername(username) 
+{
     return db('users').where({ username }).select('id').first();
 }
 
-async function isActivated(email) {
+async function isActivated(email) 
+{
     return (await db('users').where({ email }).select('validated').first())['validated'];
 };
 
-function getToken(email) {
+function getToken(email) 
+{
     return db('users').where({ email }).select('validationUrl', 'validated').first();
 };
 
-function activateEmail(email, validate) {
+function activateEmail(email, validate) 
+{
     return db('users').where({ email }).update(validate);
 };
 
-function getVideo(){
-    return db('admin').select('video_link')
+function getVideo()
+{
+    return db('admin').select('video_link');
 };
 
-function updatePassword(uid, password) {
-    return db('users').where("id", uid).update({password});
+function updatePassword(uid, password) 
+{
+    return db('users').where("id", uid).update({ password });
 }
 
-async function getResetByUID(uid) {
-    try {
+async function getResetByUID(uid) 
+{
+    try 
+    {
         return (await db.raw("SELECT EXTRACT(EPOCH FROM (now() - (SELECT time FROM password_resets WHERE uid=?))) / 60 AS minutes LIMIT 1", [uid])).rows[0].minutes;
-    } catch (ex) { console.log(ex); return -1; }
+    }
+    catch (ex) 
+    {
+        console.log(ex); return -1;
+    }
 }
 
-function getFullResetRow(uid) {
+function getFullResetRow(uid) 
+{
     return db('password_resets').where({ uid }).first();
 }
 
-function deleteResetsByUID(uid) {
+function deleteResetsByUID(uid) 
+{
     return db('password_resets').where({ uid }).del();
 }
 
-async function saveResetCode(uid, code) {
-    try { //Using this to catch any issues with the unique column requirement
+async function saveResetCode(uid, code) 
+{
+    try 
+    { //Using this to catch any issues with the unique column requirement
         return await db('password_resets').insert({ uid, code });
-    } catch (ex) { console.log(ex); return -1; }
+    }
+    catch (ex) 
+    {
+        console.log(ex); return -1;
+    }
 }

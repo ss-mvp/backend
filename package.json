@@ -12,8 +12,8 @@
     "seed": "knex seed:run",
     "go": "npm run server",
     "dev": "npm run rollback && npm run latest && npm run seed && npm run go",
-    "lint": "npx eslint ./api/**.js ./services/**.js",
-    "format": "npx eslint ./api/**.js ./services/**.js --fix"
+    "lint": "npx eslint ./api/** ./services/** ./data/migrations/**",
+    "format": "npx eslint ./api/** ./services/** ./data/migrations/** --fix"
   },
   "repository": {
     "type": "git",

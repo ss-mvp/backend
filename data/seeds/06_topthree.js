@@ -1,10 +1,12 @@
 const topThree = require("../seed_data/topThree.json")
 
-exports.seed = function(knex) {
+exports.seed = function(knex) 
+{
     // Deletes ALL existing entries
     return knex('topThree').del()
-      .then(function () {
+        .then(function () 
+        {
         // Inserts seed entries
-        return knex('topThree').insert(topThree)
+            return knex('topThree').insert(topThree)
         })
 }

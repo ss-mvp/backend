@@ -11,4 +11,5 @@
     },
     "javascript.format.semicolons": "insert",
     "typescript.format.semicolons": "insert",
+    "editor.detectIndentation": false
 }

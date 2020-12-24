@@ -1,14 +1,14 @@
 [
-  {
-    "story_id": 1,
-    "prompt_id": 1
-  },
-  {
-    "story_id": 2,
-    "prompt_id": 2
-  },
-  {
-    "story_id": 3,
-    "prompt_id": 3
-  }
+    {
+        "story_id": 1,
+        "prompt_id": 1
+    },
+    {
+        "story_id": 2,
+        "prompt_id": 2
+    },
+    {
+        "story_id": 3,
+        "prompt_id": 3
+    }
 ]

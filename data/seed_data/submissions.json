@@ -1,143 +1,145 @@
-[{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 66,
-    "prompt_id": 1,
-    "userId": 1,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 75,
-    "prompt_id": 1,
-    "userId": 2,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 80,
-    "prompt_id": 1,
-    "userId": 3,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 77,
-    "prompt_id": 1,
-    "userId": 4,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 64,
-    "prompt_id": 1,
-    "userId": 5,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 83,
-    "prompt_id": 1,
-    "userId": 6,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 65,
-    "prompt_id": 1,
-    "userId": 7,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 72,
-    "prompt_id": 1,
-    "userId": 8,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 59,
-    "prompt_id": 1,
-    "userId": 9,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 98,
-    "prompt_id": 1,
-    "userId": 10,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 20,
-    "prompt_id": 1,
-    "userId": 11,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 53,
-    "prompt_id": 1,
-    "userId": 12,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-},
-{
-    "image": "1595350818077",
-    "flagged": false,
-    "score": 78,
-    "prompt_id": 1,
-    "userId": 13,
-    "vote": false,
-    "active": true,
-    "topThree": false,
-    "voting": false
-}]
+[
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 66,
+        "prompt_id": 1,
+        "userId": 1,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 75,
+        "prompt_id": 1,
+        "userId": 2,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 80,
+        "prompt_id": 1,
+        "userId": 3,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 77,
+        "prompt_id": 1,
+        "userId": 4,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 64,
+        "prompt_id": 1,
+        "userId": 5,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 83,
+        "prompt_id": 1,
+        "userId": 6,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 65,
+        "prompt_id": 1,
+        "userId": 7,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 72,
+        "prompt_id": 1,
+        "userId": 8,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 59,
+        "prompt_id": 1,
+        "userId": 9,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 98,
+        "prompt_id": 1,
+        "userId": 10,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 20,
+        "prompt_id": 1,
+        "userId": 11,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 53,
+        "prompt_id": 1,
+        "userId": 12,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    },
+    {
+        "image": "1595350818077",
+        "flagged": false,
+        "score": 78,
+        "prompt_id": 1,
+        "userId": 13,
+        "vote": false,
+        "active": true,
+        "topThree": false,
+        "voting": false
+    }
+]
