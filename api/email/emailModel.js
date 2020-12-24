@@ -105,7 +105,8 @@ function deleteResetsByUID(uid)
 async function saveResetCode(uid, code) 
 {
     try 
-    { //Using this to catch any issues with the unique column requirement
+    {
+        //Using this to catch any issues with the unique column requirement
         return await db("password_resets").insert({ uid, code });
     }
     catch (ex) 

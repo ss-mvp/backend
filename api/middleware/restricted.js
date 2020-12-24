@@ -13,8 +13,8 @@ module.exports = (authRequired = true) => (req, res, next) =>
         {
             if (err && authRequired) 
             {
-                console.log(err)
-                return res.status(401).json({ error: "Token is not valid."})
+                console.log(err);
+                return res.status(401).json({ error: "Token is not valid." });
             }
             else 
             {
@@ -25,7 +25,7 @@ module.exports = (authRequired = true) => (req, res, next) =>
                 }
                 next();
             }
-        })
+        });
     }
     else 
     {

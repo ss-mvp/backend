@@ -9,7 +9,6 @@ const {
     getTopThree,
     rankIt,
     getFinalScores,
-    addWinner,
     addIP,
     getVotes,
     getYesterdaysWinner
@@ -122,13 +121,12 @@ async function checkIP(req, res, next)
     //According to the Elastic IP's list, we won't see
     //IPV6 Addresses, so we can assume we WILL have v4
     //Addresses only, and the latest IP should be the 1st
-    let ipToCheck =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    let ipToCheck = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
     let Comma = ipToCheck.indexOf(",");
 
     if (Comma === -1) 
     {
-    //If localhost reset to 127 localhost
+        //If localhost reset to 127 localhost
         if (req.connection.remoteAddress === "::1") ipToCheck = "127.0.0.1";
 
         //If using default remoteaddr, the IP should lead with ::, so let's remove it

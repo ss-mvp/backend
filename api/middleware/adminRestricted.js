@@ -15,7 +15,7 @@ module.exports = (req, res, next) =>
             if (err)
             {
                 console.log(err);
-                return res.status(401).json({ error: "Token is not valid."});
+                return res.status(401).json({ error: "Token is not valid." });
             }
             else
             {
@@ -27,7 +27,7 @@ module.exports = (req, res, next) =>
 
                 next();
             }
-        })
+        });
     }
     else
         return res.status(401).json({ error: "You need a user token to access this resource. Please login first." });

@@ -14,12 +14,12 @@ module.exports = {
     removeSubmissionsByEmail,
     updateTopThree,
     getSubmissionURLById
-}
+};
 
 async function isAdmin(id) 
 {
     let Admin = await db("admins").where({ uid: id }).first();
-  
+
     if (Admin && Admin.uid == id)
         return true;
 
@@ -28,8 +28,8 @@ async function isAdmin(id)
 
 async function removeSubmissionsByEmail(email) 
 {
-    const { id } = await db("users").where({ email })
-    return db("submissions").where(id, userId).del()
+    const { id } = await db("users").where({ email });
+    return db("submissions").where(id, userId).del();
 }
 
 function addVideo(videoAndTime) 
@@ -85,22 +85,22 @@ function getFlag(id)
 
 async function flagContent(id) 
 {
-    const flag = await getFlag(id)
-    console.log(flag)
+    const flag = await getFlag(id);
+    console.log(flag);
     if (!flag) 
     {
-        await db("submissions").where({ id }).update({ flagged: false, flag: "None" })
+        await db("submissions").where({ id }).update({ flagged: false, flag: "None" });
     }
     else 
     {
-        await db("submissions").where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" })
+        await db("submissions").where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" });
     }
     return await getFlag(id);
 }
 
 async function unFlagContent(id) 
 {
-    await db("submissions").where({ id }).update({ flagged: false, flag: "None" })
+    await db("submissions").where({ id }).update({ flagged: false, flag: "None" });
     return await getFlag(id);
 }
 
@@ -111,10 +111,10 @@ async function setWinner(details)
 
 async function updateTopThree(story_id)
 {
-    return await db("submissions").where({ id: story_id }).update({ vote: true, topThree: true })
+    return await db("submissions").where({ id: story_id }).update({ vote: true, topThree: true });
 }
 
 function removeWinner(story_id, user_id, prompt_id) 
 {
-    return db("topThree").where({ story_id }).orWhere({ user_id }).orWhere({ prompt_id }).del()
+    return db("topThree").where({ story_id }).orWhere({ user_id }).orWhere({ prompt_id }).del();
 }

@@ -20,7 +20,7 @@ const startGame = new CronJob(
     "00 30 20 * * *",
     async function () 
     {
-    // Clear previous games data
+        // Clear previous games data
         await story.disableAll();
 
         //Set the current active prompt to false
@@ -138,10 +138,10 @@ server.use(
 
             if (
                 origin === "https://contest.storysquad.app" ||
-        origin === "https://adminconteststorysquad.netlify.app" ||
-        origin === "https://server.storysquad.app" ||
-        origin === "https://fdsc-production.netlify.app" ||
-        origin === "https://fdsc-development.netlify.app"
+                origin === "https://adminconteststorysquad.netlify.app" ||
+                origin === "https://server.storysquad.app" ||
+                origin === "https://fdsc-production.netlify.app" ||
+                origin === "https://fdsc-development.netlify.app"
             )
                 callback(null, true);
             else callback("Not allowed by CORS", false);

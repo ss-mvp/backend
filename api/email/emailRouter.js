@@ -28,14 +28,14 @@ router.post("/register", async (req, res) =>
     let validationToken = uuid.v5(username, uuidNamespace);
 
     let newUser =
-  {
-      email,
-      username,
-      password: bc.hashSync(password, 10),
-      age,
-      parentEmail,
-      validationUrl: validationToken
-  };
+    {
+        email,
+        username,
+        password: bc.hashSync(password, 10),
+        age,
+        parentEmail,
+        validationUrl: validationToken
+    };
 
     if (!(await auth.addUser(newUser)))
         return res.status(500).json({ error: "Unknown server error" });
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) =>
 
         if (!await auth.isActivated(req.body.email))
             return res.status(400).json({ error: "Your account must be validated" });
-    
+
         if (bc.compareSync(req.body.password, User.password))
             return res.status(201).json({ username: User.username, token: signToken(User) });
         else
@@ -101,7 +101,7 @@ router.get("/reset", async (req, res) =>
 {
     if (!req.query.email)
         return res.status(300).json({ error: "Invalid email provided" });
-  
+
     let User = await auth.getUser(req.query.email);
 
     if (!User)
@@ -119,7 +119,7 @@ router.get("/reset", async (req, res) =>
             return res.status(500).json({ error: "Unknown server error" });
 
         if (ResetTime < 10) //If it's less than 10 minutes old
-        //Rate limit the creation of another code
+            //Rate limit the creation of another code
             return res.status(502).json({ error: "A code was created less than 10 minutes ago for this email" });
 
         //Otherwise delete old codes
@@ -149,7 +149,7 @@ router.post("/reset", async (req, res) =>
 {
     if (!req.body.email || !req.body.code || !req.body.password)
         return res.status(300).json({ error: "Email, code, and password are required" });
-  
+
     let User = await auth.getUser(req.body.email);
 
     if (!User)
@@ -187,10 +187,10 @@ router.get("/video", (req, res) =>
         .then(video => res.status(200).json(video))
         .catch(err => 
         {
-            console.log(err)
-            res.status(500).json({ messsage: err })
-        })
-})
+            console.log(err);
+            res.status(500).json({ messsage: err });
+        });
+});
 
 function signToken(user) 
 {

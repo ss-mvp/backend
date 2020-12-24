@@ -51,8 +51,7 @@ async function getFinalScores()
 
         const allNums = await Promise.all([one, two, three]);
         let totalScore = 0;
-        totalScore =
-      allNums[0].length * 3 + allNums[1].length * 2 + allNums[2].length;
+        totalScore = allNums[0].length * 3 + allNums[1].length * 2 + allNums[2].length;
 
         return await db("topThree")
             .where({ id: el.id })
@@ -64,7 +63,7 @@ async function getFinalScores()
     return await db("topThree")
         .join("users", "topThree.user_id", "users.id")
         .join("submissions", "topThree.story_id", "submissions.id")
-    // .groupBy('topThree.prompt_time_id')
+        // .groupBy('topThree.prompt_time_id')
         .orderBy("topThree.score", "desc")
         .select(
             "users.username",
@@ -90,7 +89,7 @@ async function addWinner()
     }
     else 
     {
-    // Otherwise return the `db("winning_stories").insert(winner);`
+        // Otherwise return the `db("winning_stories").insert(winner);`
         return db("winning_stories").insert(winner);
     }
 }

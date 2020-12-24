@@ -51,7 +51,7 @@ async function clearVotes()
     }
     catch (ex) 
     {
-        console.log(ex); 
+        console.log(ex);
     }
 }
 
@@ -70,7 +70,7 @@ async function nextPrompt()
     }
     catch (ex) 
     {
-        console.log(ex); return -1; 
+        console.log(ex); return -1;
     }
 }
 
@@ -85,7 +85,7 @@ async function hasSubmitted(userId)
     }
     catch (ex) 
     {
-        console.log(ex); return false; 
+        console.log(ex); return false;
     }
 }
 
@@ -125,7 +125,7 @@ function allSubmissionsByUser(user_id)
     return db("submissions")
         .orderBy("score", "desc")
         .select("image", "score")
-        .where("userId", user_id)
+        .where("userId", user_id);
 }
 
 function top5SubmissionsByUser(user_id) 
@@ -141,11 +141,11 @@ async function addImage(image)
 {
     try 
     {
-        return (await db("submissions").insert(image).returning("id"))[0]; 
+        return (await db("submissions").insert(image).returning("id"))[0];
     }
     catch (ex) 
     {
-        console.log(ex); return -1; 
+        console.log(ex); return -1;
     }
 }
 
