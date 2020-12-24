@@ -129,25 +129,4 @@ async function checkIP(req, res, next) {
   }
 }
 
-// // dummy router to test addWinner()
-// router.post("/addwinner", (req, res) => {
-//   addWinner()
-//     .then((winner) => {
-//       res.status(201).json(winner);
-//       // console.log("The winner is: ", winner);
-//     })
-//     .catch((err) => {
-//       res.status(500).json({ message: "There was a server error" });
-//     });
-// });
-
-// // dummy router to test for yesterday's
-// router.get("/yesterdayWinner", (req, res) => {
-//   getYesterdaysWinner()
-//     .then((winner) => [res.status(200).json({ yesterday: true, winner })])
-//     .catch((err) => {
-//       res.status(500).json({ message: "Cannot find winner" });
-//     });
-// });
-
 module.exports = router;

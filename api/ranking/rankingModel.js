@@ -127,11 +127,6 @@ async function getWinner(winnerId) {
     .first();
 }
 
-/**
- * SELECT *
-FROM submissions
-INNER JOIN winning_stories ON submissions.id = winning_stories.story_id
- */
 // return the last item in our db("winning_stories")
 async function getYesterdaysWinner() {
   return await db("submissions")
