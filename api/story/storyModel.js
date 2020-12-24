@@ -1,4 +1,4 @@
-const db = require('../../data/dbConfig.js');
+const db = require("../../data/dbConfig.js");
 
 module.exports = {
     addReadability,
@@ -25,7 +25,7 @@ module.exports = {
 
 function disableAll() 
 {
-    return db('submissions').update({
+    return db("submissions").update({
         active: false,
         topThree: false,
         vote: false,
@@ -35,8 +35,8 @@ function disableAll()
 
 async function clearRanking() 
 {
-    await db('topThree').del();
-    await db('ranking').del();
+    await db("topThree").del();
+    await db("ranking").del();
 }
 
 //Not being used as the tomorrow prompt is being moved as a limited easter-egg upon voting
@@ -44,9 +44,9 @@ async function clearVotes()
 {
     try
     {
-        await db('users').update({ voted: false }).whereIn(
+        await db("users").update({ voted: false }).whereIn(
             "id",
-            (await db('users').select("id").where("voted", true).pluck("id"))
+            (await db("users").select("id").where("voted", true).pluck("id"))
         );
     }
     catch (ex) 
@@ -63,10 +63,10 @@ async function nextPrompt()
 
         currentPrompt.active = currentPrompt.topThree = currentPrompt.voting = currentPrompt.today = false;
 
-        await db('prompts').update(currentPrompt).where("id", currentPrompt.id);
+        await db("prompts").update(currentPrompt).where("id", currentPrompt.id);
 
         //By simply doing +1 we assume a prompt id will *never* be deleted.
-        return await db('prompts').update({ active: true, today: true }).where("id", currentPrompt.id + 1);
+        return await db("prompts").update({ active: true, today: true }).where("id", currentPrompt.id + 1);
     }
     catch (ex) 
     {
@@ -99,41 +99,41 @@ async function hasVoted(userId)
 
 function getPromptById(id) 
 {
-    return db('prompts').where({ id }).first();
+    return db("prompts").where({ id }).first();
 }
 
 function addReadability(link, readability) 
 {
-    return db('submissions').where('image', '=', link).update({ readability });
+    return db("submissions").where("image", "=", link).update({ readability });
 }
 
 function getSubmission(id) 
 {
-    return db('submissions').where({ id });
+    return db("submissions").where({ id });
 }
 
 async function getSubmissionURLByName(id) 
 {
-    return await db('submissions')
-        .select('image', 'active', 'userId')
+    return await db("submissions")
+        .select("image", "active", "userId")
         .where({ image: id })
         .first();
 }
 
 function allSubmissionsByUser(user_id) 
 {
-    return db('submissions')
-        .orderBy('score', 'desc')
-        .select('image', 'score')
-        .where('userId', user_id)
+    return db("submissions")
+        .orderBy("score", "desc")
+        .select("image", "score")
+        .where("userId", user_id)
 }
 
 function top5SubmissionsByUser(user_id) 
 {
-    return db('submissions')
-        .orderBy('score', 'desc')
-        .select('image', 'score', 'rotation')
-        .where('userId', user_id)
+    return db("submissions")
+        .orderBy("score", "desc")
+        .select("image", "score", "rotation")
+        .where("userId", user_id)
         .limit(5);
 }
 
@@ -141,7 +141,7 @@ async function addImage(image)
 {
     try 
     {
-        return (await db('submissions').insert(image).returning('id'))[0]; 
+        return (await db("submissions").insert(image).returning("id"))[0]; 
     }
     catch (ex) 
     {
@@ -151,19 +151,19 @@ async function addImage(image)
 
 async function getPrompt() 
 {
-    return (await db('prompts')
+    return (await db("prompts")
         .where("today", true)
         .first());
 }
 
 function getVideoById(id) 
 {
-    return db('admin').where({ id }).first();
+    return db("admin").where({ id }).first();
 }
 
 async function getVideo() 
 {
-    const videos = await db('admin');
+    const videos = await db("admin");
     let id = 0;
     let largest = 0;
     videos.map((element) => 
@@ -180,20 +180,20 @@ async function getVideo()
 
 function allPrompts() 
 {
-    return db('prompts');
+    return db("prompts");
 }
 
 function allStories() 
 {
-    return db('submissions');
+    return db("submissions");
 }
 
 function addPrompt(newPrompt) 
 {
-    return db('prompts').insert(newPrompt);
+    return db("prompts").insert(newPrompt);
 }
 
 function editPrompt(id, edits) 
 {
-    return db('prompts').where({ id }).update(edits);
+    return db("prompts").where({ id }).update(edits);
 }

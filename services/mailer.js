@@ -1,6 +1,6 @@
-const nm = require('nodemailer');
-const ses = require('nodemailer-ses-transport');
-const hbs = require('nodemailer-express-handlebars');
+const nm = require("nodemailer");
+const ses = require("nodemailer-ses-transport");
+const hbs = require("nodemailer-express-handlebars");
 
 const transporter = nm.createTransport(
     ses(
@@ -21,19 +21,19 @@ function SendMail(
     const handlebarOptions = {
         viewEngine:
         {
-            extName: '.handlebars',
-            partialsDir: './templates/',
-            layoutsDir: './templates/',
+            extName: ".handlebars",
+            partialsDir: "./templates/",
+            layoutsDir: "./templates/",
             defaultLayout: `${templateFile}.handlebars`
         },
-        viewPath: './templates/',
-        extName: '.handlebars'
+        viewPath: "./templates/",
+        extName: ".handlebars"
     };
     
-    transporter.use('compile', hbs(handlebarOptions));
+    transporter.use("compile", hbs(handlebarOptions));
 
     let MailOptions = {
-        from: 'support@storysquad.app',
+        from: "support@storysquad.app",
         to: toAddress,
         subject: subject,
         context: paramaterObject,

@@ -1,4 +1,4 @@
-const db = require('../../data/dbConfig.js');
+const db = require("../../data/dbConfig.js");
 
 module.exports = {
     getAllUsers,
@@ -20,24 +20,24 @@ module.exports = {
 
 function getAllUsers() 
 {
-    return db('users');
+    return db("users");
 }
 
 function getUser(email) 
 {
-    return db('users').where({ email }).first();
+    return db("users").where({ email }).first();
 }
 
 function findEmail(id) 
 {
-    return db('users').where({ id });
+    return db("users").where({ id });
 };
 
 async function addUser(user) 
 {
     try  
     {
-        await db('users').insert(user); return true;
+        await db("users").insert(user); return true;
     }
     catch (ex) 
     {
@@ -47,37 +47,37 @@ async function addUser(user)
 
 function getUserIdByEmail(email) 
 {
-    return db('users').where({ email }).select('id').first();
+    return db("users").where({ email }).select("id").first();
 };
 
 function getUserIdByUsername(username) 
 {
-    return db('users').where({ username }).select('id').first();
+    return db("users").where({ username }).select("id").first();
 }
 
 async function isActivated(email) 
 {
-    return (await db('users').where({ email }).select('validated').first())['validated'];
+    return (await db("users").where({ email }).select("validated").first())["validated"];
 };
 
 function getToken(email) 
 {
-    return db('users').where({ email }).select('validationUrl', 'validated').first();
+    return db("users").where({ email }).select("validationUrl", "validated").first();
 };
 
 function activateEmail(email, validate) 
 {
-    return db('users').where({ email }).update(validate);
+    return db("users").where({ email }).update(validate);
 };
 
 function getVideo()
 {
-    return db('admin').select('video_link');
+    return db("admin").select("video_link");
 };
 
 function updatePassword(uid, password) 
 {
-    return db('users').where("id", uid).update({ password });
+    return db("users").where("id", uid).update({ password });
 }
 
 async function getResetByUID(uid) 
@@ -94,19 +94,19 @@ async function getResetByUID(uid)
 
 function getFullResetRow(uid) 
 {
-    return db('password_resets').where({ uid }).first();
+    return db("password_resets").where({ uid }).first();
 }
 
 function deleteResetsByUID(uid) 
 {
-    return db('password_resets').where({ uid }).del();
+    return db("password_resets").where({ uid }).del();
 }
 
 async function saveResetCode(uid, code) 
 {
     try 
     { //Using this to catch any issues with the unique column requirement
-        return await db('password_resets').insert({ uid, code });
+        return await db("password_resets").insert({ uid, code });
     }
     catch (ex) 
     {

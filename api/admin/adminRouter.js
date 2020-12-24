@@ -1,13 +1,13 @@
-const router = require('express').Router();
-const jwt = require('jsonwebtoken')
+const router = require("express").Router();
+const jwt = require("jsonwebtoken")
 const story = require("../story/storyModel.js");
-const admin = require('./adminModel.js');
+const admin = require("./adminModel.js");
 const auth = require("../email/emailModel");
 const s3 = require("../../services/file-upload");
-const jwtSecret = process.env.JWT_SECRET || 'sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23';
-const adminRestricted = require('../middleware/adminRestricted');
+const jwtSecret = process.env.JWT_SECRET || "sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23";
+const adminRestricted = require("../middleware/adminRestricted");
 
-router.get('/', adminRestricted, async (req, res) => 
+router.get("/", adminRestricted, async (req, res) => 
 {
 
     const submissions = await admin.getSubmissions();
@@ -15,7 +15,7 @@ router.get('/', adminRestricted, async (req, res) =>
     return res.json({ submissions });
 })
 
-router.get('/users', adminRestricted, async (req, res) => 
+router.get("/users", adminRestricted, async (req, res) => 
 {
     const users = await admin.getUsers();
     if (users) 
@@ -28,7 +28,7 @@ router.get('/users', adminRestricted, async (req, res) =>
     }
 })
 
-router.post('/video', adminRestricted, async (req, res) => 
+router.post("/video", adminRestricted, async (req, res) => 
 {
 
     function youtube_parser(url)
@@ -63,7 +63,7 @@ router.post('/video', adminRestricted, async (req, res) =>
     }
 })
 
-router.get('/flag/:id', adminRestricted, async (req, res) => 
+router.get("/flag/:id", adminRestricted, async (req, res) => 
 {
     const flag = await admin.getFlag(req.params.id);
     if (flag) 
@@ -76,11 +76,11 @@ router.get('/flag/:id', adminRestricted, async (req, res) =>
     }
 })
 
-router.post('/flag/:id', adminRestricted, async (req, res) => 
+router.post("/flag/:id", adminRestricted, async (req, res) => 
 {
     
     const flagged = await admin.flagContent(req.params.id);
-    console.log('flagged', flagged)
+    console.log("flagged", flagged)
     if (flagged) 
     {
         console.log(flagged)
@@ -93,7 +93,7 @@ router.post('/flag/:id', adminRestricted, async (req, res) =>
     
 })
 
-router.get('/winners', adminRestricted, async (req, res) => 
+router.get("/winners", adminRestricted, async (req, res) => 
 {
     const subs = await admin.getSubmissionsPerTime();
     return res.json({ subs });
@@ -131,7 +131,7 @@ router.get("/image/:id", adminRestricted, async (req, res) =>
     }).send();
 });
 
-router.post('/remove_user_data/:email', adminRestricted, async (req, res) => 
+router.post("/remove_user_data/:email", adminRestricted, async (req, res) => 
 {
     const { email } = req.params;
     const removal = await admin.removeSubmissionsByEmail(email);
@@ -145,7 +145,7 @@ router.post('/remove_user_data/:email', adminRestricted, async (req, res) =>
     }
 })
 
-router.post('/setwinners/:prompt_id', adminRestricted, async (req, res) => 
+router.post("/setwinners/:prompt_id", adminRestricted, async (req, res) => 
 {
     try
     {

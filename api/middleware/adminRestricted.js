@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-const adminModel = require('../admin/adminModel');
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+const adminModel = require("../admin/adminModel");
 dotenv.config();
-const jwtSecret = process.env.JWT_SECRET || 'sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23';
+const jwtSecret = process.env.JWT_SECRET || "sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23";
 
 module.exports = (req, res, next) =>
 {

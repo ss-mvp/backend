@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
-const jwtSecret = process.env.JWT_SECRET || 'sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23';
+const jwtSecret = process.env.JWT_SECRET || "sfwefsd9fdsf9sf9sf9sd8f9sdkfjkwekl23";
 
 module.exports = (authRequired = true) => (req, res, next) => 
 {

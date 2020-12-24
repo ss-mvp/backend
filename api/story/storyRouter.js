@@ -43,7 +43,7 @@ async function TranslateFile(File)
         if ((SigFind(File.data, "FF D8 FF") === 0 && SigFind(File.data, "FF D9") != -1) && File.mimetype.includes("image/jp")) //JPEG
         {
             //Remove EXIF Data
-            let b64New = piexif.remove(`data:image/jpg;base64,${File.data.toString('base64')}`);
+            let b64New = piexif.remove(`data:image/jpg;base64,${File.data.toString("base64")}`);
       
             return Buffer.from(b64New.substring(22), "base64");
         }
@@ -57,7 +57,7 @@ async function TranslateFile(File)
             });
       
             //Remove EXIF Data
-            let b64New = piexif.remove(`data:image/jpg;base64,${OutBuffer.toString('base64')}`);
+            let b64New = piexif.remove(`data:image/jpg;base64,${OutBuffer.toString("base64")}`);
 
             return Buffer.from(b64New.substring(22), "base64");
         }
@@ -196,7 +196,7 @@ router.get("/image/:id", async (req, res) =>
     }).send();
 });
 
-router.get('/video', restricted(), async (req, res) => 
+router.get("/video", restricted(), async (req, res) => 
 {
     const video = await story.getVideo();
     const returnPackage = {
@@ -211,7 +211,7 @@ router.get("/prompt", restricted(false), async (req, res) =>
 {
     const prompt = await story.getPrompt();
     if (!prompt)
-        return res.status(500).json({ error: 'Something went wrong.' });
+        return res.status(500).json({ error: "Something went wrong." });
     else 
     {
         let submitted = false;
@@ -221,7 +221,7 @@ router.get("/prompt", restricted(false), async (req, res) =>
     }
 })
 
-router.get('/all_prompts', adminRestricted, async (req, res) => 
+router.get("/all_prompts", adminRestricted, async (req, res) => 
 {
     const prompts = await story.allPrompts();
     if (!prompts) 
@@ -234,7 +234,7 @@ router.get('/all_prompts', adminRestricted, async (req, res) =>
     }
 })
 
-router.get('/mytopstories', restricted(), async (req, res) => 
+router.get("/mytopstories", restricted(), async (req, res) => 
 {
     const submissions = await story.top5SubmissionsByUser(req.userId);
     if (!submissions)
@@ -243,7 +243,7 @@ router.get('/mytopstories', restricted(), async (req, res) =>
         return res.status(200).json(submissions);
 });
 
-router.put('/edit/:id', adminRestricted, (req, res) => 
+router.put("/edit/:id", adminRestricted, (req, res) => 
 {
     // There needs to be id and edits in req packet
     console.log(req.body)
@@ -260,7 +260,7 @@ router.put('/edit/:id', adminRestricted, (req, res) =>
     }
 })
 
-router.post('/add', adminRestricted, (req, res) => 
+router.post("/add", adminRestricted, (req, res) => 
 {
     console.log(req.body)
     if (req.body.prompt) 

@@ -9,6 +9,10 @@
     },
     "plugins": [],
     "rules": {
+        "quotes": [
+            "error",
+            "double"
+        ],
         "no-useless-return": "warn",
         "no-dupe-args": "warn",
         "no-irregular-whitespace": "warn",

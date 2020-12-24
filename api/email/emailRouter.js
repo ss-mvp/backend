@@ -1,29 +1,29 @@
-const router = require('express').Router();
-const bc = require('bcrypt');
-const auth = require('./emailModel.js');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const router = require("express").Router();
+const bc = require("bcrypt");
+const auth = require("./emailModel.js");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
 const jwtSecret = process.env.JWT_SECRET;
-const uuid = require('uuid');
+const uuid = require("uuid");
 const uuidNamespace = "d6d91fb8-cccc-4909-94f7-b22e17f6de22";
 const querystring = require("querystring");
 const mailer = require("../../services/mailer");
 
-router.post('/register', async (req, res) =>
+router.post("/register", async (req, res) =>
 {
     if (!req.body.email || !req.body.password || !req.body.username || !req.body.age)
-        return res.status(400).json({ error: 'Username, email, age, and password are required' });
+        return res.status(400).json({ error: "Username, email, age, and password are required" });
 
     let { email, password, username, age, parentEmail } = req.body;
 
     let existingEmail = await auth.getUserIdByEmail(email);
     if (existingEmail)
-        return res.status(400).json({ error: 'Email already in use' });
+        return res.status(400).json({ error: "Email already in use" });
 
     let existingUsername = await auth.getUserIdByUsername(username);
     if (existingUsername)
-        return res.status(400).json({ error: 'Username already in use' });
+        return res.status(400).json({ error: "Username already in use" });
 
     let validationToken = uuid.v5(username, uuidNamespace);
 
@@ -42,16 +42,16 @@ router.post('/register', async (req, res) =>
 
     let Query = querystring.stringify({ token: validationToken, email: email });
 
-    let sendUrl = (process.env.BE_ENV === 'development') ?
+    let sendUrl = (process.env.BE_ENV === "development") ?
         `http://localhost:5000/email/activate/?${Query}` :
         `https://server.storysquad.app/email/activate/?${Query}`;
 
     await mailer.SendMail(parentEmail || email, "Activate your Story Squad account", "activation", { url: sendUrl });
 
-    return res.status(200).json({ message: 'User created' });
+    return res.status(200).json({ message: "User created" });
 });
 
-router.post('/login', async (req, res) =>
+router.post("/login", async (req, res) =>
 {
     try
     {
@@ -78,7 +78,7 @@ router.post('/login', async (req, res) =>
     }
 });
 
-router.get('/activate', async (req, res) =>
+router.get("/activate", async (req, res) =>
 {
     if (!req.query.token || !req.query.email)
         return res.redirect("https://contest.storysquad.app/");
@@ -91,7 +91,7 @@ router.get('/activate', async (req, res) =>
 
     await auth.activateEmail(req.query.email, { validated: true });
 
-    if (process.env.BE_ENV === 'development')
+    if (process.env.BE_ENV === "development")
         res.redirect(`http://localhost:3000/activated?token=${req.query.token}`);
     else
         res.redirect(`https://contest.storysquad.app/activated?token=${req.query.token}`);
@@ -136,7 +136,7 @@ router.get("/reset", async (req, res) =>
     //E-Mail new code
     let Query = querystring.stringify({ code: newCode, email: User.email });
 
-    let sendUrl = (process.env.BE_ENV === 'development') ?
+    let sendUrl = (process.env.BE_ENV === "development") ?
         `http://localhost:3000/passwordreset?${Query}` :
         `https://contest.storysquad.app/passwordreset?${Query}`;
 
@@ -181,7 +181,7 @@ router.post("/reset", async (req, res) =>
     return res.status(200).json({ message: "Updated password" });
 });
 
-router.get('/video', (req, res) => 
+router.get("/video", (req, res) => 
 {
     auth.getVideo()
         .then(video => res.status(200).json(video))
@@ -201,7 +201,7 @@ function signToken(user)
     };
 
     const options = {
-        expiresIn: '1d'
+        expiresIn: "1d"
     };
 
     return jwt.sign(payload, jwtSecret, options);

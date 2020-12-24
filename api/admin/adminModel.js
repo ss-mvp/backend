@@ -1,4 +1,4 @@
-const db = require('../../data/dbConfig.js');
+const db = require("../../data/dbConfig.js");
 
 module.exports = {
     isAdmin,
@@ -28,49 +28,49 @@ async function isAdmin(id)
 
 async function removeSubmissionsByEmail(email) 
 {
-    const { id } = await db('users').where({ email })
-    return db('submissions').where(id, userId).del()
+    const { id } = await db("users").where({ email })
+    return db("submissions").where(id, userId).del()
 }
 
 function addVideo(videoAndTime) 
 {
-    return db('admin').insert(videoAndTime);
+    return db("admin").insert(videoAndTime);
 }
 
 async function getSubmissionsPerTime() 
 {
-    return await db('submissions').where(
+    return await db("submissions").where(
         {
             active: true
         })
-        .orderBy('score', 'desc')
+        .orderBy("score", "desc")
         .limit(10)
-        .join('users', 'users.id', 'submissions.userId')
+        .join("users", "users.id", "submissions.userId")
         .select(
-            'submissions.id as id',
-            'submissions.userId',
-            'users.username',
-            'submissions.prompt_id',
-            'submissions.active',
-            'submissions.topThree',
-            'submissions.image',
-            'submissions.pages',
-            'submissions.flagged',
-            'submissions.flag',
-            'submissions.vote',
-            'submissions.voting',
-            'submissions.score'
+            "submissions.id as id",
+            "submissions.userId",
+            "users.username",
+            "submissions.prompt_id",
+            "submissions.active",
+            "submissions.topThree",
+            "submissions.image",
+            "submissions.pages",
+            "submissions.flagged",
+            "submissions.flag",
+            "submissions.vote",
+            "submissions.voting",
+            "submissions.score"
         );
 }
 
 function getUsers() 
 {
-    return db('users').select('username', 'id');
+    return db("users").select("username", "id");
 }
 
 function getSubmissions() 
 {
-    return db('submissions').where('flagged', '=', 'false');
+    return db("submissions").where("flagged", "=", "false");
 }
 
 async function getSubmissionURLById(id) 
@@ -80,7 +80,7 @@ async function getSubmissionURLById(id)
 
 function getFlag(id) 
 {
-    return db('submissions').select('flagged').where({ id }).first();
+    return db("submissions").select("flagged").where({ id }).first();
 }
 
 async function flagContent(id) 
@@ -89,32 +89,32 @@ async function flagContent(id)
     console.log(flag)
     if (!flag) 
     {
-        await db('submissions').where({ id }).update({ flagged: false, flag: "None" })
+        await db("submissions").where({ id }).update({ flagged: false, flag: "None" })
     }
     else 
     {
-        await db('submissions').where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" })
+        await db("submissions").where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" })
     }
     return await getFlag(id);
 }
 
 async function unFlagContent(id) 
 {
-    await db('submissions').where({ id }).update({ flagged: false, flag: "None" })
+    await db("submissions").where({ id }).update({ flagged: false, flag: "None" })
     return await getFlag(id);
 }
 
 async function setWinner(details) 
 {
-    return await db('topThree').insert(details);
+    return await db("topThree").insert(details);
 }
 
 async function updateTopThree(story_id)
 {
-    return await db('submissions').where({ id: story_id }).update({ vote: true, topThree: true })
+    return await db("submissions").where({ id: story_id }).update({ vote: true, topThree: true })
 }
 
 function removeWinner(story_id, user_id, prompt_id) 
 {
-    return db('topThree').where({ story_id }).orWhere({ user_id }).orWhere({ prompt_id }).del()
+    return db("topThree").where({ story_id }).orWhere({ user_id }).orWhere({ prompt_id }).del()
 }
