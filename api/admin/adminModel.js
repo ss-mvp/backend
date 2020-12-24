@@ -50,9 +50,7 @@ async function getSubmissionsPerTime() {
       'submissions.active',
       'submissions.topThree',
       'submissions.image',
-      'submissions.pages',
       'submissions.flagged',
-      'submissions.flag',
       'submissions.vote',
       'submissions.voting',
       'submissions.score'
@@ -79,15 +77,15 @@ async function flagContent(id) {
   const flag = await getFlag(id)
   console.log(flag)
   if (!flag) {
-    await db('submissions').where({ id }).update({ flagged: false, flag: "None" })
+    await db('submissions').where({ id }).update({ flagged: false })
   } else {
-    await db('submissions').where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" })
+    await db('submissions').where({ id }).update({ flagged: true })
   }
   return await getFlag(id);
 }
 
 async function unFlagContent(id) {
-  await db('submissions').where({ id }).update({ flagged: false, flag: "None" })
+  await db('submissions').where({ id }).update({ flagged: false })
   return await getFlag(id);
 }
 

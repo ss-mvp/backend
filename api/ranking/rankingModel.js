@@ -26,7 +26,6 @@ async function getTopThree() {
       "submissions.userId",
       "users.username",
       "submissions.image",
-      "submissions.pages",
       "submissions.rotation"
     );
 }
