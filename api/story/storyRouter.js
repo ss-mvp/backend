@@ -173,8 +173,8 @@ router.get("/image/:id", async (req, res) =>
     //Get the name of the image
     let Submission = await story.getSubmissionURLByName(ID);
 
-  //if (!Submission.active && Submission.userId != req.userId)
-  //  return res.status(403).json({ error: "You do not have access to this resource" });
+    //If (!Submission.active && Submission.userId != req.userId)
+    //  Return res.status(403).json({ error: "You do not have access to this resource" });
 
     if (!Submission.active && Submission.userId != req.userId)
         return res.status(403).json({ error: "You do not have access to this resource" });
