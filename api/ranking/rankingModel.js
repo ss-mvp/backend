@@ -15,21 +15,19 @@ module.exports = {
     getYesterdaysWinner
 };
 
-async function getTopThree() 
-{
-    return await db("topThree")
-        .join("users", "topThree.user_id", "users.id")
-        .join("submissions", "submissions.id", "topThree.story_id")
-        .orderBy("topThree.id", "desc")
-        .limit(3)
-        .select(
-            "topThree.id as id",
-            "submissions.userId",
-            "users.username",
-            "submissions.image",
-            "submissions.pages",
-            "submissions.rotation"
-        );
+async function getTopThree() {
+  return await db("topThree")
+    .join("users", "topThree.user_id", "users.id")
+    .join("submissions", "submissions.id", "topThree.story_id")
+    .orderBy("topThree.id", "desc")
+    .limit(3)
+    .select(
+      "topThree.id as id",
+      "submissions.userId",
+      "users.username",
+      "submissions.image",
+      "submissions.rotation"
+    );
 }
 
 async function getVotes() 

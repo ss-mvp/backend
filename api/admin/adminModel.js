@@ -37,30 +37,27 @@ function addVideo(videoAndTime)
     return db("admin").insert(videoAndTime);
 }
 
-async function getSubmissionsPerTime() 
-{
-    return await db("submissions").where(
-        {
-            active: true
-        })
-        .orderBy("score", "desc")
-        .limit(10)
-        .join("users", "users.id", "submissions.userId")
-        .select(
-            "submissions.id as id",
-            "submissions.userId",
-            "users.username",
-            "submissions.prompt_id",
-            "submissions.active",
-            "submissions.topThree",
-            "submissions.image",
-            "submissions.pages",
-            "submissions.flagged",
-            "submissions.flag",
-            "submissions.vote",
-            "submissions.voting",
-            "submissions.score"
-        );
+async function getSubmissionsPerTime() {
+  return await db('submissions').where(
+    {
+      active: true
+    })
+    .orderBy('score', 'desc')
+    .limit(10)
+    .join('users', 'users.id', 'submissions.userId')
+    .select(
+      'submissions.id as id',
+      'submissions.userId',
+      'users.username',
+      'submissions.prompt_id',
+      'submissions.active',
+      'submissions.topThree',
+      'submissions.image',
+      'submissions.flagged',
+      'submissions.vote',
+      'submissions.voting',
+      'submissions.score'
+    );
 }
 
 function getUsers() 
@@ -83,25 +80,20 @@ function getFlag(id)
     return db("submissions").select("flagged").where({ id }).first();
 }
 
-async function flagContent(id) 
-{
-    const flag = await getFlag(id);
-    console.log(flag);
-    if (!flag) 
-    {
-        await db("submissions").where({ id }).update({ flagged: false, flag: "None" });
-    }
-    else 
-    {
-        await db("submissions").where({ id }).update({ flagged: true, flag: "ADMIN FLAGGED" });
-    }
-    return await getFlag(id);
+async function flagContent(id) {
+  const flag = await getFlag(id)
+  console.log(flag)
+  if (!flag) {
+    await db('submissions').where({ id }).update({ flagged: false })
+  } else {
+    await db('submissions').where({ id }).update({ flagged: true })
+  }
+  return await getFlag(id);
 }
 
-async function unFlagContent(id) 
-{
-    await db("submissions").where({ id }).update({ flagged: false, flag: "None" });
-    return await getFlag(id);
+async function unFlagContent(id) {
+  await db('submissions').where({ id }).update({ flagged: false })
+  return await getFlag(id);
 }
 
 async function setWinner(details) 
