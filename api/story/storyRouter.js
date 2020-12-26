@@ -170,8 +170,8 @@ router.get("/image/:id", async (req, res) =>
   if (!Submission)
     return res.status(404).json({ error: "Submission not found in DB" });
 
-  if (!Submission.active && Submission.userId != req.userId)
-    return res.status(403).json({ error: "You do not have access to this resource" });
+  //if (!Submission.active && Submission.userId != req.userId)
+  //  return res.status(403).json({ error: "You do not have access to this resource" });
 
   s3.getObject(
     {
