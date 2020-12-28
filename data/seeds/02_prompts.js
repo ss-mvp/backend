@@ -1,10 +1,12 @@
 const prompts = require("../seed_data/prompts.json")
 
-exports.seed = function(knex) {
+exports.seed = function(knex) 
+{
     // Deletes ALL existing entries
     return knex('prompts').del()
-      .then(function () {
+        .then(function () 
+        {
         // Inserts seed entries
-        return knex('prompts').insert(prompts)
+            return knex('prompts').insert(prompts)
         })
 }

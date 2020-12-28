@@ -18,6 +18,10 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 -   Simplifies database creation, connections, queries, etc.
 -   Highly cross-compatible with different databases.
 
+#### Linting
+
+-   Uses ESLINT to enforce lint patterns
+
 ## Endpoints
 
 #### Email Routes
