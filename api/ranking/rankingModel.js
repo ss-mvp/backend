@@ -12,7 +12,8 @@ module.exports = {
     getUser,
     getSubmission,
     getScoresByPromptID,
-    getYesterdaysWinner
+    getYesterdaysWinner,
+    usersProfile
 };
 
 async function getTopThree() 
@@ -20,6 +21,7 @@ async function getTopThree()
     return await db("topThree")
         .join("users", "topThree.user_id", "users.id")
         .join("submissions", "submissions.id", "topThree.story_id")
+        .join("prompts", "prompts.id", "submissions.prompt_id")
         .orderBy("topThree.id", "desc")
         .limit(3)
         .select(
@@ -27,7 +29,8 @@ async function getTopThree()
             "submissions.userId",
             "users.username",
             "submissions.image",
-            "submissions.rotation"
+            "submissions.rotation",
+            "prompts.prompt"
         );
 }
 
@@ -153,4 +156,13 @@ async function getYesterdaysWinner()
         )
         .orderBy("winning_stories.date", "desc")
         .first();
+}
+
+// Provide the Front End with a list of a users most recent submissions in order to render "today's submission and score"
+
+async function usersProfile(userId) {
+    return await db("submissions")
+    .select("*")
+    .where("userId", userId)
+    .limit(7)
 }

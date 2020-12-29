@@ -11,7 +11,8 @@ const {
     getFinalScores,
     addIP,
     getVotes,
-    getYesterdaysWinner
+    getYesterdaysWinner,
+    usersProfile
 } = require("./rankingModel");
 
 router.get("/", async (req, res) => 
@@ -153,5 +154,18 @@ async function checkIP(req, res, next)
         next();
     }
 }
+
+
+// // Dummy GET request to test the users submissions data for their profile
+// router.get('/profile/:id', (req, res) => {
+//     const {id} = req.params
+//     usersProfile(id)
+//     .then(data => {
+//         res.status(200).json(data)
+//     })
+//     .catch(err => {
+//         res.status(500).json({ message: "Internal Server error on '/profile/:id'"})
+//     })
+// })
 
 module.exports = router;
