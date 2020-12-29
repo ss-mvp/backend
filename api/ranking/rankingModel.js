@@ -12,8 +12,7 @@ module.exports = {
     getUser,
     getSubmission,
     getScoresByPromptID,
-    getYesterdaysWinner,
-    usersProfile
+    getYesterdaysWinner
 };
 
 async function getTopThree() 
@@ -65,14 +64,16 @@ async function getFinalScores()
     return await db("topThree")
         .join("users", "topThree.user_id", "users.id")
         .join("submissions", "topThree.story_id", "submissions.id")
+        .join("prompts", "prompts.id", "submissions.prompt_id")
         // .groupBy('topThree.prompt_time_id')
         .orderBy("topThree.score", "desc")
         .select(
+            "users.id as userId",
             "users.username",
             "submissions.image",
             "submissions.rotation",
-            "users.id as userId",
-            "topThree.id"
+            "topThree.id",
+            "prompts.prompt"
         )
         .first();
 }
@@ -161,11 +162,13 @@ async function getYesterdaysWinner()
     return await db("submissions")
         .join("winning_stories", "winning_stories.story_id", "submissions.id")
         .join("users", "users.id", "submissions.userId")
+        .join("prompts", "prompts.id", "submissions.prompt_id")
         .select(
+            "users.id as userId",
             "users.username",
             "submissions.image",
             "submissions.rotation",
-            "users.id as userId"
+            "prompts.prompt"
         )
         .orderBy("winning_stories.date", "desc")
         .first();
