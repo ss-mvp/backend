@@ -49,7 +49,7 @@ router.get("/votes", async (req, res) =>
     }
 });
 
-router.post("/", checkIP, async (req, res) => 
+router.post("/", checkIP, restricted(false), async (req, res) => 
 {
     try 
     {
@@ -65,7 +65,9 @@ router.post("/", checkIP, async (req, res) =>
 
         await Promise.all(ranks);
 
-        await addIP(req.userIP);
+        // Pass userId from restricted-MW
+        // Pass in the req.body and we should be able to map through that data set in our addIP function
+        await addIP(req.userIP, req.userId, req.body);
 
         return res.status(200).json({
             message: "Submitted",
@@ -157,14 +159,14 @@ async function checkIP(req, res, next)
 
 
 // // Dummy GET request to test the users submissions data for their profile
-// router.get('/profile/:id', (req, res) => {
-//     const {id} = req.params
-//     usersProfile(id)
+// Router.get('/profile/:id', (req, res) => {
+//     Const {id} = req.params
+//     UsersProfile(id)
 //     .then(data => {
-//         res.status(200).json(data)
+//         Res.status(200).json(data)
 //     })
 //     .catch(err => {
-//         res.status(500).json({ message: "Internal Server error on '/profile/:id'"})
+//         Res.status(500).json({ message: "Internal Server error on '/profile/:id'"})
 //     })
 // })
 

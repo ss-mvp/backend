@@ -120,10 +120,23 @@ async function rankIt(topThreeId, rank)
     return await db("ranking").insert(newRanking);
 }
 
-async function addIP(newIP) 
+async function addIP(newIP, id, body) 
 {
     const today = moment().format("MMM Do YY");
-    return await db("votersIP").insert({ ip: newIP, date_voted: today });
+
+    // Hold top three votes in order
+    let votes = [null, null, null]
+
+    // LOOP over the body
+    // TODO - error handling
+    for (let i = 0; i < body.length; i++) 
+    {
+        let submissionId = await db("topThree").select(body[i].topthree_id);
+        
+        votes[body[i].rank - 1] = submissionId
+    }
+
+    return await db("votersIP").insert({ ip: newIP, date_voted: today, user_id: id, first_place: votes[0], second_place: votes[1], third_place: votes[2]});
 }
 
 async function getWinner(winnerId) 
@@ -160,9 +173,9 @@ async function getYesterdaysWinner()
 
 // Provide the Front End with a list of a users most recent submissions in order to render "today's submission and score"
 
-async function usersProfile(userId) {
-    return await db("submissions")
-    .select("*")
-    .where("userId", userId)
-    .limit(7)
-}
+// Async function usersProfile(userId) {
+//     Return await db("submissions")
+//     .select("*")
+//     .where("userId", userId)
+//     .limit(7)
+// }
