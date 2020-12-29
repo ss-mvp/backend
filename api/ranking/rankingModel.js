@@ -113,7 +113,7 @@ function getScoresByPromptID(promptid)
     return db("submissions").select("score").where("prompt_id", promptid);
 }
 
-//This needs to be redone, might be very abusable from clients
+// This needs to be redone, might be very abusable from clients
 async function rankIt(topThreeId, rank) 
 {
     const newRanking = { topthree_id: topThreeId, rank };
