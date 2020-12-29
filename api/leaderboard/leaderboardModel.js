@@ -10,5 +10,6 @@ async function getLeaderboard()
         .from("submissions as s")
         .join("users as u", "u.id", "s.userId")
         .groupBy("u.id", "s.image")
-        .orderBy("score", "desc");
+        .orderBy("score", "desc")
+        .limit(10)
 }
