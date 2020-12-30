@@ -24,6 +24,11 @@ router.get("/", async (req, res) =>
             return res.status(400).json({ error: "Voting has not started today" });
 
         const top = await getTopThree();
+
+        top[0].prompt = Today.prompt;
+        top[1].prompt = Today.prompt;
+        top[2].prompt = Today.prompt;
+
         res.status(200).json(top);
     }
     catch (err) 

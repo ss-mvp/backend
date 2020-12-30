@@ -20,7 +20,6 @@ async function getTopThree()
     return await db("topThree")
         .join("users", "topThree.user_id", "users.id")
         .join("submissions", "submissions.id", "topThree.story_id")
-        .join("prompts", "prompts.id", "submissions.prompt_id")
         .orderBy("topThree.id", "desc")
         .limit(3)
         .select(
@@ -126,18 +125,18 @@ async function addIP(newIP, id, body)
     const today = moment().format("MMM Do YY");
 
     // Hold top three votes in order
-    let votes = [null, null, null]
+    let votes = [null, null, null];
 
     // LOOP over the body
     // TODO - error handling
     for (let i = 0; i < body.length; i++) 
     {
-        let submission = await db("topThree").where({id: body[i].topthree_id }).select("story_id").first();
-        
-        votes[body[i].rank - 1] = submission.story_id
+        let submission = await db("topThree").where({ id: body[i].topthree_id }).select("story_id").first();
+
+        votes[body[i].rank - 1] = submission.story_id;
     }
 
-    return await db("votersIP").insert({ ip: newIP, date_voted: today, user_id: id, first_place: votes[0], second_place: votes[1], third_place: votes[2]});
+    return await db("votersIP").insert({ ip: newIP, date_voted: today, user_id: id, first_place: votes[0], second_place: votes[1], third_place: votes[2] });
 }
 
 async function getWinner(winnerId) 
