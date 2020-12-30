@@ -134,12 +134,14 @@ function top5SubmissionsByUser(user_id)
         .orderBy("score", "desc")
         .where("userId", user_id)
         .join("submissions", "topThree.story_id", "submissions.id")
+        .join("prompts", "prompts.id", "submissions.prompt_id")
         .select(
             "users.username",
             "users.id as userId",
             "submissions.id",
             "submissions.image",
-            "submissions.rotation"
+            "submissions.rotation",
+            "prompts.prompt"
         )
         .limit(5);
 }
