@@ -173,12 +173,3 @@ async function getYesterdaysWinner()
         .orderBy("winning_stories.date", "desc")
         .first();
 }
-
-// Provide the Front End with a list of a users most recent submissions in order to render "today's submission and score"
-
-// Async function usersProfile(userId) {
-//     Return await db("submissions")
-//     .select("*")
-//     .where("userId", userId)
-//     .limit(7)
-// }

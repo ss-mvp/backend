@@ -158,16 +158,4 @@ async function checkIP(req, res, next)
 }
 
 
-// // Dummy GET request to test the users submissions data for their profile
-// Router.get('/profile/:id', (req, res) => {
-//     Const {id} = req.params
-//     UsersProfile(id)
-//     .then(data => {
-//         Res.status(200).json(data)
-//     })
-//     .catch(err => {
-//         Res.status(500).json({ message: "Internal Server error on '/profile/:id'"})
-//     })
-// })
-
 module.exports = router;
