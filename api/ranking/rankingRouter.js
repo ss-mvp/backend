@@ -48,7 +48,7 @@ router.get("/votes", async (req, res) =>
     }
 });
 
-router.post("/", checkIP, async (req, res) => 
+router.post("/", checkIP, restricted(false), async (req, res) => 
 {
     try 
     {
@@ -64,7 +64,9 @@ router.post("/", checkIP, async (req, res) =>
 
         await Promise.all(ranks);
 
-        await addIP(req.userIP);
+        // Pass userId from restricted-MW
+        // Pass in the req.body and we should be able to map through that data set in our addIP function
+        await addIP(req.userIP, req.userId, req.body);
 
         return res.status(200).json({
             message: "Submitted",
@@ -153,5 +155,6 @@ async function checkIP(req, res, next)
         next();
     }
 }
+
 
 module.exports = router;
