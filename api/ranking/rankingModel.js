@@ -27,8 +27,7 @@ async function getTopThree()
             "submissions.userId",
             "users.username",
             "submissions.image",
-            "submissions.rotation",
-            "prompts.prompt"
+            "submissions.rotation"
         );
 }
 
