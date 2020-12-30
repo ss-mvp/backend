@@ -160,15 +160,6 @@ async function getPrompt()
 {
     return (await db("prompts")
         .where("today", true)
-        .join("users", "topThree.user_id", "users.id")
-        .join("submissions", "topThree.story_id", "submissions.id")
-        .select(
-            "users.username",
-            "users.id as userId",
-            "submissions.id",
-            "submissions.image",
-            "submissions.rotation"
-        )
         .first());
 }
 
