@@ -137,8 +137,8 @@ router.get("/reset", async (req, res) =>
     let Query = querystring.stringify({ code: newCode, email: User.email });
 
     let sendUrl = (process.env.BE_ENV === "development") ?
-        `http://localhost:3000/passwordreset?${Query}` :
-        `https://contest.storysquad.app/passwordreset?${Query}`;
+        `http://localhost:3000/reset?${Query}` :
+        `https://contest.storysquad.app/reset?${Query}`;
 
     await mailer.SendMail(User.parentEmail, "Story Squad Password Reset", "resetpassword", { url: sendUrl, username: User.username });
 
