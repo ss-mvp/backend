@@ -235,24 +235,29 @@ router.get("/all_prompts", adminRestricted, async (req, res) =>
 
 router.get("/mytopstories", restricted(), async (req, res) => 
 {
+
     const submissions = await story.top5SubmissionsByUser(req.userId);
     if (!submissions)
         return res.status(404).json({ error: "No submissions found for the user with that id" });
     else
         return res.status(200).json(submissions);
+
+
 });
 
 // GET the users past 7 submissions for their profile
-router.get("/mysubmissions", async (req, res) => 
+// Limiting to 7 now to preserve space on the FE for the users profile.
+router.get("/mysubmissions", restricted(), async (req, res) => 
 {
+
     const submissions = await story.past7Submissions(req.userId);
-
     if (!submissions)
-        return res.status(404).json({ error: "No submissions found for the user with that id"})
+        return res.status(404).json({ error: "No submissions found for the user with that id" });
     else
-        return res.status(200).json(submissions)
-})
+        return res.status(200).json(submissions);
 
+
+});
 router.put("/edit/:id", adminRestricted, (req, res) => 
 {
     // There needs to be id and edits in req packet

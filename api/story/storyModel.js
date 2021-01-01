@@ -134,8 +134,8 @@ function top5SubmissionsByUser(user_id)
     return db("submissions")
         .orderBy("score", "desc")
         .where("userId", user_id)
-        .join("submissions", "topThree.story_id", "submissions.id")
         .join("prompts", "prompts.id", "submissions.prompt_id")
+        .join("users", "users.id", "submissions.userId")
         .select(
             "users.username",
             "users.id as userId",
@@ -159,6 +159,8 @@ function past7Submissions(user_id)
     return db("submissions")
         .orderBy("image", "asc")
         .where("userId", user_id)
+        .join("prompts", "prompts.id", "submissions.prompt_id")
+        .join("users", "users.id", "submissions.userId")
         .select(
             "users.username",
             "users.id as userId",
