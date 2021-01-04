@@ -24,12 +24,12 @@ function SendMail(
             extName: ".handlebars",
             partialsDir: "./templates/",
             layoutsDir: "./templates/",
-            defaultLayout: `${templateFile}.handlebars`
+            defaultLayout: ""
         },
         viewPath: "./templates/",
         extName: ".handlebars"
     };
-    
+
     transporter.use("compile", hbs(handlebarOptions));
 
     let MailOptions = {
@@ -54,4 +54,4 @@ function SendMail(
 
 module.exports = {
     SendMail
-}
+};
