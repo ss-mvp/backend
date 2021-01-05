@@ -25,6 +25,12 @@ router.post("/register", async (req, res) =>
     if (existingUsername)
         return res.status(400).json({ error: "Username already in use" });
 
+    // Ensure username is not an email to prevent web scrappers and "stalking like" activity for public data
+    // 409 is the correct status code for duplicate resource or resource already exists
+    let codenameCheck = await auth.userNamePattern(req.body.username)
+    if (!codenameCheck)
+        return res.status(409).json({ error: "Only letters and numbers are allowed for codenames." });
+
     let validationToken = uuid.v5(username, uuidNamespace);
 
     let newUser =
