@@ -63,7 +63,7 @@ async function isActivated(email)
 
 function getToken(email) 
 {
-    return db("users").where({ email }).select("validationUrl", "validated").first();
+    return db("users").where({ email }).select("validationUrl", "validated", "username", "email", "id").first();
 };
 
 function activateEmail(email, validate) 
