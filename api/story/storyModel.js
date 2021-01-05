@@ -141,6 +141,7 @@ function top5SubmissionsByUser(user_id)
             "users.id as userId",
             "submissions.id",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation",
             "prompts.prompt"
         )
@@ -154,9 +155,9 @@ FROM submissions
 WHERE submissions."userId" = 17
 ORDER BY image ASC
  */
-function past7Submissions(user_id) 
+async function past7Submissions(user_id) 
 {
-    return db("submissions")
+    return await db("submissions")
         .orderBy("image", "asc")
         .where("userId", user_id)
         .join("prompts", "prompts.id", "submissions.prompt_id")
@@ -166,6 +167,7 @@ function past7Submissions(user_id)
             "users.id as userId",
             "submissions.id",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation",
             "prompts.prompt"
         )

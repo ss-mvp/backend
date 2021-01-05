@@ -27,6 +27,7 @@ async function getTopThree()
             "submissions.userId",
             "users.username",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation"
         );
 }
@@ -69,6 +70,7 @@ async function getFinalScores()
             "users.id as userId",
             "users.username",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation",
             "topThree.id",
             "prompts.prompt"
@@ -149,6 +151,7 @@ async function getWinner(winnerId)
             "users.id as userId",
             "submissions.id",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation"
         )
         .first();
@@ -165,6 +168,7 @@ async function getYesterdaysWinner()
             "users.id as userId",
             "users.username",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation",
             "prompts.prompt"
         )
