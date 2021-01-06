@@ -15,7 +15,8 @@ module.exports = {
     getResetByUID,
     getFullResetRow,
     deleteResetsByUID,
-    saveResetCode
+    saveResetCode,
+    registerUserPatternCheck
 };
 
 function getAllUsers() 
@@ -62,7 +63,7 @@ async function isActivated(email)
 
 function getToken(email) 
 {
-    return db("users").where({ email }).select("validationUrl", "validated").first();
+    return db("users").where({ email }).select("validationUrl", "validated", "username", "email", "id").first();
 };
 
 function activateEmail(email, validate) 
@@ -112,5 +113,28 @@ async function saveResetCode(uid, code)
     catch (ex) 
     {
         console.log(ex); return -1;
+    }
+}
+
+// Regex checking if the username only contains letters and numbers
+// Regex checking if the password includesCapital, includesNumber, checkLength
+function registerUserPatternCheck(username, password) 
+{
+    const codenamePattern = /^[A-Za-z0-9]*$/;
+
+    const includesCapital = /[A-Z]/;
+    const includesNumber = /[0-9]/;
+
+    if (codenamePattern.test(username) && 
+        (password.length >= 8 && password.length <= 32) && 
+        includesCapital.test(password) && 
+        includesNumber.test(password)
+    ) 
+    {
+        return true
+    }
+    else 
+    {
+        return false
     }
 }

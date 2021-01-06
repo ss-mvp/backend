@@ -25,6 +25,11 @@ router.post("/register", async (req, res) =>
     if (existingUsername)
         return res.status(400).json({ error: "Username already in use" });
 
+    // Ensure username is not an email to prevent web scrappers and "stalking like" activity for public data
+    let codenameCheck = auth.registerUserPatternCheck(req.body.username, req.body.password)
+    if (!codenameCheck)
+        return res.status(400).json({ error: "Username or Password Invalid." });
+
     let validationToken = uuid.v5(username, uuidNamespace);
 
     let newUser =
@@ -85,16 +90,23 @@ router.get("/activate", async (req, res) =>
     //Return res.status(300).json({ error: 'Token and email are required for validation' });
 
     const data = await auth.getToken(req.query.email);
-
+    
     if (!data || data.validated || (req.query.token !== data.validationUrl))
         return res.redirect("https://contest.storysquad.app/");
-
+    
     await auth.activateEmail(req.query.email, { validated: true });
 
+    const user = {
+        username: data.username,
+        email: data.email,
+        id: data.id
+    }
+    const authToken = signToken(user)
+    
     if (process.env.BE_ENV === "development")
-        res.redirect(`http://localhost:3000/activated?token=${req.query.token}`);
+        res.redirect(`http://localhost:3000/activated?authToken=${authToken}`);
     else
-        res.redirect(`https://contest.storysquad.app/activated?token=${req.query.token}`);
+        res.redirect(`https://contest.storysquad.app/activated?authToken=${authToken}`);
 });
 
 router.get("/reset", async (req, res) =>
@@ -201,7 +213,7 @@ function signToken(user)
     };
 
     const options = {
-        expiresIn: "1d"
+        expiresIn: "2d"
     };
 
     return jwt.sign(payload, jwtSecret, options);
