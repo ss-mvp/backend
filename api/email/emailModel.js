@@ -16,7 +16,7 @@ module.exports = {
     getFullResetRow,
     deleteResetsByUID,
     saveResetCode,
-    userNamePattern
+    registerUserPatternCheck
 };
 
 function getAllUsers() 
@@ -117,24 +117,24 @@ async function saveResetCode(uid, code)
 }
 
 // Regex checking if the username only contains letters and numbers
-async function userNamePattern(username) 
+// Regex checking if the password includesCapital, includesNumber, checkLength
+function registerUserPatternCheck(username, password) 
 {
+    const codenamePattern = /^[A-Za-z0-9]*$/;
+
+    const includesCapital = /[A-Z]/;
+    const includesNumber = /[0-9]/;
+
+    if (codenamePattern.test(username) && 
+        (password.length >= 8 && password.length <= 32) && 
+        includesCapital.test(password) && 
+        includesNumber.test(password)
+    ) 
     {
-        const codenamePattern = /^[A-Za-z0-9]*$/;
-        try 
-        {
-            if (codenamePattern.test(username)) 
-            {
-                return true
-            }
-            else 
-            {
-                return false
-            }
-        }
-        catch (error) 
-        {
-            console.log(error)   
-        }
+        return true
+    }
+    else 
+    {
+        return false
     }
 }
