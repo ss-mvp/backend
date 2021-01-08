@@ -243,39 +243,38 @@ router.post("/resetusername", restricted(), async (req, res) =>
 // Endpoint to update a users password
 router.post("/resetpassword", restricted(), async (req, res) => 
 {
-        // Ensure the user does not reuse their current password
-        if (req.body.currentpassword === req.body.newpassword)
-        {
-            res.status(400).json({ message: "New password can not match current password."})
-        }
-
-        // Ensure the users new password matches confirmed password
-        if (req.body.confirmpassword !== req.body.newpassword)
-        {
-            res.status(400).json({ message: "New password and confirm password do not match."})
-        }
-
-        // Ensure the user gave us their current password, new password and a confirmed one
-        if (!req.body.currentpassword || !req.body.newpassword || !req.body.confirmpassword)
-        {
-            return res.status(400).json({ message: "Please complete all fields correctly."})
-        }
-
-        // Store the users id from the restricted middlware to simplify readability
-        const userId = req.userId;
-
-        // Hash and reset the users password
-        if (req.body.currentpassword && req.body.newpassword && req.body.confirmpassword)
-        {
-            await auth.updatePassword(userId, bc.hashSync(req.body.confirmpassword, 10)).then(ress => 
-            {
-                res.status(200).json({ message: "Password udpated successfully!"})
-            }).catch(err => 
-            {
-                res.status(500).json({message: "Internal server error."})
-            })
-        }       
+    // Ensure the user does not reuse their current password
+    if (req.body.currentpassword === req.body.newpassword)
+    {
+        res.status(400).json({ message: "New password can not match current password."})
     }
+
+    // Ensure the users new password matches confirmed password
+    if (req.body.confirmpassword !== req.body.newpassword)
+    {
+        res.status(400).json({ message: "New password and confirm password do not match."})
+    }
+
+    // Ensure the user gave us their current password, new password and a confirmed one
+    if (!req.body.currentpassword || !req.body.newpassword || !req.body.confirmpassword)
+    {
+        return res.status(400).json({ message: "Please complete all fields correctly."})
+    }
+
+    // Store the users id from the restricted middlware to simplify readability
+    const userId = req.userId;
+
+    // Hash and reset the users password
+    if (req.body.currentpassword && req.body.newpassword && req.body.confirmpassword)
+    {
+        await auth.updatePassword(userId, bc.hashSync(req.body.confirmpassword, 10)).then(ress => 
+        {
+            res.status(200).json({ message: "Password udpated successfully!"})
+        }).catch(err => 
+        {
+            res.status(500).json({message: "Internal server error."})
+        })
+    }       
       
 })
 
