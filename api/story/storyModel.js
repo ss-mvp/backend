@@ -19,6 +19,7 @@ module.exports = {
     getSubmissionURLByName,
     allSubmissionsByUser,
     top5SubmissionsByUser,
+    past7Submissions,
     getVideo,
     getVideoById
 };
@@ -133,17 +134,44 @@ function top5SubmissionsByUser(user_id)
     return db("submissions")
         .orderBy("score", "desc")
         .where("userId", user_id)
-        .join("submissions", "topThree.story_id", "submissions.id")
         .join("prompts", "prompts.id", "submissions.prompt_id")
+        .join("users", "users.id", "submissions.userId")
         .select(
             "users.username",
             "users.id as userId",
             "submissions.id",
             "submissions.image",
+            "submissions.score",
             "submissions.rotation",
             "prompts.prompt"
         )
         .limit(5);
+}
+
+// This function will return the users top 7 submissions to be loaded in each users profile
+/**
+ * SELECT score, image
+FROM submissions
+WHERE submissions."userId" = 17
+ORDER BY image ASC
+ */
+async function past7Submissions(user_id) 
+{
+    return await db("submissions")
+        .orderBy("image", "asc")
+        .where("userId", user_id)
+        .join("prompts", "prompts.id", "submissions.prompt_id")
+        .join("users", "users.id", "submissions.userId")
+        .select(
+            "users.username",
+            "users.id as userId",
+            "submissions.id",
+            "submissions.image",
+            "submissions.score",
+            "submissions.rotation",
+            "prompts.prompt"
+        )
+        .limit(7);
 }
 
 async function addImage(image) 
