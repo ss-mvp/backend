@@ -83,18 +83,11 @@ function updatePassword(uid, password)
 }
 
 async function updateUsername(uid, newusername) 
-{
-    try 
-    {        
-        await db("users").where("id", uid).update({
-            username: newusername
-        });
+{    
+    await db("users").where("id", uid).update({
+        username: newusername
+    });
 
-    }
-    catch (error) 
-    {
-        console.log(error)
-    }
 }
 
 async function getResetByUID(uid) 
