@@ -47,6 +47,7 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | PUT    | `/upload/edit/:id`   | admin           | Edit a prompt |
 | GET    | `/upload/all_prompts` | admin          | Get all previous prompt data |
 | POST   | `/upload/add`        | admin          | Add a new prompt |
+| GET    | `/upload/mysubmissions`     | user           | Get the current users past 7 submissions for their profile |
 
 #### Admin Routes
 
