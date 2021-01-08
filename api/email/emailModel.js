@@ -12,6 +12,7 @@ module.exports = {
     getToken,
     getVideo,
     updatePassword,
+    updateUsername,
     getResetByUID,
     getFullResetRow,
     deleteResetsByUID,
@@ -79,6 +80,21 @@ function getVideo()
 function updatePassword(uid, password) 
 {
     return db("users").where("id", uid).update({ password });
+}
+
+async function updateUsername(uid, newusername) 
+{
+    try 
+    {        
+        await db("users").where("id", uid).update({
+            username: newusername
+        });
+
+    }
+    catch (error) 
+    {
+        console.log(error)
+    }
 }
 
 async function getResetByUID(uid) 

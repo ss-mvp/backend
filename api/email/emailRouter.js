@@ -9,6 +9,8 @@ const uuid = require("uuid");
 const uuidNamespace = "d6d91fb8-cccc-4909-94f7-b22e17f6de22";
 const querystring = require("querystring");
 const mailer = require("../../services/mailer");
+const restricted = require("../middleware/restricted");
+
 
 router.post("/register", async (req, res) =>
 {
@@ -192,6 +194,37 @@ router.post("/reset", async (req, res) =>
 
     return res.status(200).json({ message: "Updated password" });
 });
+
+// Endpoint to update a users username
+router.post("/resetusername", restricted(), async (req, res) => 
+{
+    // Ensure the req.body even has a username to begin with
+    if (!req.body.username) 
+    {
+        return res.status(400).json({ message: "That username could not be found."})
+    }
+
+    // Ensure the user gave us their old username and a new one
+    if (!req.body.oldusername || !req.body.newusername)
+    {
+        return res.status(400).json({ message: "Please provide your old and new username in the correct fields."})
+    }
+
+    const userId = req.userId;
+    console.log(userId)
+
+    // Reset the users username
+    if (req.body.username && req.body.newusername && req.body.oldusername)
+    {
+        await auth.updateUsername(userId, req.body.newusername).then(ress => 
+        {
+            res.status(200).json({ message: `Username updated to ${req.body.newusername}`})
+        }).catch(err => 
+        {
+            res.status(500).json({message: "Internal err"})
+        })
+    }       
+})
 
 router.get("/video", (req, res) => 
 {
