@@ -198,32 +198,46 @@ router.post("/reset", async (req, res) =>
 // Endpoint to update a users username
 router.post("/resetusername", restricted(), async (req, res) => 
 {
-    // Ensure the req.body even has a username to begin with
-    if (!req.body.username) 
+    // Ensure the user gave us their current username correctly
+    // Req.username is the users true current username before the change found in their token
+    // We want to ensure checks and balances are being handled in each input
+    if (req.body.currentusername !== req.username) 
     {
-        return res.status(400).json({ message: "That username could not be found."})
+        return res.status(400).json({ message: "Incorrect current username provided."})
     }
 
-    // Ensure the user gave us their old username and a new one
-    if (!req.body.oldusername || !req.body.newusername)
+    // Ensure the user does not reuse their current username
+    if (req.body.newusername === req.body.currentusername)
     {
-        return res.status(400).json({ message: "Please provide your old and new username in the correct fields."})
+        res.status(400).json({ message: "New username can not match current username."})
     }
+
+    // Ensure the users newusername matches confirmed username
+    if (req.body.confirmusername !== req.body.newusername)
+    {
+        res.status(400).json({ message: "New username and confirm username must match."})
+    }
+
+    // Ensure the user gave us their current username username and a new one
+    if (!req.body.currentusername || !req.body.newusername || !req.body.confirmusername)
+    {
+        return res.status(400).json({ message: "Please complete all fields correctly."})
+    }
+
 
     const userId = req.userId;
-    console.log(userId)
 
     // Reset the users username
-    if (req.body.username && req.body.newusername && req.body.oldusername)
+    if (req.body.currentusername && req.body.newusername && req.body.confirmusername)
     {
         await auth.updateUsername(userId, req.body.newusername).then(ress => 
         {
             res.status(200).json({ message: `Username updated to ${req.body.newusername}`})
         }).catch(err => 
         {
-            res.status(500).json({message: "Internal err"})
+            res.status(500).json({message: "Internal server error."})
         })
-    }       
+    }          
 })
 
 router.get("/video", (req, res) => 
