@@ -33,6 +33,8 @@ Check the wiki for a [setup guide](https://github.com/ss-mvp/backend/wiki/Setup-
 | POST   | `/email/activate`           | anyone         | Validates email for a new user if given a valid query string |
 | GET    | `/email/reset`              | anyone         | Request a password reset for a given email |
 | POST   | `/email/reset`              | anyone         | Submit password reset information for a given email |
+| POST   | `/resetusername`            | users          | Submit username reset for users logged in |
+| POST   | `/resetpassword`            | users          | Submit password reset for users logged in |
 | GET    | `/email/video`              | anyone         | Returns link for winners announcement YouTube video stream |
 
 #### Story Routes

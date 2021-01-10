@@ -9,6 +9,8 @@ const uuid = require("uuid");
 const uuidNamespace = "d6d91fb8-cccc-4909-94f7-b22e17f6de22";
 const querystring = require("querystring");
 const mailer = require("../../services/mailer");
+const restricted = require("../middleware/restricted");
+
 
 router.post("/register", async (req, res) =>
 {
@@ -192,6 +194,89 @@ router.post("/reset", async (req, res) =>
 
     return res.status(200).json({ message: "Updated password" });
 });
+
+// Endpoint to update a users username
+router.post("/resetusername", restricted(), async (req, res) => 
+{
+    // Ensure the user gave us their current username correctly
+    // Req.username is the users true current username before the change found in their token
+    // We want to ensure checks and balances are being handled in each input
+    if (req.body.currentusername !== req.username) 
+    {
+        return res.status(400).json({ message: "Incorrect current username provided."})
+    }
+
+    // Ensure the user does not reuse their current username
+    if (req.body.newusername === req.body.currentusername)
+    {
+        res.status(400).json({ message: "New username can not match current username."})
+    }
+
+    // Ensure the users newusername matches confirmed username
+    if (req.body.confirmusername !== req.body.newusername)
+    {
+        res.status(400).json({ message: "New username and confirm username must match."})
+    }
+
+    // Ensure the user gave us their current username username and a new one
+    if (!req.body.currentusername || !req.body.newusername || !req.body.confirmusername)
+    {
+        return res.status(400).json({ message: "Please complete all fields correctly."})
+    }
+
+    // Store the users id from the restricted middlware to simplify readability
+    const userId = req.userId;
+
+    // Reset the users username
+    if (req.body.currentusername && req.body.newusername && req.body.confirmusername)
+    {
+        await auth.updateUsername(userId, req.body.newusername).then(ress => 
+        {
+            res.status(200).json({ message: `Username updated to ${req.body.newusername}`})
+        }).catch(err => 
+        {
+            res.status(500).json({message: "Internal server error."})
+        })
+    }          
+})
+
+// Endpoint to update a users password
+router.post("/resetpassword", restricted(), async (req, res) => 
+{
+    // Ensure the user does not reuse their current password
+    if (req.body.currentpassword === req.body.newpassword)
+    {
+        res.status(400).json({ message: "New password can not match current password."})
+    }
+
+    // Ensure the users new password matches confirmed password
+    if (req.body.confirmpassword !== req.body.newpassword)
+    {
+        res.status(400).json({ message: "New password and confirm password do not match."})
+    }
+
+    // Ensure the user gave us their current password, new password and a confirmed one
+    if (!req.body.currentpassword || !req.body.newpassword || !req.body.confirmpassword)
+    {
+        return res.status(400).json({ message: "Please complete all fields correctly."})
+    }
+
+    // Store the users id from the restricted middlware to simplify readability
+    const userId = req.userId;
+
+    // Hash and reset the users password
+    if (req.body.currentpassword && req.body.newpassword && req.body.confirmpassword)
+    {
+        await auth.updatePassword(userId, bc.hashSync(req.body.confirmpassword, 10)).then(ress => 
+        {
+            res.status(200).json({ message: "Password udpated successfully!"})
+        }).catch(err => 
+        {
+            res.status(500).json({message: "Internal server error."})
+        })
+    }       
+      
+})
 
 router.get("/video", (req, res) => 
 {
