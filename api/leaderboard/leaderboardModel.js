@@ -13,7 +13,7 @@ const useMe = exp.setDate(today.getDate() - 7)
 // We want to retrieve submissions that were submitted from today up to 7 days ago
 async function getLeaderboard() 
 {
-    return await db("submissions as s")
+    return  await db("submissions as s")
         .join("users as u", "u.id", "s.userId")
         .select("u.id", "username")
         .where("s.image", ">", `${useMe}`)
