@@ -10,6 +10,7 @@ const useMe = exp.setDate(today.getDate() - 7)
 
 
 // This function sends a list of the top ten scores to the front end to be displayed in the leaderboard. 
+// We want to retrieve submissions that were submitted from today up to 7 days ago
 async function getLeaderboard() 
 {
     return await db("submissions as s")
