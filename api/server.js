@@ -100,28 +100,11 @@ const endVoting = new CronJob(
     "America/New_York"
 );
 
-const resetLeaderboard = new CronJob(
-    "* 00 * * sun",
-    async () => 
-    {
-        await db("leaderboard")
-            .select("u.id", "image", "username")
-            .sum("s.score as score")
-            .from("submissions as s")
-            .join("users as u", "u.id", "s.userId")
-            .groupBy("u.id", "s.image")
-            .orderBy("score", "desc");
-    },
-    null,
-    true,
-    "America/New_York"
-);
 
 endSubmission.start();
 endVoting.start();
 startVoting.start();
 startGame.start();
-resetLeaderboard.start();
 
 const server = express();
 
