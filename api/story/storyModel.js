@@ -171,7 +171,7 @@ async function past7Submissions(user_id)
             "submissions.rotation",
             "prompts.prompt"
         )
-        .limit(7);
+        .limit(6);
 }
 
 async function addImage(image) 
