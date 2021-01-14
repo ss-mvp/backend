@@ -134,6 +134,7 @@ function generateRandomUsername()
     const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
 
     // Generate a rng username from the UNG package
+    // TESTEST
     const randomusername = uniqueNamesGenerator({
         dictionaries: [ adjectives, animals, numberDictionary],
         length: 3,
