@@ -1,4 +1,5 @@
-const db = require("../../data/dbConfig.js");
+const db = require("../../data/dbConfig.js")
+const { uniqueNamesGenerator, NumberDictionary, animals, adjectives } = require("unique-names-generator");
 
 module.exports = {
     getAllUsers,
@@ -17,6 +18,7 @@ module.exports = {
     getFullResetRow,
     deleteResetsByUID,
     saveResetCode,
+    generateRandomUsername,
     registerUserPatternCheck
 };
 
@@ -123,6 +125,23 @@ async function saveResetCode(uid, code)
     {
         console.log(ex); return -1;
     }
+}
+
+// A function that creates a RNG username
+function generateRandomUsername()
+{
+    // Generate a random number from the UNG package
+    const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
+
+    // Generate a rng username from the UNG package
+    const randomusername = uniqueNamesGenerator({
+        dictionaries: [ adjectives, animals, numberDictionary],
+        length: 3,
+        separator: "",
+        style: "upperCase"
+    });
+
+    return randomusername
 }
 
 // Regex checking if the username only contains letters and numbers

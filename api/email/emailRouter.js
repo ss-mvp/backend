@@ -11,6 +11,28 @@ const querystring = require("querystring");
 const mailer = require("../../services/mailer");
 const restricted = require("../middleware/restricted");
 
+router.get("/randomusername", async (req, res) => 
+{
+
+    let randomusername = auth.generateRandomUsername();
+    console.log("randomusername", randomusername)
+
+    // Check if the username is taken
+    // Run the getUserIdByUsername query and if we find a match re-run the rng
+    const foundUsername = await auth.getUserIdByUsername(randomusername);
+    console.log("foundUsername", foundUsername)
+
+    if (foundUsername === randomusername)
+    {
+        randomusername = auth.generateRandomUsername();  
+    }
+    else 
+    {
+        res.status(200).json(randomusername)
+    }
+
+})
+
 
 router.post("/register", async (req, res) =>
 {
