@@ -22,13 +22,11 @@ router.get("/randomusername", async (req, res) =>
     const foundUsername = await auth.getUserIdByUsername(randomusername);
     console.log("foundUsername", foundUsername)
 
-    if (foundUsername === randomusername)
-    {
-        randomusername = auth.generateRandomUsername();  
-    }
+    if (!foundUsername)
+        res.status(200).json(randomusername)
     else 
     {
-        res.status(200).json(randomusername)
+        randomusername = auth.generateRandomUsername();  
     }
 
 })
