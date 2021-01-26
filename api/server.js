@@ -124,7 +124,7 @@ server.use(
                 origin === "https://adminconteststorysquad.netlify.app" ||
                 origin === "https://server.storysquad.app" ||
                 origin === "https://fdsc-production.netlify.app" ||
-                origin === "https://fdsc-development.netlify.app"
+                origin === "https://fdsc-frontend-k05uv8tvq.vercel.app"
             )
                 callback(null, true);
             else callback("Not allowed by CORS", false);
